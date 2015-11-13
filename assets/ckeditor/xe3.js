@@ -1,5 +1,5 @@
 "use strict"
-
+var xe3CkEditors = {};
 function xe3CkEditor(textarea, config, closure)
 {
     xe3CkEditorConfig.put(config);
@@ -23,6 +23,7 @@ function xe3CkEditor(textarea, config, closure)
         });
     };
 
+    xe3CkEditors[textarea] = editor;
     return editor;
 }
 
