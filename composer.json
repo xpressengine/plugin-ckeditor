@@ -4,18 +4,13 @@
   "keywords": ["xpressengine bundle", "XE CkEditor"],
   "version": "0.4.0",
   "support": {
-    "email": "developers@xpressengine.com",
-    "issues": "http://xpressengine.com/issues",
-    "forum": "http://xpressengine.com/forum",
-    "wiki": "http://xpressengine.com/wiki",
-    "irc": "http://xpressengine.com/irc",
-    "source": "http://xpressengine.com/source/"
+    "email": "developers@xpressengine.com"
   },
   "authors": [
     {
-      "name": "akasima",
-      "email": "akasima@xpressengine.com",
-      "homepage": "http://www.xpressengine.com",
+      "name": "XE Team",
+      "email": "developers@xpressengine.com",
+      "homepage": "http://xpressengine.io",
       "role": "Developer"
     }
   ],
