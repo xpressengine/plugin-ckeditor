@@ -323,7 +323,7 @@ a.cke_button {
   display: inline-block;
   height: 30px;
   line-height: 30px;
-  padding: 0 6px;
+  padding:0 4px;
   outline: 0;
   float: left;
   border: 0;
@@ -364,7 +364,7 @@ a.cke_button_disabled:active {
   background-repeat: no-repeat;
   background: none !important;
   margin-top: 5px;
-  width: 16px;
+  width:20px;
   height: 16px;
   float: left;
   display: inline-block;
@@ -376,7 +376,7 @@ a.cke_button_disabled:active {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  font-size: 18px;
+  font-size:20px;
   color: #7f919e; }
 
 .cke_button_label {
