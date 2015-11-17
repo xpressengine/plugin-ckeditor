@@ -1,0 +1,27 @@
+.__xe_content {
+    position: relative;
+}
+
+.__xe_content .active {
+    border-color: #c2c9b4!important;
+}
+
+.__xe_content .drag-here {
+    position: absolute;
+    display: none;
+    top: 2px;
+    left: -2px;
+    line-height: 95px;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    color: #a7b4c1;
+    background-color: #ffffff;
+    opacity: 0.5;
+}
+
+.__xe_content .fileupload {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
