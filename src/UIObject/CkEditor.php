@@ -129,7 +129,7 @@ class CkEditor extends AbstractUIObject
         $contentDomHtmlOptionString = $this->getContentDomHtmlOption($editorConfig);
 
         $contentHtml = [];
-        $contentHtml[] = "<textarea name='{$editorConfig['contentDomName']}' id='{$editorConfig['contentDomId']}' {$contentDomHtmlOptionString}>";
+        $contentHtml[] = "<textarea name='{$editorConfig['contentDomName']}' id='{$editorConfig['contentDomId']}' {$contentDomHtmlOptionString} placeholder='".xe_trans('xe::content')."'>";
         $contentHtml[] = $content;
         $contentHtml[] = '</textarea>';
 
