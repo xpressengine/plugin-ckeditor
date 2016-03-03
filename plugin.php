@@ -38,7 +38,7 @@ class Plugin extends AbstractPlugin
     /**
      * @return boolean
      */
-    public function checkInstalled()
+    public function checkInstalled($installedVersion = NULL)
     {
         // TODO: Implement checkInstall() method.
 
@@ -48,7 +48,7 @@ class Plugin extends AbstractPlugin
     /**
      * @return boolean
      */
-    public function checkUpdated()
+    public function checkUpdated($installedVersion = NULL)
     {
         // TODO: Implement checkUpdate() method.
     }
