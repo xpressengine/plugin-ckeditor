@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugins\CkEditor\Extension;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Plugin\AbstractComponent;
 use Xpressengine\Plugins\CkEditor\ContentsCompilerPluginInterface;
@@ -67,16 +67,16 @@ class ContentsCompilerPlugin extends AbstractComponent implements ContentsCompil
 
             $path = 'plugins/ckeditor/assets/compiler';
             // requirejs 를 load 하기 전에 붙여야 한다.
-            FrontEnd::js([
+            XeFrontend::js([
                 asset(str_replace(base_path(), '', $path . '/mermaid.min.js')),
             ])->appendTo('head')->load();
 
-            FrontEnd::js([
+            XeFrontend::js([
                 asset(str_replace(base_path(), '', $path . '/contentsCompiler.js')),
                 asset(str_replace(base_path(), '', $path . '/prism.js')),
             ])->load();
 
-            FrontEnd::css([
+            XeFrontend::css([
                 asset(str_replace(base_path(), '', $path . '/hashTag.css')),
                 asset(str_replace(base_path(), '', $path . '/prism.css')),
                 asset(str_replace(base_path(), '', $path . '/mermaid.css')),

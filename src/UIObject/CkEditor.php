@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugins\CkEditor\UIObject;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\UIObject\AbstractUIObject;
 use Route;
 use Xpressengine\Plugin\PluginRegister;
@@ -178,7 +178,7 @@ class CkEditor extends AbstractUIObject
 
 
             $path = '/plugins/ckeditor/assets/ckeditor';
-            Frontend::js([
+            XeFrontend::js([
                 asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
                 asset(str_replace(base_path(), '', $path . '/styles.js')),
                 asset(str_replace(base_path(), '', $path . '/xe3.js')),

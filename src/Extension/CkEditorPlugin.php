@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugins\CkEditor\Extension;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\Plugin\AbstractComponent;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
 use Xpressengine\Database\VirtualConnectionInterface;
@@ -61,7 +61,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             self::$loaded = true;
 
             $path = '/plugins/ckeditor/assets/plugins';
-            Frontend::js([
+            XeFrontend::js([
                 asset(str_replace(base_path(), '', $path . '/append.js')),
             ])->load();
         }
