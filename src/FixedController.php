@@ -14,7 +14,7 @@
 namespace Xpressengine\Plugins\CkEditor;
 
 use App\Http\Controllers\Controller;
-use Presenter;
+use XePresenter;
 
 /**
  * CkEditorPluginInterface
@@ -74,7 +74,7 @@ class FixedController extends Controller
             }
         }
 
-        return Presenter::makeApi([
+        return XePresenter::makeApi([
             'file' => $file->toArray(),
             'media' => $media,
             'thumbnails' => $thumbnails,
@@ -152,7 +152,7 @@ class FixedController extends Controller
             $words[] = $tagEntity->word;
         }
 
-        return Presenter::makeApi($words);
+        return XePresenter::makeApi($words);
     }
 
     /**
@@ -199,7 +199,7 @@ class FixedController extends Controller
                 'profileImage' => $user['profileImage'],
             ];
         }
-        return Presenter::makeApi($suggestions);
+        return XePresenter::makeApi($suggestions);
     }
 
 }
