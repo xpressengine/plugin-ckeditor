@@ -1,0 +1,25 @@
+.__xe_section_content .__xe_mention {
+    border-radius: 2px;
+    margin: 0 1px;
+    padding: 0 1px;
+    color: #77CCDD;
+}
+
+.__xe_section_content .__xe_hashtag {
+ /**   background: #ebeef0;
+    border: 1px solid #d3d9e3;
+    border-radius: 2px;
+    margin: 0 1px;
+    padding: 0 1px;
+    color: #2577ef;
+    */
+}
+
+.__xe_section_content .__xe_file {
+    background: #ebeef0;
+    border: 1px solid #d3d9e3;
+    border-radius: 2px;
+    margin: 0 1px;
+    padding: 0 1px;
+    color: #2577ef;
+}
