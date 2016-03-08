@@ -13,7 +13,7 @@
  */
 namespace Xpressengine\Plugins\CkEditor\Extension;
 
-use Frontend;
+use XeFrontend;
 use Xpressengine\Media\Models\Image;
 use Xpressengine\Plugin\AbstractComponent;
 use Xpressengine\Plugins\CkEditor\ContentsCompilerPluginInterface;

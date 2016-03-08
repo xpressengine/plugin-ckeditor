@@ -6,7 +6,7 @@ namespace Xpressengine\Plugins\CkEditor\UIObject;
 
 use Xpressengine\UIObject\AbstractUIObject;
 use Xpressengine\Plugin\PluginRegister;
-use Frontend;
+use XeFrontend;
 
 /**
  * Class ContentsView
