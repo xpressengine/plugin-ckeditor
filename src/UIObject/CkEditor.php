@@ -184,7 +184,7 @@ class CkEditor extends AbstractUIObject
                 asset(str_replace(base_path(), '', $path . '/xe3.js')),
             ])->load();
 
-            Frontend::css([
+            XeFrontend::css([
                 asset(str_replace(base_path(), '', $path . '/xe3.css')),
             ])->load();
 
