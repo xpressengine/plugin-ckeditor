@@ -179,6 +179,9 @@ class CkEditor extends AbstractUIObject
 
             $path = '/plugins/ckeditor/assets/ckeditor';
             XeFrontend::js([
+                'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+                'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
+                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
                 asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
                 asset(str_replace(base_path(), '', $path . '/styles.js')),
                 asset(str_replace(base_path(), '', $path . '/xe3.js')),
