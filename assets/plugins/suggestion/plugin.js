@@ -1,8 +1,6 @@
-﻿"use strict";
+"use strict";
 
 (function(XE){
-    var $ = XE.$;
-
     /**
      * polyfill for IE9 to allow for multiple arguments in setTimeout
      */

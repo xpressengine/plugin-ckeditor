@@ -2,9 +2,7 @@
 
 (function(XE) {
 
-    var DOCUMENT_DRAGDROP_INSTANCE,
-        $ = XE.$;
-
+    var DOCUMENT_DRAGDROP_INSTANCE;
     var editors = [];
 
     /**
