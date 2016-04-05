@@ -19,6 +19,7 @@
   "extra": {
     "xpressengine": {
       "title": "CkEditor",
+      "icon": "icon.png",
       "component": {
         "uiobject/xpressengine@ckEditor": {
           "class": "Xpressengine\\Plugins\\CkEditor\\UIObject\\CkEditor",
