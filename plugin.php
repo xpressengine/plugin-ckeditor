@@ -60,10 +60,10 @@ class Plugin extends AbstractPlugin
      */
     public function boot()
     {
+        $editor = app('xe.editor');
+
         /** @var \Xpressengine\UIObject\UIObjectHandler $uiobjectHandler */
         $uiobjectHandler = app('xe.uiobject');
-        //$uiobjectHandler->setAlias('editor', UIObject\CkEditor::getId());
-        //$uiobjectHandler->setAlias('contentCompiler', UIObject\ContentsCompiler::getId());
         $uiobjectHandler->setAlias('editor', 'uiobject/xpressengine@ckEditor');
         $uiobjectHandler->setAlias('contentCompiler', 'uiobject/xpressengine@contentsCompiler');
     }
