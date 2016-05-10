@@ -14,6 +14,8 @@
 namespace Xpressengine\Plugins\CkEditor;
 
 use Xpressengine\Plugin\AbstractPlugin;
+use XeSkin;
+use Route;
 
 /**
  * CkEditor plugin
@@ -66,6 +68,17 @@ class Plugin extends AbstractPlugin
         $uiobjectHandler = app('xe.uiobject');
         $uiobjectHandler->setAlias('editor', 'uiobject/xpressengine@ckEditor');
         $uiobjectHandler->setAlias('contentCompiler', 'uiobject/xpressengine@contentsCompiler');
+
+        XeSkin::setDefaultSettingsSkin($this->getId(), 'editor/xpressengine@ckEditor/settingsSkin/xpressengine@default');
+
+
+        Route::settings($this->getId(), function () {
+            Route::get('setting/{instanceId}', ['as' => 'manage.plugin.cke.setting', 'uses' => 'SettingsController@getSetting']);
+        }, ['namespace' => __NAMESPACE__]);
+
+        app()->bind('xe.plugin.ckeditor', function ($app) {
+            return $this;
+        }, true);
     }
 
     /**

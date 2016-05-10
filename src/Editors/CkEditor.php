@@ -272,4 +272,9 @@ class CkEditor extends AbstractEditor
     {
         // TODO: Implement contentsCompile() method.
     }
+
+    public static function getInstanceSettingURI($instanceId)
+    {
+        return route('manage.plugin.cke.setting', $instanceId);
+    }
 }

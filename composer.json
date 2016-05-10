@@ -55,6 +55,11 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\ContentsCompilerPlugin",
           "name": "ContentsCompiler 플러그인",
           "description": "XE 에서 에디터 내용 출력에 사용 할 플러그인."
+        },
+        "editor/xpressengine@ckEditor/settingsSkin/xpressengine@default": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\SettingsSkin",
+          "name": "설정 스킨",
+          "description": "설정페이지에서 사용될 스킨"
         }
       }
     }
