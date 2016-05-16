@@ -74,6 +74,7 @@ class Plugin extends AbstractPlugin
 
         Route::settings($this->getId(), function () {
             Route::get('setting/{instanceId}', ['as' => 'manage.plugin.cke.setting', 'uses' => 'SettingsController@getSetting']);
+            Route::post('setting/{instanceId}', ['as' => 'manage.plugin.cke.setting', 'uses' => 'SettingsController@postSetting']);
         }, ['namespace' => __NAMESPACE__]);
 
         app()->bind('xe.plugin.ckeditor', function ($app) {
