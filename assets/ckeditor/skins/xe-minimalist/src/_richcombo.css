@@ -67,25 +67,25 @@ a.cke_combo_button
 	float: left;
 	margin: 0 6px 5px 0;
 
-	border: 1px solid #a6a6a6;
-	border-bottom-color: #979797;
+	border: 1px solid #bbbcbf;
 
-	border-radius: 3px;
+	border-radius: 2px;
 
-	box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 0 2px rgba(255,255,255,.15) inset, 0 1px 0 rgba(255,255,255,.15) inset;
+	/*box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 0 2px rgba(255,255,255,.15) inset, 0 1px 0 rgba(255,255,255,.15) inset;*/
 
-	background: #e4e4e4;
-	background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);
-	filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');
+	/*background: #e4e4e4;*/
+	/*background-image: linear-gradient(to bottom, #ffffff, #e4e4e4);*/
+	/*filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#ffffff', endColorstr='#e4e4e4');*/
 }
 
 /* Different states of the container. */
 .cke_combo_off a.cke_combo_button:hover,
 .cke_combo_off a.cke_combo_button:focus
 {
-	background: #ccc;
-	background-image: linear-gradient(to bottom, #f2f2f2, #ccc);
-	filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f2f2f2', endColorstr='#cccccc');
+  border: 1px solid #9b9da1;
+	/*background: #ccc;*/
+	/*background-image: linear-gradient(to bottom, #f2f2f2, #ccc);*/
+	/*filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#f2f2f2', endColorstr='#cccccc');*/
 
 	outline: none;
 }
@@ -93,20 +93,20 @@ a.cke_combo_button
 .cke_combo_off a.cke_combo_button:active,
 .cke_combo_on a.cke_combo_button
 {
-	border: 1px solid #777;
+	border: 1px solid #9b9da1;
 
-	box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.6) inset;
+	/*box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 1px 5px rgba(0,0,0,.6) inset;*/
 
-	background: #b5b5b5;
-	background-image: linear-gradient(to bottom, #aaa, #cacaca);
-	filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#aaaaaa', endColorstr='#cacaca');
+	background: #e8e9eb;
+	/*background-image: linear-gradient(to bottom, #aaa, #cacaca);*/
+	/*filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#aaaaaa', endColorstr='#cacaca');*/
 }
 
 .cke_combo_on a.cke_combo_button:hover,
 .cke_combo_on a.cke_combo_button:focus,
 .cke_combo_on a.cke_combo_button:active
 {
-	box-shadow: 0 1px 6px rgba(0,0,0,.7) inset, 0 1px 0 rgba(0,0,0,.2);
+	/*box-shadow: 0 1px 6px rgba(0,0,0,.7) inset, 0 1px 0 rgba(0,0,0,.2);*/
 }
 
 .cke_rtl .cke_combo_button
