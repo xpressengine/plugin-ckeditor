@@ -29,7 +29,7 @@ function xe3CkEditor(textarea, config, closure)
 
 var xe3CkEditorConfig = {
     configs: {
-        skin : 'xe3',
+        skin : 'xe-minimalist',
         customConfig : '',
         contentsCss : '/plugins/ckeditor/assets/ckeditor/content.css',
         on : {
