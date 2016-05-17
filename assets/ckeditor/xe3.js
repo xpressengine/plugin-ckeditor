@@ -40,31 +40,31 @@ var xe3CkEditorConfig = {
                 $(e.editor.container.$).removeClass('active');
             }.bind(this)
         },
-        toolbarGroups: [
-            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-            { name: 'paragraph', groups: [ 'list' ] },
-            { name: 'styles' },
-            { name: 'tools' },
-            { name: 'document', groups: [ 'mode' ] },
-            { name: 'others', groups: ['code', 'source'] }
-        ],
+        // toolbarGroups: [
+        //     { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        //     { name: 'paragraph', groups: [ 'list' ] },
+        //     { name: 'styles' },
+        //     { name: 'tools' },
+        //     { name: 'document', groups: [ 'mode' ] },
+        //     { name: 'others', groups: ['code', 'source'] }
+        // ],
         height : 300,
         autoGrow_minHeight : 300,
         autoGrow_maxHeight : 300,
-        allowedContent: {
-            p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-            a: {attributes: ['!href']},
-            span: {
-                attributes: ['contenteditable', 'data-*'],
-                classes: []
-            },
-            img: {
-                attributes: ['*'],
-                classes: []
-            }
-        },
-        removeButtons : 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript',
-        removeDialogTabs : 'link:advanced',
+        // allowedContent: {
+        //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+        //     a: {attributes: ['!href']},
+        //     span: {
+        //         attributes: ['contenteditable', 'data-*'],
+        //         classes: []
+        //     },
+        //     img: {
+        //         attributes: ['*'],
+        //         classes: []
+        //     }
+        // },
+        // removeButtons : 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript',
+        // removeDialogTabs : 'link:advanced',
         extraPlugins: 'resize',
         resize_dir: 'vertical'
     },
