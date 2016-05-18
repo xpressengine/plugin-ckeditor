@@ -43,7 +43,7 @@ class CkEditor extends AbstractUIObject
             'contentDomName' => 'content',
             'contentDomId' => 'xeContentEditor',
             'contentDomOptions' => [
-                'class' => 'form-control',
+                'class' => 'xe-form-control',
                 'rows' => '20',
                 'cols' => '80'
             ],
