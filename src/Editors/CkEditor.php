@@ -14,10 +14,12 @@
 namespace Xpressengine\Plugins\CkEditor\Editors;
 
 use XeFrontend;
-use Xpressengine\Config\ConfigEntity;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
+use Xpressengine\Editor\AbstractParts;
+use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Plugin\PluginRegister;
+use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
 
 /**
  * CkEditor
@@ -31,16 +33,30 @@ use Xpressengine\Plugin\PluginRegister;
  */
 class CkEditor extends AbstractEditor
 {
+    protected $editors;
+
+    protected $register;
+
     protected static $loaded = false;
 
     protected static $plugins = [];
 
+    protected $partsBag;
+
     const FILE_UPLOAD_PATH = 'attached/ckeditor';
+
     const THUMBNAIL_TYPE = 'spill';
 
-    protected function getDefaultSetting()
+    public function __construct(EditorHandler $editors, PluginRegister $register)
+    {
+        $this->editors = $editors;
+        $this->register = $register;
+    }
+
+    protected function getDefaultOptions()
     {
         return [
+            'content' => '',
             'contentDomName' => 'content',
             'contentDomId' => 'xeContentEditor',
             'contentDomOptions' => [
@@ -48,7 +64,7 @@ class CkEditor extends AbstractEditor
                 'rows' => '20',
                 'cols' => '80'
             ],
-            'onlyJavaScript' => false,
+            'editorOptions' => [],
         ];
     }
 
@@ -77,45 +93,46 @@ class CkEditor extends AbstractEditor
     }
 
     /**
-     * getEditorConfig
+     * getoptions
      *
      * @return array
      */
-    protected function getEditorConfig()
+    protected function getOptions()
     {
         $args = $this->arguments;
-        $editorConfig = array_merge($this->getDefaultSetting(), $args);
-        return $editorConfig;
+        $editorSetting = array_merge($this->getDefaultOptions(), $args);
+
+        return $editorSetting;
     }
 
     public function render()
     {
-        /** @var \Xpressengine\Plugin\PluginRegister $register */
-        $register = app('xe.pluginRegister');
-
-        static::$plugins = $register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
-
-        $editorConfig = $this->getEditorConfig();
+        static::$plugins = $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
 
         $this->initAssets();
+        $this->loadParts();
 
         $htmlString = [];
+        if($this->arguments !== false){
+            $editorSetting = $this->getOptions();
 
-        if(!$editorConfig['onlyJavaScript']){
-
-            $content = $editorConfig['content'];
-
-            $htmlString[] = $this->getContentHtml($content, $editorConfig);
-            $htmlString[] = $this->getEditorScript($editorConfig);
+            $htmlString[] = $this->getContentHtml(array_get($editorSetting, 'content'), $editorSetting);
+            $htmlString[] = $this->getEditorScript($editorSetting);
         }
 
-        $this->template = implode('', $htmlString);
+        // todo: comment 와 같이 js만 사용 하는 경우 config 값을 전달할 수 있어야 함.
 
-        $this->template = $this->renderPlugins($this->template);
+        return $this->renderPlugins(implode('', $htmlString));
+    }
 
-        return $this->template;
-//
-//        return parent::render();
+    protected function loadParts()
+    {
+        foreach ($this->config->get('parts', []) as $partsId) {
+            if ($parts = $this->editors->getParts($partsId, $this->instanceId)) {
+                $parts->initAssets();
+                $this->partsBag[$partsId] = $parts;
+            }
+        }
     }
 
     protected function renderPlugins($content)
@@ -128,49 +145,58 @@ class CkEditor extends AbstractEditor
         return $content;
     }
 
-    protected function getContentHtml($content, $editorConfig)
+    protected function getContentHtml($content, $editorSetting)
     {
-        $contentDomHtmlOptionString = $this->getContentDomHtmlOption($editorConfig);
-
         $contentHtml = [];
-        $contentHtml[] = "<textarea name='{$editorConfig['contentDomName']}' id='{$editorConfig['contentDomId']}' {$contentDomHtmlOptionString} placeholder='".xe_trans('xe::content')."'>";
+        $contentHtml[] = '<textarea ';
+        $contentHtml[] = 'name="' . $editorSetting['contentDomName'] . '" ';
+        $contentHtml[] = 'id="' . $editorSetting['contentDomId'] . '" ';
+        $contentHtml[] = $this->getContentDomHtmlOption($editorSetting['contentDomOptions']);
+        $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
         $contentHtml[] = $content;
         $contentHtml[] = '</textarea>';
 
         return implode('', $contentHtml);
     }
 
-    protected function getEditorScript($editorConfig)
+    protected function getEditorScript($editorSetting)
     {
+        $arrConfig = array_except($this->config->all(), 'parts');
+        $argsParts = [];
+        /** @var AbstractParts $parts */
+        foreach ($this->partsBag as $parts) {
+            $argsParts[] = [
+                'name' => $parts->getName(),
+                'icon' => $parts->getIcon()
+            ];
+        }
         $editorScript = [];
         $editorScript[] = "
         <script>
             $(function() {
-                xe3CkEditor('{$editorConfig['contentDomId']}', ".json_encode($editorConfig['editorConfig']).");
-            });
+                xe3CkEditor('{$editorSetting['contentDomId']}', ".json_encode($editorSetting['editorOptions']).", ".json_encode($arrConfig).", ".json_encode($argsParts).");
+            });r
         </script>";
 
         return implode('', $editorScript);
     }
 
-    protected function getPluginsScript()
-    {
-        $htmlString = [];
-        /** @var CkEditorPluginInterface $plugin */
-        foreach (static::$plugins as $plugin) {
-            $htmlString[] = $plugin::render();
-        }
-    }
+//    protected function getPluginsScript()
+//    {
+//        $htmlString = [];
+//        /** @var CkEditorPluginInterface $plugin */
+//        foreach (static::$plugins as $plugin) {
+//            $htmlString[] = $plugin::render();
+//        }
+//    }
 
-    public static function getManageUri()
-    {
-        // TODO: Implement getManageUri() method.
-    }
+//    public static function getManageUri()
+//    {
+//        // TODO: Implement getManageUri() method.
+//    }
 
     /**
      * initAssets
-     *
-     * @param $editorConfig
      *
      * @return void
      */
@@ -178,8 +204,6 @@ class CkEditor extends AbstractEditor
     {
         if (self::$loaded === false) {
             self::$loaded = true;
-
-
 
             $path = '/plugins/ckeditor/assets/ckeditor';
             XeFrontend::js([
@@ -213,53 +237,18 @@ class CkEditor extends AbstractEditor
     /**
      * getContentDomHtmlOption
      *
-     * @param $editorConfig
+     * @param array $domOptions
      *
      * @return string
      */
-    protected function getContentDomHtmlOption($editorConfig)
+    protected function getContentDomHtmlOption($domOptions)
     {
         $optionsString = '';
-        foreach($editorConfig['contentDomOptions'] as $key => $val)
-        {
+        foreach ($domOptions as $key => $val) {
             $optionsString.= "$key='{$val}' ";
         }
 
         return $optionsString;
-    }
-
-    /**
-     * 설정 등록
-     *
-     * @param string $instanceId editor instance id
-     * @param ConfigEntity $config config
-     * @return void
-     */
-    public function setConfig($instanceId, ConfigEntity $config)
-    {
-        // TODO: Implement setConfig() method.
-    }
-
-    /**
-     * 설정 반환
-     *
-     * @param string $instanceId editor instance id
-     * @return mixed
-     */
-    public function getConfig($instanceId)
-    {
-        // TODO: Implement getConfig() method.
-    }
-
-    /**
-     * 설정 삭제
-     *
-     * @param string $instanceId editor instance id
-     * @return void
-     */
-    public function removeConfig($instanceId)
-    {
-
     }
 
     /**

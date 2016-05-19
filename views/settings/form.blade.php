@@ -19,7 +19,7 @@
         </div>
         <div class="panel-collapse collapse in">
             <form method="post" action="{{ route('manage.plugin.cke.setting', $instanceId) }}">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                {{ csrf_field() }}
                 <div class="panel-body">
 
                     <div class="panel">
@@ -35,7 +35,7 @@
                                         <div class="clearfix">
                                             <label>설정1</label>
                                         </div>
-                                        <input type="text" class="form-control" name="var1">
+                                        <input type="text" class="form-control" name="var1" value="{{ $config->get('var1') }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -43,7 +43,7 @@
                                         <div class="clearfix">
                                             <label>설정2</label>
                                         </div>
-                                        <input type="text" class="form-control" name="var2">
+                                        <input type="text" class="form-control" name="var2" value="{{ $config->get('var2') }}">
                                     </div>
                                 </div>
                             </div>
@@ -58,42 +58,59 @@
                         </div>
 
                             <ul class="list-group item-setting">
+                                @foreach ($items as $id => $item)
                                 <li class="list-group-item">
                                     <button class="btn handler"><i class="xi-bullet-point"></i></button>
-                                    <em class="item-title">구글지도</em>
-                                    <span class="item-subtext">구글지도를 삽입할 수 있습니다.</span>
+                                    <em class="item-title">{{ $item['class']::getComponentInfo('name') }}</em>
+                                    <span class="item-subtext">{{ $item['class']::getComponentInfo('description') }}</span>
                                     <div class="xe-btn-toggle pull-right">
                                         <label>
                                             <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="googleMap" checked="checked">
+                                            <input type="checkbox" name="parts[]" value="{{ $id }}" {{$item['activated'] ? 'checked' : ''}}>
                                             <span class="toggle"></span>
                                         </label>
                                     </div>
+                                    {{--@if($uri = $class::getInstanceSettingURI($instanceId))--}}
+                                    {{--<a href="{{ $uri }}" class="btn btn-default btn-xs">설정</a>--}}
+                                    {{--@endif--}}
                                 </li>
-                                <li class="list-group-item">
-                                    <button class="btn handler"><i class="xi-bullet-point"></i></button>
-                                    <em class="item-title">이모티콘</em>
-                                    <span class="item-subtext">이모티콘을 에디터에 삽입할 수 있습니다.</span>
-                                    <div class="xe-btn-toggle pull-right">
-                                        <label>
-                                            <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="emoticon" checked="checked">
-                                            <span class="toggle"></span>
-                                        </label>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <button class="btn handler"><i class="xi-bullet-point"></i></button>
-                                    <em class="item-title">인용구</em>
-                                    <span class="item-subtext">인용구를 삽입합니다.</span>
-                                    <div class="xe-btn-toggle pull-right">
-                                        <label>
-                                            <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="cite" checked="checked">
-                                            <span class="toggle"></span>
-                                        </label>
-                                    </div>
-                                </li>
+                                @endforeach
+                                {{--<li class="list-group-item">--}}
+                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
+                                    {{--<em class="item-title">구글지도</em>--}}
+                                    {{--<span class="item-subtext">구글지도를 삽입할 수 있습니다.</span>--}}
+                                    {{--<div class="xe-btn-toggle pull-right">--}}
+                                        {{--<label>--}}
+                                            {{--<span class="sr-only">toggle</span>--}}
+                                            {{--<input type="checkbox" name="googleMap" checked="checked">--}}
+                                            {{--<span class="toggle"></span>--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</li>--}}
+                                {{--<li class="list-group-item">--}}
+                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
+                                    {{--<em class="item-title">이모티콘</em>--}}
+                                    {{--<span class="item-subtext">이모티콘을 에디터에 삽입할 수 있습니다.</span>--}}
+                                    {{--<div class="xe-btn-toggle pull-right">--}}
+                                        {{--<label>--}}
+                                            {{--<span class="sr-only">toggle</span>--}}
+                                            {{--<input type="checkbox" name="emoticon" checked="checked">--}}
+                                            {{--<span class="toggle"></span>--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</li>--}}
+                                {{--<li class="list-group-item">--}}
+                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
+                                    {{--<em class="item-title">인용구</em>--}}
+                                    {{--<span class="item-subtext">인용구를 삽입합니다.</span>--}}
+                                    {{--<div class="xe-btn-toggle pull-right">--}}
+                                        {{--<label>--}}
+                                            {{--<span class="sr-only">toggle</span>--}}
+                                            {{--<input type="checkbox" name="cite" checked="checked">--}}
+                                            {{--<span class="toggle"></span>--}}
+                                        {{--</label>--}}
+                                    {{--</div>--}}
+                                {{--</li>--}}
                             </ul>
 
                     </div>

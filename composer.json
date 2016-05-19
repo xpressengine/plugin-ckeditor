@@ -21,42 +21,42 @@
       "title": "CkEditor",
       "icon": "icon.png",
       "component": {
-        "editor/xpressengine@ckEditor": {
+        "editor/ckeditor@ckEditor": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Editors\\CkEditor",
           "name": "CkEditor",
           "description": "XE 에서 사용할 기본 에디터"
         },
-        "uiobject/xpressengine@ckEditor": {
+        "uiobject/ckeditor@ckEditor": {
           "class": "Xpressengine\\Plugins\\CkEditor\\UIObject\\CkEditor",
           "name": "CkEditor",
           "description": "XE 에서 사용할 기본 에디터"
         },
-        "uiobject/xpressengine@contentsCompiler": {
+        "uiobject/ckeditor@contentsCompiler": {
           "class": "Xpressengine\\Plugins\\CkEditor\\UIObject\\ContentsCompiler",
           "name": "ContentsCompiler",
           "description": "에디터로 작성된 내용 출력시 사용"
         },
-        "FieldType/xpressengine@CkEditor": {
+        "FieldType/ckeditor@CkEditor": {
           "class": "Xpressengine\\Plugins\\CkEditor\\FieldType\\CkEditor",
           "name": "CkEditor",
           "description": "에디터 Dynamic field"
         },
-        "uiobject/xpressengine@ckEditor/plugin/xpressengine@default": {
+        "uiobject/ckeditor@ckEditor/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
           "description": "XE 에서 CkEditor 에 사용 할 플러그인."
         },
-        "editor/xpressengine@ckEditor/plugin/xpressengine@default": {
+        "editor/ckeditor@ckEditor/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
           "description": "XE 에서 CkEditor 에 사용 할 플러그인."
         },
-        "uiobject/xpressengine@contentsCompiler/plugin/xpressengine@default": {
+        "uiobject/ckeditor@contentsCompiler/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\ContentsCompilerPlugin",
           "name": "ContentsCompiler 플러그인",
           "description": "XE 에서 에디터 내용 출력에 사용 할 플러그인."
         },
-        "editor/xpressengine@ckEditor/settingsSkin/xpressengine@default": {
+        "editor/ckeditor@ckEditor/settingsSkin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\SettingsSkin",
           "name": "설정 스킨",
           "description": "설정페이지에서 사용될 스킨"
