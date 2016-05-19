@@ -56,7 +56,6 @@ class CkEditor extends AbstractEditor
     protected function getDefaultOptions()
     {
         return [
-            'content' => '',
             'contentDomName' => 'content',
             'contentDomId' => 'xeContentEditor',
             'contentDomOptions' => [
@@ -71,12 +70,12 @@ class CkEditor extends AbstractEditor
     public static function boot()
     {
         self::registerFixedRoute();
-
-        // TODO: Implement boot() method.
     }
 
     /**
      * Register fixed route for slug
+     *
+     * todo: route 쓸지 말지 체크 필요
      *
      * @return void
      */
@@ -93,16 +92,13 @@ class CkEditor extends AbstractEditor
     }
 
     /**
-     * getoptions
+     * get options
      *
      * @return array
      */
     protected function getOptions()
     {
-        $args = $this->arguments;
-        $editorSetting = array_merge($this->getDefaultOptions(), $args);
-
-        return $editorSetting;
+        return array_merge($this->getDefaultOptions(), $this->arguments);
     }
 
     public function render()
@@ -114,10 +110,10 @@ class CkEditor extends AbstractEditor
 
         $htmlString = [];
         if($this->arguments !== false){
-            $editorSetting = $this->getOptions();
+            $options = $this->getOptions();
 
-            $htmlString[] = $this->getContentHtml(array_get($editorSetting, 'content'), $editorSetting);
-            $htmlString[] = $this->getEditorScript($editorSetting);
+            $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
+            $htmlString[] = $this->getEditorScript($options);
         }
 
         // todo: comment 와 같이 js만 사용 하는 경우 config 값을 전달할 수 있어야 함.
@@ -145,13 +141,13 @@ class CkEditor extends AbstractEditor
         return $content;
     }
 
-    protected function getContentHtml($content, $editorSetting)
+    protected function getContentHtml($content, $options)
     {
         $contentHtml = [];
         $contentHtml[] = '<textarea ';
-        $contentHtml[] = 'name="' . $editorSetting['contentDomName'] . '" ';
-        $contentHtml[] = 'id="' . $editorSetting['contentDomId'] . '" ';
-        $contentHtml[] = $this->getContentDomHtmlOption($editorSetting['contentDomOptions']);
+        $contentHtml[] = 'name="' . $options['contentDomName'] . '" ';
+        $contentHtml[] = 'id="' . $options['contentDomId'] . '" ';
+        $contentHtml[] = $this->getContentDomHtmlOption($options['contentDomOptions']);
         $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
         $contentHtml[] = $content;
         $contentHtml[] = '</textarea>';
@@ -159,7 +155,7 @@ class CkEditor extends AbstractEditor
         return implode('', $contentHtml);
     }
 
-    protected function getEditorScript($editorSetting)
+    protected function getEditorScript($options)
     {
         $arrConfig = array_except($this->config->all(), 'tools');
         $tools = [];
@@ -172,15 +168,21 @@ class CkEditor extends AbstractEditor
                 'options' => $tool->getOptions(),
             ];
         }
-        $editorScript = [];
-        $editorScript[] = "
+        $editorScript = '
         <script>
             $(function() {
-                XEeditor.getEditor('" . $this->getName() . "').create('{$editorSetting['contentDomId']}', ".json_encode($editorSetting['editorOptions']).", ".json_encode($arrConfig).", ".json_encode($tools).");
+                XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
             });
-        </script>";
+        </script>';
 
-        return implode('', $editorScript);
+        return sprintf(
+            $editorScript,
+            $this->getName(),
+            $options['contentDomId'],
+            json_encode($options['editorOptions']),
+            json_encode($arrConfig),
+            json_encode($tools)
+        );
     }
 
     /**
@@ -193,15 +195,14 @@ class CkEditor extends AbstractEditor
         if (self::$loaded === false) {
             self::$loaded = true;
 
-            $path = '/plugins/ckeditor/assets/ckeditor';
+            $path = str_replace(base_path(), '', realpath(__DIR__.'/../../assets/ckeditor'));
             XeFrontend::js([
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
-                asset(str_replace(base_path(), '', $path . '/styles.js')),
-//                asset(str_replace(base_path(), '', $path . '/xe3.js')),
-                asset(str_replace(base_path(), '', $path . '/xe.ckeditor.define.js')),
+                asset($path . '/ckeditor.js'),
+                asset($path . '/styles.js'),
+                asset($path . '/xe.ckeditor.define.js'),
             ])->load();
 
             XeFrontend::css([
@@ -210,7 +211,6 @@ class CkEditor extends AbstractEditor
 
             // ckeditor load 후 plugin 을 불러옴
             $this->initAssetPlugins();
-
         }
 
     }
