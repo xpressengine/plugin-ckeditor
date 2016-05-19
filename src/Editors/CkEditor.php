@@ -16,7 +16,7 @@ namespace Xpressengine\Plugins\CkEditor\Editors;
 use XeFrontend;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
-use Xpressengine\Editor\AbstractParts;
+use Xpressengine\Editor\AbstractTool;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
@@ -41,7 +41,7 @@ class CkEditor extends AbstractEditor
 
     protected static $plugins = [];
 
-    protected $partsBag;
+    protected $tools;
 
     const FILE_UPLOAD_PATH = 'attached/ckeditor';
 
@@ -110,7 +110,7 @@ class CkEditor extends AbstractEditor
         static::$plugins = $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
 
         $this->initAssets();
-        $this->loadParts();
+        $this->loadTools();
 
         $htmlString = [];
         if($this->arguments !== false){
@@ -125,12 +125,12 @@ class CkEditor extends AbstractEditor
         return $this->renderPlugins(implode('', $htmlString));
     }
 
-    protected function loadParts()
+    protected function loadTools()
     {
-        foreach ($this->config->get('parts', []) as $partsId) {
-            if ($parts = $this->editors->getParts($partsId, $this->instanceId)) {
-                $parts->initAssets();
-                $this->partsBag[$partsId] = $parts;
+        foreach ($this->config->get('tools', []) as $toolId) {
+            if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
+                $tool->initAssets();
+                $this->tools[$toolId] = $tool;
             }
         }
     }
@@ -161,39 +161,27 @@ class CkEditor extends AbstractEditor
 
     protected function getEditorScript($editorSetting)
     {
-        $arrConfig = array_except($this->config->all(), 'parts');
-        $argsParts = [];
-        /** @var AbstractParts $parts */
-        foreach ($this->partsBag as $parts) {
-            $argsParts[] = [
-                'name' => $parts->getName(),
-                'icon' => $parts->getIcon()
+        $arrConfig = array_except($this->config->all(), 'tools');
+        $tools = [];
+        /** @var AbstractTool $tool */
+        foreach ($this->tools as $tool) {
+            $tools[] = [
+                'id' => $tool->getId(),
+                'name' => $tool->getName(),
+                'icon' => $tool->getIcon(),
+                'options' => $tool->getOptions(),
             ];
         }
         $editorScript = [];
         $editorScript[] = "
         <script>
             $(function() {
-                xe3CkEditor('{$editorSetting['contentDomId']}', ".json_encode($editorSetting['editorOptions']).", ".json_encode($arrConfig).", ".json_encode($argsParts).");
-            });r
+                XEeditor.getEditor('" . $this->getName() . "').create('{$editorSetting['contentDomId']}', ".json_encode($editorSetting['editorOptions']).", ".json_encode($arrConfig).", ".json_encode($tools).");
+            });
         </script>";
 
         return implode('', $editorScript);
     }
-
-//    protected function getPluginsScript()
-//    {
-//        $htmlString = [];
-//        /** @var CkEditorPluginInterface $plugin */
-//        foreach (static::$plugins as $plugin) {
-//            $htmlString[] = $plugin::render();
-//        }
-//    }
-
-//    public static function getManageUri()
-//    {
-//        // TODO: Implement getManageUri() method.
-//    }
 
     /**
      * initAssets
@@ -212,7 +200,8 @@ class CkEditor extends AbstractEditor
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
                 asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
                 asset(str_replace(base_path(), '', $path . '/styles.js')),
-                asset(str_replace(base_path(), '', $path . '/xe3.js')),
+//                asset(str_replace(base_path(), '', $path . '/xe3.js')),
+                asset(str_replace(base_path(), '', $path . '/xe.ckeditor.define.js')),
             ])->load();
 
             XeFrontend::css([
@@ -249,6 +238,11 @@ class CkEditor extends AbstractEditor
         }
 
         return $optionsString;
+    }
+
+    public function getName()
+    {
+        return 'XEckeditor';
     }
 
     /**

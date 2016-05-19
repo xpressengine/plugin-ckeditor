@@ -21,12 +21,12 @@ class SettingsController extends Controller
     {
         $config = XeConfig::get(Editors\CkEditor::getId() . '.' . $instanceId);
 
-        $parts = $handler->getPartsAll();
+        $tools = $handler->getToolAll();
 
-        $partsIds = $config->get('parts', []);
-        $activated = array_intersect_key($parts, array_flip($partsIds));
-        $activated = array_merge(array_flip($partsIds), $activated);
-        $deactivated = array_diff_key($parts, array_flip($partsIds));
+        $toolIds = $config->get('tools', []);
+        $activated = array_intersect_key($tools, array_flip($toolIds));
+        $activated = array_merge(array_flip($toolIds), $activated);
+        $deactivated = array_diff_key($tools, array_flip($toolIds));
 
         $items = [];
         foreach ($activated as $key => $item) {
@@ -48,7 +48,7 @@ class SettingsController extends Controller
         XeConfig::set(Editors\CkEditor::getId() . '.' . $instanceId, [
             'var1' => $request->get('var1'),
             'var2' => $request->get('var2'),
-            'parts' => $request->get('parts', [])
+            'tools' => $request->get('tools', [])
         ]);
 
         return redirect()->route('manage.plugin.cke.setting', $instanceId);

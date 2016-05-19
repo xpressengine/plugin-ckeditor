@@ -66,7 +66,7 @@
                                     <div class="xe-btn-toggle pull-right">
                                         <label>
                                             <span class="sr-only">toggle</span>
-                                            <input type="checkbox" name="parts[]" value="{{ $id }}" {{$item['activated'] ? 'checked' : ''}}>
+                                            <input type="checkbox" name="tools[]" value="{{ $id }}" {{$item['activated'] ? 'checked' : ''}}>
                                             <span class="toggle"></span>
                                         </label>
                                     </div>
