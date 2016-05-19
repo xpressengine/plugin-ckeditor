@@ -43,7 +43,7 @@ class CkEditor extends AbstractUIObject
             'contentDomName' => 'content',
             'contentDomId' => 'xeContentEditor',
             'contentDomOptions' => [
-                'class' => 'form-control',
+                'class' => 'xe-form-control',
                 'rows' => '20',
                 'cols' => '80'
             ],
@@ -142,8 +142,10 @@ class CkEditor extends AbstractUIObject
         $editorScript[] = "
         <script>
             $(function() {
-                xe3CkEditor('{$editorConfig['contentDomId']}', ".json_encode($editorConfig['editorConfig']).");
+                XEeditor.getEditor('XEckeditor').create('{$editorConfig['contentDomId']}', ".json_encode($editorConfig['editorConfig']).");
             });
+            
+            
         </script>";
 
         return implode('', $editorScript);
@@ -182,9 +184,11 @@ class CkEditor extends AbstractUIObject
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
+                'assets/core/common/js/xe.editor.interface.js',
                 asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
                 asset(str_replace(base_path(), '', $path . '/styles.js')),
-                asset(str_replace(base_path(), '', $path . '/xe3.js')),
+                asset(str_replace(base_path(), '', $path . '/xe.ckeditor.define.js')),
+                //asset(str_replace(base_path(), '', $path . '/xe3.js')),
             ])->load();
 
             XeFrontend::css([

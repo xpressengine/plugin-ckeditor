@@ -60,10 +60,10 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
         if (self::$loaded === false) {
             self::$loaded = true;
 
-            $path = '/plugins/ckeditor/assets/plugins';
-            XeFrontend::js([
-                asset(str_replace(base_path(), '', $path . '/append.js')),
-            ])->load();
+//            $path = '/plugins/ckeditor/assets/plugins';
+//            XeFrontend::js([
+//                asset(str_replace(base_path(), '', $path . '/append.js')),
+//            ])->load();
         }
 
     }
