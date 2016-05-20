@@ -21,6 +21,8 @@ use XeConfig;
 /**
  * CkEditor plugin
  *
+ * todo: default config, permission 등록
+ * 
  * @category    CkEditor
  * @package     CkEditor
  * @author      XE Team (akasima) <osh@xpressengine.com>

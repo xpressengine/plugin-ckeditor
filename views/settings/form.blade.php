@@ -47,6 +47,18 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <label>html 편집 권한</label>
+                                        <div class="well">
+                                            {!! uio('permission', $permArgs['html']) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -70,47 +82,13 @@
                                             <span class="toggle"></span>
                                         </label>
                                     </div>
-                                    {{--@if($uri = $class::getInstanceSettingURI($instanceId))--}}
-                                    {{--<a href="{{ $uri }}" class="btn btn-default btn-xs">설정</a>--}}
-                                    {{--@endif--}}
+                                    <div class="pull-right">
+                                        @if($uri = $item['class']::getInstanceSettingURI($instanceId))
+                                            <a href="{{ $uri }}">설정</a>
+                                        @endif
+                                    </div>
                                 </li>
                                 @endforeach
-                                {{--<li class="list-group-item">--}}
-                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
-                                    {{--<em class="item-title">구글지도</em>--}}
-                                    {{--<span class="item-subtext">구글지도를 삽입할 수 있습니다.</span>--}}
-                                    {{--<div class="xe-btn-toggle pull-right">--}}
-                                        {{--<label>--}}
-                                            {{--<span class="sr-only">toggle</span>--}}
-                                            {{--<input type="checkbox" name="googleMap" checked="checked">--}}
-                                            {{--<span class="toggle"></span>--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</li>--}}
-                                {{--<li class="list-group-item">--}}
-                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
-                                    {{--<em class="item-title">이모티콘</em>--}}
-                                    {{--<span class="item-subtext">이모티콘을 에디터에 삽입할 수 있습니다.</span>--}}
-                                    {{--<div class="xe-btn-toggle pull-right">--}}
-                                        {{--<label>--}}
-                                            {{--<span class="sr-only">toggle</span>--}}
-                                            {{--<input type="checkbox" name="emoticon" checked="checked">--}}
-                                            {{--<span class="toggle"></span>--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</li>--}}
-                                {{--<li class="list-group-item">--}}
-                                    {{--<button class="btn handler"><i class="xi-bullet-point"></i></button>--}}
-                                    {{--<em class="item-title">인용구</em>--}}
-                                    {{--<span class="item-subtext">인용구를 삽입합니다.</span>--}}
-                                    {{--<div class="xe-btn-toggle pull-right">--}}
-                                        {{--<label>--}}
-                                            {{--<span class="sr-only">toggle</span>--}}
-                                            {{--<input type="checkbox" name="cite" checked="checked">--}}
-                                            {{--<span class="toggle"></span>--}}
-                                        {{--</label>--}}
-                                    {{--</div>--}}
-                                {{--</li>--}}
                             </ul>
 
                     </div>

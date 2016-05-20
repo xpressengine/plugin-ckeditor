@@ -18,8 +18,10 @@ use Xpressengine\Editor\AbstractEditor;
 use Route;
 use Xpressengine\Editor\AbstractTool;
 use Xpressengine\Editor\EditorHandler;
+use Xpressengine\Permission\Instance;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
+use Illuminate\Contracts\Auth\Access\Gate;
 
 /**
  * CkEditor
@@ -37,6 +39,8 @@ class CkEditor extends AbstractEditor
 
     protected $register;
 
+    protected $gate;
+
     protected static $loaded = false;
 
     protected static $plugins = [];
@@ -47,10 +51,11 @@ class CkEditor extends AbstractEditor
 
     const THUMBNAIL_TYPE = 'spill';
 
-    public function __construct(EditorHandler $editors, PluginRegister $register)
+    public function __construct(EditorHandler $editors, PluginRegister $register, Gate $gate)
     {
         $this->editors = $editors;
         $this->register = $register;
+        $this->gate = $gate;
     }
 
     protected function getDefaultOptions()
@@ -158,6 +163,10 @@ class CkEditor extends AbstractEditor
     protected function getEditorScript($options)
     {
         $arrConfig = array_except($this->config->all(), 'tools');
+        $arrConfig['perms'] = [
+            'html' => $this->gate->allows('html', new Instance(static::getPermKey($this->instanceId)))
+        ];
+
         $tools = [];
         /** @var AbstractTool $tool */
         foreach ($this->tools as $tool) {
@@ -166,6 +175,7 @@ class CkEditor extends AbstractEditor
                 'name' => $tool->getName(),
                 'icon' => $tool->getIcon(),
                 'options' => $tool->getOptions(),
+                'enable' => $tool->allows(),
             ];
         }
         $editorScript = '
@@ -206,7 +216,7 @@ class CkEditor extends AbstractEditor
             ])->load();
 
             XeFrontend::css([
-                asset(str_replace(base_path(), '', $path . '/xe3.css')),
+                asset($path . '/xe3.css'),
             ])->load();
 
             // ckeditor load 후 plugin 을 불러옴
@@ -238,6 +248,11 @@ class CkEditor extends AbstractEditor
         }
 
         return $optionsString;
+    }
+
+    public static function getPermKey($instanceId)
+    {
+        return static::getConfigKey($instanceId);
     }
 
     public function getName()
