@@ -70,53 +70,6 @@ XEeditor.define({
         }
     },
     interfaces: {
-        components: [{
-            name: 'Code',
-            options: {
-                label: 'Wrap code',
-                command: 'wrapCode'
-            },
-            exec: function(editor) {
-                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-            }
-        }, {
-            name: 'Diagram',
-            options: {
-                label: 'Wrap diagram',
-                command: 'wrapDiagram'
-            },
-            exec: function (editor) {
-                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-            }
-        }, {
-            name: 'FileUpload',
-            options: {
-                label: 'File upload'
-
-            }
-        }, {
-            name: 'ImageUpload',
-            options: {
-                label: 'Image upload'
-            }
-        }],
-        addComponents: function(components) {
-            var editor = this.props.editor;
-
-            for(var i = 0, max = components.length; i < max; i += 1) {
-                var component = components[i];
-
-                editor.ui.add( component.name, CKEDITOR.UI_BUTTON, component.options);
-
-                if(component.hasOwnProperty('options')
-                    && component.options.hasOwnProperty('command')) {
-                    editor.addCommand(component.options.command, {
-                        exec: component.exec
-                    });
-                }
-            }
-
-        },
         initialize: function (selector, options) {
             var editor = CKEDITOR.replace(selector, options || {});
 
@@ -139,21 +92,53 @@ XEeditor.define({
         addContents: function (text) {
             CKEDITOR.instances[this.props.selector].insertHtml(text);
         },
-        addComponents: function (components) {
+        addTools: function (components) {
             var editor = this.props.editor;
 
             for(var i = 0, max = components.length; i < max; i += 1) {
                 var component = components[i];
 
-                editor.ui.add( component.name, CKEDITOR.UI_BUTTON, component.options);
+                if(component.permission) {
+                    editor.ui.add( component.name, CKEDITOR.UI_BUTTON, component.options);
 
-                if(component.hasOwnProperty('options')
-                    && component.options.hasOwnProperty('command')) {
-                    editor.addCommand(component.options.command, {
-                        exec: component.exec
-                    });
+                    if(component.hasOwnProperty('options')
+                        && component.options.hasOwnProperty('command')) {
+                        editor.addCommand(component.options.command, {
+                            exec: XEeditor.tools.get(components.id).iconClick
+                        });
+                    }    
                 }
             }
         }
     }
 });
+
+XEedior.tools.define({
+    id : 'editorparts/emoticon@emoticon',
+    events: {
+        iconClick: function() {
+
+        },
+        elementDbClick: function(e, editor, target) {
+
+        }
+    }
+});
+
+XEediorTool.define({
+    name: 'Code',
+    events: {
+        iconClick: function() {
+
+        },
+        elementDbClick: function(e, editor, target) {
+
+        }
+    }
+});
+
+/*
+<div data-xe-parts="{id}"></div>
+
+<img data-xe-part="{id}" />
+*/
