@@ -13,6 +13,7 @@
  */
 namespace Xpressengine\Plugins\CkEditor;
 
+use Xpressengine\Permission\Grant;
 use Xpressengine\Plugin\AbstractPlugin;
 use XeSkin;
 use Route;
@@ -37,7 +38,7 @@ class Plugin extends AbstractPlugin
      */
     public function unInstall()
     {
-        // TODO: Implement unInstall() method.
+        // TODO: config, permission 삭제
     }
 
     /**
@@ -69,7 +70,7 @@ class Plugin extends AbstractPlugin
 
         /** @var \Xpressengine\UIObject\UIObjectHandler $uiobjectHandler */
         $uiobjectHandler = app('xe.uiobject');
-        $uiobjectHandler->setAlias('editor', 'uiobject/ckeditor@ckEditor');
+//        $uiobjectHandler->setAlias('editor', 'uiobject/ckeditor@ckEditor');
         $uiobjectHandler->setAlias('contentCompiler', 'uiobject/ckeditor@contentsCompiler');
 
         XeSkin::setDefaultSettingsSkin($this->getId(), 'editor/ckeditor@ckEditor/settingsSkin/ckeditor@default');
@@ -93,6 +94,8 @@ class Plugin extends AbstractPlugin
      */
     public function activate($installedVersion = null)
     {
+        // todo: 기본 설정 및 권한 등록
         XeConfig::set('editor/ckeditor@ckEditor', []);
+//        app('xe.permission')->register('editor/ckeditor@ckEditor', new Grant());
     }
 }
