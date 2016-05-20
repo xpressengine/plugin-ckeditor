@@ -142,10 +142,32 @@ class CkEditor extends AbstractUIObject
         $editorScript[] = "
         <script>
             $(function() {
-                XEeditor.getEditor('XEckeditor').create('{$editorConfig['contentDomId']}', ".json_encode($editorConfig['editorConfig']).");
+                XEeditor.getEditor('XEckeditor').create('{$editorConfig['contentDomId']}', ".json_encode($editorConfig['editorConfig']).",  {},  {
+                    name: 'Code',
+                    options: {
+                        label: 'Wrap code',
+                        command: 'wrapCode',
+                        icon: '/~/~/icon.png'
+                    }
+                }, {
+                    name: 'Diagram',
+                    options: {
+                        label: 'Wrap diagram',
+                        command: 'wrapDiagram'
+                    }
+                }, {
+                    name: 'FileUpload',
+                    options: {
+                        label: 'File upload'
+        
+                    }
+                }, {
+                    name: 'ImageUpload',
+                    options: {
+                        label: 'Image upload'
+                    }
+                });
             });
-            
-            
         </script>";
 
         return implode('', $editorScript);
