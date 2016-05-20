@@ -6,11 +6,12 @@ use XeConfig;
 use App\Http\Controllers\Controller;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Http\Request;
-use Xpressengine\Permission\Grant;
-use Xpressengine\User\Models\UserGroup;
+use Xpressengine\Permission\PermissionSupport;
 
 class SettingsController extends Controller
 {
+    use PermissionSupport;
+
     protected $plugin;
 
     public function __construct()
@@ -22,21 +23,6 @@ class SettingsController extends Controller
     public function getSetting(EditorHandler $handler, $instanceId)
     {
         $config = XeConfig::get(Editors\CkEditor::getConfigKey($instanceId));
-        $permission = app('xe.permission')->findOrNew(Editors\CkEditor::getPermKey($instanceId));
-
-        $mode = function ($action) use ($permission) {
-            return $permission->pure($action) ? 'manual' : 'inherit';
-        };
-
-        $allGroup = UserGroup::get();
-        $permArgs = [
-            'html' => [
-                'mode' => $mode('html'),
-                'grant' => $permission['html'],
-                'title' => 'html',
-                'groups' => $allGroup,
-            ]
-        ];
 
         $tools = $handler->getToolAll();
 
@@ -56,7 +42,7 @@ class SettingsController extends Controller
         return XePresenter::make('form', [
             'instanceId' => $instanceId,
             'config' => $config,
-            'permArgs' => $permArgs,
+            'permArgs' => $this->getPermArguments(Editors\CkEditor::getPermKey($instanceId), 'html'),
             'items' => $items,
         ]);
     }
@@ -69,39 +55,8 @@ class SettingsController extends Controller
             'tools' => $request->get('tools', [])
         ]);
 
-        $permInputs = [];
-        foreach ($request->all() as $name => $value) {
-            if (substr($name, 0, strlen('html')) === 'html') {
-                $permInputs[$name] = $value;
-            }
-        }
-
-        $grantInfo = [
-            'html' => $this->makeGrant($permInputs, 'html'),
-        ];
-
-        $grant = new Grant();
-        foreach (array_filter($grantInfo) as $action => $info) {
-            $grant->set($action, $info);
-        }
-
-        app('xe.permission')->register(Editors\CkEditor::getPermKey($instanceId), $grant);
+        $this->permissionRegister($request, Editors\CkEditor::getPermKey($instanceId), 'html');
 
         return redirect()->route('manage.plugin.cke.setting', $instanceId);
-    }
-
-    private function makeGrant($inputs, $action)
-    {
-        if (array_get($inputs, $action . 'Mode') === 'inherit') {
-            return null;
-        }
-
-        return [
-            Grant::RATING_TYPE => array_get($inputs, $action . 'Rating'),
-            Grant::GROUP_TYPE => array_get($inputs, $action . 'Group', []),
-            Grant::USER_TYPE => array_filter(explode(',', array_get($inputs, $action . 'User'))),
-            Grant::EXCEPT_TYPE => array_filter(explode(',', array_get($inputs, $action . 'Except'))),
-            Grant::VGROUP_TYPE => array_get($inputs, $action . 'VGroup', []),
-        ];
     }
 }
