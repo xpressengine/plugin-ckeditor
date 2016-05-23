@@ -121,18 +121,13 @@ class CkEditor extends AbstractEditor
             $htmlString[] = $this->getEditorScript($options);
         }
 
-        // todo: comment 와 같이 js만 사용 하는 경우 config 값을 전달할 수 있어야 함.
-
         return $this->renderPlugins(implode('', $htmlString));
     }
 
     protected function loadTools()
     {
-        foreach ($this->config->get('tools', []) as $toolId) {
-            if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
-                $tool->initAssets();
-                $this->tools[$toolId] = $tool;
-            }
+        foreach ($this->getTools() as $tool) {
+            $tool->initAssets();
         }
     }
 
@@ -162,22 +157,6 @@ class CkEditor extends AbstractEditor
 
     protected function getEditorScript($options)
     {
-        $arrConfig = array_except($this->config->all(), 'tools');
-        $arrConfig['perms'] = [
-            'html' => $this->gate->allows('html', new Instance(static::getPermKey($this->instanceId)))
-        ];
-
-        $tools = [];
-        /** @var AbstractTool $tool */
-        foreach ($this->tools as $tool) {
-            $tools[] = [
-                'id' => $tool->getId(),
-                'name' => $tool->getName(),
-                'icon' => $tool->getIcon(),
-                'options' => $tool->getOptions(),
-                'enable' => $tool->allows(),
-            ];
-        }
         $editorScript = '
         <script>
             $(function() {
@@ -190,8 +169,8 @@ class CkEditor extends AbstractEditor
             $this->getName(),
             $options['contentDomId'],
             json_encode($options['editorOptions']),
-            json_encode($arrConfig),
-            json_encode($tools)
+            json_encode($this->getConfigData()),
+            json_encode($this->getTools())
         );
     }
 
@@ -258,6 +237,30 @@ class CkEditor extends AbstractEditor
     public function getName()
     {
         return 'XEckeditor';
+    }
+    
+    public function getConfigData()
+    {
+        $data = array_except($this->config->all(), 'tools');
+        $data['perms'] = [
+            'html' => $this->gate->allows('html', new Instance(static::getPermKey($this->instanceId)))
+        ];
+
+        return $data;
+    }
+
+    public function getTools()
+    {
+        if ($this->tools === null) {
+            $this->tools = [];
+            foreach ($this->config->get('tools', []) as $toolId) {
+                if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
+                    $this->tools[] = $tool;
+                }
+            }
+        }
+
+        return $this->tools;
     }
 
     /**
