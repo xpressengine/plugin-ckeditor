@@ -54,20 +54,6 @@ class CkEditor extends AbstractEditor
         $this->gate = $gate;
     }
 
-    protected function getDefaultOptions()
-    {
-        return [
-            'contentDomName' => 'content',
-            'contentDomId' => 'xeContentEditor',
-            'contentDomOptions' => [
-                'class' => 'form-control',
-                'rows' => '20',
-                'cols' => '80'
-            ],
-            'editorOptions' => [],
-        ];
-    }
-
     public static function boot()
     {
         self::registerFixedRoute();
@@ -93,16 +79,6 @@ class CkEditor extends AbstractEditor
     }
 
     /**
-     * get options
-     *
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return array_merge($this->getDefaultOptions(), $this->arguments);
-    }
-
-    /**
      * Get the evaluated contents of the object.
      *
      * @return string
@@ -110,27 +86,8 @@ class CkEditor extends AbstractEditor
     public function render()
     {
         $this->initAssets();
-        $this->loadTools();
 
-        $htmlString = [];
-        $scriptOnly = true;
-        if($this->arguments !== false){
-            $options = $this->getOptions();
-
-            $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
-            $htmlString[] = $this->getEditorScript($options);
-
-            $scriptOnly = false;
-        }
-
-        return $this->renderPlugins(implode('', $htmlString), $scriptOnly);
-    }
-
-    protected function loadTools()
-    {
-        foreach ($this->getTools() as $tool) {
-            $tool->initAssets();
-        }
+        return $this->renderPlugins(parent::render(), $this->scriptOnly);
     }
 
     protected function renderPlugins($content, $scriptOnly)
@@ -146,39 +103,6 @@ class CkEditor extends AbstractEditor
     protected function getPlugins()
     {
         return $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
-    }
-
-    protected function getContentHtml($content, $options)
-    {
-        $contentHtml = [];
-        $contentHtml[] = '<textarea ';
-        $contentHtml[] = 'name="' . $options['contentDomName'] . '" ';
-        $contentHtml[] = 'id="' . $options['contentDomId'] . '" ';
-        $contentHtml[] = $this->getContentDomHtmlOption($options['contentDomOptions']);
-        $contentHtml[] = ' placeholder="' . xe_trans('xe::content') . '">';
-        $contentHtml[] = $content;
-        $contentHtml[] = '</textarea>';
-
-        return implode('', $contentHtml);
-    }
-
-    protected function getEditorScript($options)
-    {
-        $editorScript = '
-        <script>
-            $(function() {
-                XEeditor.getEditor(\'%s\').create(\'%s\', %s, %s, %s);
-            });
-        </script>';
-
-        return sprintf(
-            $editorScript,
-            $this->getName(),
-            $options['contentDomId'],
-            json_encode($options['editorOptions']),
-            json_encode($this->getConfigData()),
-            json_encode($this->getTools())
-        );
     }
 
     /**
@@ -205,23 +129,6 @@ class CkEditor extends AbstractEditor
                 asset($path . '/xe3.css'),
             ])->load();
         }
-    }
-
-    /**
-     * getContentDomHtmlOption
-     *
-     * @param array $domOptions
-     *
-     * @return string
-     */
-    protected function getContentDomHtmlOption($domOptions)
-    {
-        $optionsString = '';
-        foreach ($domOptions as $key => $val) {
-            $optionsString.= "$key='{$val}' ";
-        }
-
-        return $optionsString;
     }
 
     public static function getPermKey($instanceId)
