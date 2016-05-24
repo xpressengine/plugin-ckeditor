@@ -34,8 +34,6 @@ use Illuminate\Contracts\Auth\Access\Gate;
  */
 class CkEditor extends AbstractEditor
 {
-    protected $editors;
-
     protected $register;
 
     protected $gate;
@@ -44,15 +42,14 @@ class CkEditor extends AbstractEditor
 
     protected static $plugins = [];
 
-    protected $tools;
-
     const FILE_UPLOAD_PATH = 'attached/ckeditor';
 
     const THUMBNAIL_TYPE = 'spill';
 
-    public function __construct(EditorHandler $editors, PluginRegister $register, Gate $gate)
+    public function __construct(EditorHandler $editors, PluginRegister $register, Gate $gate, $instanceId)
     {
-        $this->editors = $editors;
+        parent::__construct($editors, $instanceId);
+        
         $this->register = $register;
         $this->gate = $gate;
     }
@@ -105,10 +102,13 @@ class CkEditor extends AbstractEditor
         return array_merge($this->getDefaultOptions(), $this->arguments);
     }
 
+    /**
+     * Get the evaluated contents of the object.
+     *
+     * @return string
+     */
     public function render()
     {
-        static::$plugins = $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
-
         $this->initAssets();
         $this->loadTools();
 
@@ -136,11 +136,16 @@ class CkEditor extends AbstractEditor
     protected function renderPlugins($content, $scriptOnly)
     {
         /** @var CkEditorPluginInterface $plugin */
-        foreach (static::$plugins as $plugin) {
+        foreach ($this->getPlugins() as $plugin) {
             $content = $plugin::render($content, $scriptOnly);
         }
 
         return $content;
+    }
+
+    protected function getPlugins()
+    {
+        return $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
     }
 
     protected function getContentHtml($content, $options)
@@ -239,18 +244,9 @@ class CkEditor extends AbstractEditor
         return $data;
     }
 
-    public function getTools()
+    public function getActivateToolIds()
     {
-        if ($this->tools === null) {
-            $this->tools = [];
-            foreach ($this->config->get('tools', []) as $toolId) {
-                if ($tool = $this->editors->getTool($toolId, $this->instanceId)) {
-                    $this->tools[] = $tool;
-                }
-            }
-        }
-
-        return $this->tools;
+        return $this->config->get('tools', []);
     }
 
     /**
@@ -267,7 +263,7 @@ class CkEditor extends AbstractEditor
     protected function compilePlugins($content)
     {
         /** @var CkEditorPluginInterface $plugin */
-        foreach (static::$plugins as $plugin) {
+        foreach ($this->getPlugins() as $plugin) {
             $content = $plugin::compile($content);
         }
 
