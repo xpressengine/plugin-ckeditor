@@ -16,7 +16,6 @@ namespace Xpressengine\Plugins\CkEditor\Editors;
 use XeFrontend;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
-use Xpressengine\Editor\AbstractTool;
 use Xpressengine\Editor\EditorHandler;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Plugin\PluginRegister;
@@ -114,14 +113,17 @@ class CkEditor extends AbstractEditor
         $this->loadTools();
 
         $htmlString = [];
+        $scriptOnly = true;
         if($this->arguments !== false){
             $options = $this->getOptions();
 
             $htmlString[] = $this->getContentHtml(array_get($options, 'content'), $options);
             $htmlString[] = $this->getEditorScript($options);
+
+            $scriptOnly = false;
         }
 
-        return $this->renderPlugins(implode('', $htmlString));
+        return $this->renderPlugins(implode('', $htmlString), $scriptOnly);
     }
 
     protected function loadTools()
@@ -131,11 +133,11 @@ class CkEditor extends AbstractEditor
         }
     }
 
-    protected function renderPlugins($content)
+    protected function renderPlugins($content, $scriptOnly)
     {
         /** @var CkEditorPluginInterface $plugin */
         foreach (static::$plugins as $plugin) {
-            $content = $plugin::render($content);
+            $content = $plugin::render($content, $scriptOnly);
         }
 
         return $content;
@@ -197,18 +199,6 @@ class CkEditor extends AbstractEditor
             XeFrontend::css([
                 asset($path . '/xe3.css'),
             ])->load();
-
-            // ckeditor load 후 plugin 을 불러옴
-            $this->initAssetPlugins();
-        }
-
-    }
-
-    protected function initAssetPlugins()
-    {
-        /** @var CkEditorPluginInterface $plugin */
-        foreach (static::$plugins as $plugin) {
-            $plugin::initAssets();
         }
     }
 
@@ -266,12 +256,22 @@ class CkEditor extends AbstractEditor
     /**
      * 에디터로 등록된 내용 출력
      *
-     * @param string $contents contents
+     * @param string $content content
      * @return string
      */
-    public function contentsCompile($contents)
+    public function compile($content)
     {
-        // TODO: Implement contentsCompile() method.
+        return $this->compilePlugins($content);
+    }
+
+    protected function compilePlugins($content)
+    {
+        /** @var CkEditorPluginInterface $plugin */
+        foreach (static::$plugins as $plugin) {
+            $content = $plugin::compile($content);
+        }
+
+        return $content;
     }
 
     public static function getInstanceSettingURI($instanceId)

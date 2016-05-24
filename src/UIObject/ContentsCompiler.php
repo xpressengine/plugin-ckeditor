@@ -11,6 +11,8 @@ use XeFrontend;
 /**
  * Class ContentsView
  * @package Xpressengine\UIObjects\CKEditor
+ *
+ * @deprecated 
  */
 class ContentsCompiler extends AbstractUIObject
 {

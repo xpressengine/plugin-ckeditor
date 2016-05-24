@@ -27,7 +27,7 @@ namespace Xpressengine\Plugins\CkEditor;
  */
 interface CkEditorPluginInterface
 {
-    public static function render($content);
+    public static function render($content, $scriptOnly = false);
 
-    public static function initAssets();
+    public static function compile($content);
 }
