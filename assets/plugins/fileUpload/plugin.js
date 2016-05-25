@@ -28,7 +28,10 @@
                 }
 
                 dropZone.addClass('drag-over');
-                $drag_here.height($(editor.container.$).height());
+                $drag_here.css({
+                  height: $(editor.container.$).height(),
+                  paddingTop: $(editor.container.$).find('.cke_top').height() + 50 + 'px'
+                });
                 $drag_here.show();
             }
 
@@ -264,9 +267,9 @@
     };
 
     CKEDITOR.plugins.add('fileUpload', {
+      icons: 'fileupload',
 
         init: function(editor) {
-
             // config 체크
             if (editor.config.fileUpload.upload_url == undefined) {
                 Error('editor.config.fileUpload.upload_url 를 설정해야 합니다.');

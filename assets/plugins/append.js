@@ -46,18 +46,22 @@
   xe3CkEditorConfig.putAfterInit('defaultPlugin', function(editor) {
     editor.ui.add( 'Code', CKEDITOR.UI_BUTTON, {
       label: 'Wrap code',
-      command: 'wrapCode'
+      command: 'wrapCode',
+      icon: basePath + 'fileUpload/icons/code.png'
     });
     editor.ui.add( 'Diagram', CKEDITOR.UI_BUTTON, {
       label: 'Wrap diagram',
-      command: 'wrapDiagram'
+      command: 'wrapDiagram',
+      icon: basePath + 'fileUpload/icons/diagram.png'
     });
 
     editor.ui.add( 'FileUpload', CKEDITOR.UI_BUTTON, {
-      label: 'File upload'
+      label: 'File upload',
+      icon: basePath + 'fileUpload/icons/fileupload.png'
     });
     editor.ui.add( 'ImageUpload', CKEDITOR.UI_BUTTON, {
-      label: 'Image upload'
+      label: 'Image upload',
+      icon: basePath + 'fileUpload/icons/imageupload.png'
     });
 
     editor.addCommand( 'fileUpload', {
@@ -66,16 +70,16 @@
       }
     });
 
-        editor.addCommand( 'wrapCode', {
-            exec: function( editor ) {
-                editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
-            }
-        });
-        editor.addCommand( 'wrapDiagram', {
-            exec: function( editor ) {
-                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-            }
-        });
+    editor.addCommand( 'wrapCode', {
+      exec: function( editor ) {
+        editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
+      }
+    });
+    editor.addCommand( 'wrapDiagram', {
+      exec: function( editor ) {
+        editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+      }
+    });
   });
 
 })($);
