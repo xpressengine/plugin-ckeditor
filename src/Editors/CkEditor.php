@@ -117,6 +117,7 @@ class CkEditor extends AbstractEditor
 
             $path = str_replace(base_path(), '', realpath(__DIR__.'/../../assets/ckeditor'));
             XeFrontend::js([
+                'assets/core/common/js/xe.editor.core.js',
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',

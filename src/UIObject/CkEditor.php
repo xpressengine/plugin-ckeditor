@@ -208,7 +208,7 @@ class CkEditor extends AbstractUIObject
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                'assets/core/common/js/xe.editor.interface.js',
+                'assets/core/common/js/xe.editor.core.js',
                 asset(str_replace(base_path(), '', $path . '/ckeditor.js')),
                 asset(str_replace(base_path(), '', $path . '/styles.js')),
                 asset(str_replace(base_path(), '', $path . '/xe.ckeditor.define.js')),
