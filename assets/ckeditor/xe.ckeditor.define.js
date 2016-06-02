@@ -50,16 +50,16 @@ XEeditor.define({
         },
         plugins: [{
             name: 'extractor',
-            path: CKEDITOR.basePath + 'plugins/extractor/plugin.js'
+            path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
         },{
             name: 'fileUpload',
-            path: CKEDITOR.basePath + 'plugins/fileUpload/plugin.js'
+            path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
         },{
             name: 'suggestion',
-            path: CKEDITOR.basePath + 'plugins/suggestion/plugin.js'
+            path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
         },{
             name: 'sourcearea',
-            path: CKEDITOR.basePath + 'plugins/sourcearea/plugin.js'
+            path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
         }],
         addPlugins: function(plugins) {
             if(plugins.length > 0) {
@@ -93,21 +93,21 @@ XEeditor.define({
             editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
               label: 'Wrap code',
               command: 'wrapCode',
-              icon: CKEDITOR.basePath + '../plugins/fileUpload/icons/code.png'
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
             });
             editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
               label: 'Wrap diagram',
               command: 'wrapDiagram',
-              icon: CKEDITOR.basePath + '../plugins/fileUpload/icons/diagram.png'
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
             });
 
             editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
               label: 'File upload',
-              icon: CKEDITOR.basePath + '../plugins/fileUpload/icons/fileupload.png'
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
             });
             editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
               label: 'Image upload',
-              icon: CKEDITOR.basePath + '../plugins/fileUpload/icons/imageupload.png'
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
             });
 
             editor.addCommand( 'fileUpload', {
