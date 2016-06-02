@@ -76,6 +76,8 @@ XEeditor.define({
     interfaces: {
         coreEditor: null,
         initialize: function (selector, options, customOptions) {
+            CKEDITOR.env.isCompatible = true;
+
             var editor = CKEDITOR.replace(selector, options || {});
 
             editor.on('change', function(e) {
