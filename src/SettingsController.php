@@ -22,7 +22,7 @@ class SettingsController extends Controller
 
     public function getSetting(EditorHandler $handler, $instanceId)
     {
-        $config = XeConfig::get(Editors\CkEditor::getConfigKey($instanceId));
+        $config = XeConfig::getOrNew(Editors\CkEditor::getConfigKey($instanceId));
 
         $tools = $handler->getToolAll();
 
