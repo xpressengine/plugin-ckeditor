@@ -16,14 +16,21 @@ XEeditor.define({
                     $(e.editor.container.$).removeClass('active');
                 }.bind(this)
             },
-            // toolbarGroups: [
-            //     { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-            //     { name: 'paragraph', groups: [ 'list' ] },
-            //     { name: 'styles' },
-            //     { name: 'tools' },
-            //     { name: 'document', groups: [ 'mode' ] },
-            //     { name: 'others', groups: ['code', 'source'] }
-            // ],
+            toolbarGroups: [
+              { name: 'clipboard',   groups: [ 'undo', 'clipboard' ] },
+              { name: 'editing',     groups: [ 'find', 'selection' ] },
+              { name: 'links' },
+              { name: 'insert' },
+              { name: 'tools' },
+              { name: 'document',    groups: [ 'mode' ] },
+              '/',
+              { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+              { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+              '/',
+              { name: 'styles' },
+              { name: 'colors' },
+              { name: 'others' }
+            ],
             height : 300,
             autoGrow_minHeight : 300,
             autoGrow_maxHeight : 300,
@@ -42,7 +49,8 @@ XEeditor.define({
 
             //     }
             // },
-            // removeButtons : 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript',
+            removeButtons : 'Save,Preview,Print,Cut,Copy,Paste',
+            removePlugins: 'stylescombo',
             // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
