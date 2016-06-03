@@ -2,15 +2,15 @@
 /**
  * ContentsCompilerPlugin
  *
- * PHP version 5
- *
  * @category    CkEditorPlugin
  * @package     CkEditorPlugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Plugins\CkEditor\Extension;
 
 use XeFrontend;
@@ -25,12 +25,13 @@ use Xpressengine\Plugins\Board\Modules\Board as BoardModule;
  *
  * @category    CkEditorPlugin
  * @package     CkEditorPlugin
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  *
- * @deprecated 
+ * @deprecated
  */
 class ContentsCompilerPlugin extends AbstractComponent implements ContentsCompilerPluginInterface
 {
