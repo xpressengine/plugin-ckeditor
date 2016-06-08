@@ -18,12 +18,11 @@ use Xpressengine\Plugin\AbstractPlugin;
 use XeSkin;
 use Route;
 use XeConfig;
+use Xpressengine\User\Rating;
 
 /**
  * CkEditor plugin
  *
- * todo: default config, permission 등록
- * 
  * @category    CkEditor
  * @package     CkEditor
  * @author      XE Team (akasima) <osh@xpressengine.com>
@@ -33,6 +32,34 @@ use XeConfig;
  */
 class Plugin extends AbstractPlugin
 {
+    /**
+     * 플러그인을 설치한다. 플러그인이 설치될 때 실행할 코드를 여기에 작성한다
+     *
+     * @return void
+     */
+    public function install()
+    {
+        XeConfig::set(Editors\CkEditor::getId(), [
+            'height' => 400,
+            'fontSize' => '14px',
+            'fontFamily' => null,
+            'tools' => []
+        ]);
+
+        $data = [
+            Grant::RATING_TYPE => Rating::MEMBER,
+            Grant::GROUP_TYPE => [],
+            Grant::USER_TYPE => [],
+            Grant::EXCEPT_TYPE => [],
+            Grant::VGROUP_TYPE => [],
+        ];
+
+        $grant = new Grant();
+        $grant->set('html', $data);
+        $grant->set('tool', $data);
+        app('xe.permission')->register(Editors\CkEditor::getId(), $grant);
+    }
+
     /**
      * @return boolean
      */
@@ -68,10 +95,10 @@ class Plugin extends AbstractPlugin
     {
 //        $editor = app('xe.editor');
 
-        /** @var \Xpressengine\UIObject\UIObjectHandler $uiobjectHandler */
-        $uiobjectHandler = app('xe.uiobject');
+//        /** @var \Xpressengine\UIObject\UIObjectHandler $uiobjectHandler */
+//        $uiobjectHandler = app('xe.uiobject');
 //        $uiobjectHandler->setAlias('editor', 'uiobject/ckeditor@ckEditor');
-        $uiobjectHandler->setAlias('contentCompiler', 'uiobject/ckeditor@contentsCompiler');
+//        $uiobjectHandler->setAlias('contentCompiler', 'uiobject/ckeditor@contentsCompiler');
 
         XeSkin::setDefaultSettingsSkin($this->getId(), 'editor/ckeditor@ckEditor/settingsSkin/ckeditor@default');
 
@@ -94,8 +121,6 @@ class Plugin extends AbstractPlugin
      */
     public function activate($installedVersion = null)
     {
-        // todo: 기본 설정 및 권한 등록
-        XeConfig::set('editor/ckeditor@ckEditor', []);
-//        app('xe.permission')->register('editor/ckeditor@ckEditor', new Grant());
+        //
     }
 }

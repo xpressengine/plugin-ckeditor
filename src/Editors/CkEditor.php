@@ -145,8 +145,13 @@ class CkEditor extends AbstractEditor
     public function getConfigData()
     {
         $data = array_except($this->config->all(), 'tools');
+        $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
+            return trim($v);
+        }, explode(',', $data['fontFamily'])) : [];
+        $instance = new Instance(static::getPermKey($this->instanceId));
         $data['perms'] = [
-            'html' => $this->gate->allows('html', new Instance(static::getPermKey($this->instanceId)))
+            'html' => $this->gate->allows('html', $instance),
+            'tool' => $this->gate->allows('tool', $instance),
         ];
 
         return $data;

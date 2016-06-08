@@ -33,17 +33,23 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="clearfix">
-                                            <label>설정1</label>
+                                            <label>
+                                                에디터 높이
+                                                <small> 단위: px</small>
+                                            </label>
                                         </div>
-                                        <input type="text" class="form-control" name="var1" value="{{ $config->get('var1') }}">
+                                        <input type="text" class="form-control" name="height" value="{{ $config->get('height') }}">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="clearfix">
-                                            <label>설정2</label>
+                                            <label>
+                                                문서 글자 크기
+                                                <small>12px, 1em등 단위까지 포함해서 입력해주세요.</small>
+                                            </label>
                                         </div>
-                                        <input type="text" class="form-control" name="var2" value="{{ $config->get('var2') }}">
+                                        <input type="text" class="form-control" name="fontSize" value="{{ $config->get('fontSize') }}">
                                     </div>
                                 </div>
                             </div>
@@ -51,16 +57,41 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label>html 편집 권한</label>
-                                        <div class="well">
-                                            {!! uio('permission', $permArgs['html']) !!}
+                                        <div class="clearfix">
+                                            <label>
+                                                글꼴
+                                                <small>콤마(,)로 여러 글꼴을 지정할 수 있습니다.</small>
+                                            </label>
                                         </div>
+                                        <input type="text" class="form-control" name="fontFamily" value="{{ $config->get('fontFamily') }}" placeholder="Ex) Tahoma, Geneva, sans-serif">
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h4 class="panel-title">html 편집 권한</h4>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            {!! uio('permission', $permArgs['html']) !!}
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div class="pull-left">
+                                <h4 class="panel-title">기본 도구 사용 권한</h4>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            {!! uio('permission', $permArgs['tool']) !!}
+                        </div>
+                    </div>
+
 
                     <div class="panel">
                         <div class="panel-heading">

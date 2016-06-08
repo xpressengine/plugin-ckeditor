@@ -42,20 +42,25 @@ class SettingsController extends Controller
         return XePresenter::make('form', [
             'instanceId' => $instanceId,
             'config' => $config,
-            'permArgs' => $this->getPermArguments(Editors\CkEditor::getPermKey($instanceId), 'html'),
+            'permArgs' => $this->getPermArguments(Editors\CkEditor::getPermKey($instanceId), ['html', 'tool']),
             'items' => $items,
         ]);
     }
 
     public function postSetting(Request $request, $instanceId)
     {
+        $this->validate($request, [
+            'height' => 'required|numeric',
+            'fontSize' => 'required'
+        ]);
         XeConfig::set(Editors\CkEditor::getConfigKey($instanceId), [
-            'var1' => $request->get('var1'),
-            'var2' => $request->get('var2'),
+            'height' => $request->get('height'),
+            'fontSize' => $request->get('fontSize'),
+            'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
             'tools' => $request->get('tools', [])
         ]);
 
-        $this->permissionRegister($request, Editors\CkEditor::getPermKey($instanceId), 'html');
+        $this->permissionRegister($request, Editors\CkEditor::getPermKey($instanceId), ['html', 'tool']);
 
         return redirect()->route('manage.plugin.cke.setting', $instanceId);
     }
