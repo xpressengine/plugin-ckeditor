@@ -2,15 +2,15 @@
 /**
  * CkEditor
  *
- * PHP version 5
- *
  * @category    CkEditor
  * @package     CkEditor
- * @author      XE Team (developers) <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
+ * @license     LGPL-2.1
+ * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @link        https://xpressengine.io
  */
+
 namespace Xpressengine\Plugins\CkEditor\Editors;
 
 use XeFrontend;
@@ -27,10 +27,6 @@ use Illuminate\Contracts\Auth\Access\Gate;
  *
  * @category    CkEditor
  * @package     CkEditor
- * @author      XE Team (akasima) <osh@xpressengine.com>
- * @copyright   2014 Copyright (C) NAVER <http://www.navercorp.com>
- * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
- * @link        http://www.xpressengine.com
  */
 class CkEditor extends AbstractEditor
 {
@@ -49,7 +45,7 @@ class CkEditor extends AbstractEditor
     public function __construct(EditorHandler $editors, PluginRegister $register, Gate $gate, $instanceId)
     {
         parent::__construct($editors, $instanceId);
-        
+
         $this->register = $register;
         $this->gate = $gate;
     }
@@ -141,7 +137,7 @@ class CkEditor extends AbstractEditor
     {
         return 'XEckeditor';
     }
-    
+
     public function getConfigData()
     {
         $data = array_except($this->config->all(), 'tools');

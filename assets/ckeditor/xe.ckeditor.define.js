@@ -5,9 +5,9 @@ XEeditor.define({
     editorSettings: {
         name: 'XEckeditor',
         configs: {
-            skin : 'xe3',
+            skin : 'xe-minimalist',
             customConfig : '',
-            contentsCss : '/plugins/ckeditor/assets/ckeditor/content.css',
+            contentsCss : CKEDITOR.basePath + 'content.css',
             on : {
                 focus : function() {
                     $(this.container.$).addClass('active');
@@ -17,50 +17,58 @@ XEeditor.define({
                 }.bind(this)
             },
             toolbarGroups: [
-                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                { name: 'paragraph', groups: [ 'list' ] },
-                { name: 'styles' },
-                { name: 'tools' },
-                { name: 'document', groups: [ 'mode' ] },
-                { name: 'others', groups: ['code', 'source'] }
+              { name: 'clipboard',   groups: [ 'undo', 'clipboard' ] },
+              { name: 'editing',     groups: [ 'find', 'selection' ] },
+              { name: 'links' },
+              { name: 'insert' },
+              { name: 'tools' },
+              { name: 'document',    groups: [ 'mode' ] },
+              '/',
+              { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+              { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+              '/',
+              { name: 'styles' },
+              { name: 'colors' },
+              { name: 'others' }
             ],
             height : 300,
             autoGrow_minHeight : 300,
             autoGrow_maxHeight : 300,
-            allowedContent: {
-                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-                a: {attributes: ['!href']},
-                span: {
-                    attributes: ['contenteditable', 'data-*'],
-                    classes: []
-                },
-                img: {
-                    attributes: ['*'],
-                    classes: []
-                },
-                div: {
+            // allowedContent: {
+            //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+            //     a: {attributes: ['!href']},
+            //     span: {
+            //         attributes: ['contenteditable', 'data-*'],
+            //         classes: []
+            //     },
+            //     img: {
+            //         attributes: ['*'],
+            //         classes: []
+            //     },
+            //     div: {
 
-                }
-            },
-            removeButtons : 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript',
-            removeDialogTabs : 'link:advanced',
+            //     }
+            // },
+            removeButtons : 'Save,Preview,Print,Cut,Copy,Paste',
+            removePlugins: 'stylescombo',
+            // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
             extraAllowedContent: 'style;*[id,rel](*){*}'
         },
-        // plugins: [{
-        //     name: 'extractor',
-        //     path: CKEDITOR.basePath + 'plugins/extractor/plugin.js'
-        // },{
-        //     name: 'fileUpload',
-        //     path: CKEDITOR.basePath + 'plugins/fileUpload/plugin.js'
-        // },{
-        //     name: 'suggestion',
-        //     path: CKEDITOR.basePath + 'plugins/suggestion/plugin.js'
-        // },{
-        //     name: 'sourcearea',
-        //     path: CKEDITOR.basePath + 'plugins/sourcearea/plugin.js'
-        // }],
+        plugins: [{
+            name: 'extractor',
+            path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
+        },{
+            name: 'fileUpload',
+            path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
+        },{
+            name: 'suggestion',
+            path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
+        },{
+            name: 'sourcearea',
+            path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
+        }],
         addPlugins: function(plugins) {
             if(plugins.length > 0) {
                 for(var i = 0, max = plugins.length; i < max; i += 1) {
@@ -88,6 +96,43 @@ XEeditor.define({
                 editor: editor
                 , selector: selector
                 , options: options
+            });
+
+            editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
+              label: 'Wrap code',
+              command: 'wrapCode',
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
+            });
+            editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
+              label: 'Wrap diagram',
+              command: 'wrapDiagram',
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
+            });
+
+            editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
+              label: 'File upload',
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
+            });
+            editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
+              label: 'Image upload',
+              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
+            });
+
+            editor.addCommand( 'fileUpload', {
+              exec: function() {
+                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+              }
+            });
+
+            editor.addCommand( 'wrapCode', {
+              exec: function( editor ) {
+                editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
+              }
+            });
+            editor.addCommand( 'wrapDiagram', {
+              exec: function( editor ) {
+                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+              }
             });
         },
         getContents: function () {

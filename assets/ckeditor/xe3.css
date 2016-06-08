@@ -1,27 +1,40 @@
 .__xe_content {
-    position: relative;
+  position: relative;
 }
 
 .__xe_content .active {
-    border-color: #c2c9b4!important;
+  border-color: #c2c9b4!important;
 }
 
 .__xe_content .drag-here {
-    position: absolute;
-    display: none;
-    top: 2px;
-    left: -2px;
-    line-height: 95px;
-    width: 100%;
-    text-align: center;
-    font-size: 15px;
-    color: #a7b4c1;
-    background-color: #ffffff;
-    opacity: 0.5;
+  box-sizing: border-box;
+  position: absolute;
+  display: none;
+  top: 1px;
+  left: 0px;
+  /*line-height: 265px;*/
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  color: #393a3b;
+  background-color: rgba(243, 244, 245, .9);
 }
 
-.__xe_content .fileupload {
-    position: absolute;
-    right: 0;
-    top: 0;
+
+.cke_button.cke_button__fileupload,
+.cke_button.cke_button__imageupload {
+  position: relative;
+  overflow: hidden;
 }
+
+
+.cke_button .fileupload,
+.cke_button .imageupload {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 26px;
+  cursor: pointer;
+}
+
+
