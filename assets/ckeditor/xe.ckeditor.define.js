@@ -185,6 +185,9 @@ XEeditor.define({
 
                 }
             }
+        },
+        on: function (eventName, callback) {
+            CKEDITOR.instances[this.props.selector].on(eventName, callback);
         }
     }
 });
