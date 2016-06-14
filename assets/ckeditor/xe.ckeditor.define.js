@@ -31,9 +31,10 @@ XEeditor.define({
               { name: 'colors' },
               { name: 'others' }
             ],
-            height : 300,
-            autoGrow_minHeight : 300,
-            autoGrow_maxHeight : 300,
+            // height : 300,
+            // autoGrow_minHeight : 300,
+            // autoGrow_maxHeight : 300,
+
             // allowedContent: {
             //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
             //     a: {attributes: ['!href']},
@@ -82,12 +83,26 @@ XEeditor.define({
         }
     },
     interfaces: {
-        coreEditor: null,
         initialize: function (selector, options, customOptions) {
+
+            var editor;
+            var customOptions = customOptions || {}
+                , height = customOptions.height
+                , fontFamily = customOptions.fontFamily
+                , fontSize = customOptions.fontSize
+                , perms = customOptions.perms || {};
+
+            if(!perms.html) {
+                options.removeButtons = (options.removeButtons !== "")? options.removeButtons + ",Source" : options.removeButtons;
+            }
+
+            if(!perms.tool) {
+                options.removePlugins = (options.removePlugins !== "")? options.removePlugins + ",toolbar" : options.removePlugins;
+            }
+
             CKEDITOR.env.isCompatible = true;
 
-            var editor = CKEDITOR.replace(selector, options || {});
-
+            editor = CKEDITOR.replace(selector, options || {});
             editor.on('change', function(e) {
                 e.editor.updateElement();
             });
@@ -134,6 +149,27 @@ XEeditor.define({
                 editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
               }
             });
+
+            if(height) {
+                this.props.editor.config.height = customOptions.height;
+            }
+
+            if(fontFamily || fontSize) {
+                var bodyStyle = "";
+
+                if(fontFamily && fontFamily.length > 0) {
+                    bodyStyle += "font-family:" + fontFamily.join(",");
+                }
+
+                if(fontSize) {
+                    bodyStyle += "font-size:" + fontSize;
+                }
+
+                CKEDITOR.addCss("body{" + bodyStyle + "}");
+            }
+
+            this.renderFileUploader(customOptions);
+
         },
         getContents: function () {
             return CKEDITOR.instances[this.props.selector].getData();
@@ -188,6 +224,87 @@ XEeditor.define({
         },
         on: function (eventName, callback) {
             CKEDITOR.instances[this.props.selector].on(eventName, callback);
+        },
+        renderFileUploader: function(customOptions) {
+
+            var $editorWrap = $("." + this.props.editor.id);
+
+            $editorWrap.after("<div class='wrap-ckeditor-fileupload'><input type='file' name='uploadFiles' multiple /></div>");
+            
+            this.on("instanceReady", function() {
+
+                $editorWrap.nextAll(".wrap-ckeditor-fileupload:first input[name=uploadFiles]").fileupload({
+                    filesContainer: $editorWrap.nextAll(".wrap-ckeditor-fileupload:first"),
+                    uploadTemplateId: null,
+                    downloadTemplateId: null,
+                    uploadTemplate: function (o) {
+
+                        var uploadHtml = [
+                            '<!--에디터 파일 첨부 영역  -->',
+                            '<div class="file-attach-group">',
+                            '    <!--기본 파일첨부 -->',
+                            '    <div class="file-attach">',
+                            '        <div class="attach-info-text">',
+                            '            <p>여기에 파일을 끌어 놓거나 <a href="#">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : 2.00MB (허용 확장자 : *.*)</p>',
+                            '        </div>',
+                            '    </div>',
+                            '    <!--//기본 파일첨부 -->',
+
+                            '    <!-- 파일 업로드 시  -->',
+                            '    <div class="file-attach xe-hidden">',
+                            '        <div class="attach-info-text">',
+                            '            <p>파일 업로드 중(<span>68</span>%)</p>',
+                            '        </div>',
+                            '    </div>',
+
+                            '    <!--[D] 파일 업로드 시 display:block; 변경 및 0~100% 값으로 progress-->',
+                            '    <div class="attach-progress">',
+                            '        <div class="attach-progress-bar" style="width:0%"></div>',
+                            '    </div>',
+
+                            '   <!--// 파일 업로드 시  -->',
+                            '    <div class="file-view xe-hidden">',
+                            '        <strong>8개 파일 첨부됨. (12MB/20MB)</strong>',
+                            '        <ul class="thumbnail-list">',
+                            '            <li>',
+                            '                <img src="../../assets_temp/store/@tmp_thum3.jpg" alt="thumbnail">',
+                            '                    <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
+                            '                    <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                            '            </li>',
+                            '        </ul>',
+                            '        <ul class="file-attach-list">',
+                            '            <li>',
+                            '                <p class="xe-pull-left">텍스트파일.txt (250KB)</p>',
+                            '                <div class="xe-pull-right">',
+                            '                    <button type="button">본문에 넣기</button>',
+                            '                    <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                            '                </div>',
+                            '            </li>',
+                            '            <li>',
+                            '                <p class="xe-pull-left">텍스트파일.txt (250KB)</p>',
+                            '                <div class="xe-pull-right">',
+                            '                    <button type="button">본문에 넣기</button>',
+                            '                    <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                            '                </div>',
+                            '            </li>',
+                            '            <li>',
+                            '                <p class="xe-pull-left">이미지 외 기타파일.txt (250KB)</p>',
+                            '                <div class="xe-pull-right">',
+                            '                    <button type="button">본문에 넣기</button>',
+                            '                    <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                            '                </div>',
+                            '            </li>',
+                            '        </ul>',
+                            '    </div>',
+                            '</div>',
+                            '<!--//에디터 파일 첨부 영역  -->'
+                        ].join("\n");
+                        
+                        return uploadHtml;
+                    }
+                });
+
+            });
         }
     }
 });
