@@ -233,6 +233,8 @@ XEeditor.define({
 
             var editorWrapClass = "." + this.props.editor.id;
             var uploadUrl = this.props.options.fileUpload.upload_url
+                , downloadUrl = this.props.options.fileUpload.download_url
+                , destroyUrl = this.props.options.fileUpload.destroy_url
                 , attachMaxSize = customOptions.attachMaxSize
                 , fileMaxSize = customOptions.fileMaxSize
                 , extensions = customOptions.extensions
@@ -241,155 +243,260 @@ XEeditor.define({
             var fileCount = 0
                 , fileTotalSize = 0;
 
-            this.on("instanceReady", function() {
+            var self = this;
 
-                var $editorWrap = $(editorWrapClass);
-                var uploadHtml = [
-                    '<!--에디터 파일 첨부 영역  -->',
-                    '<div class="file-attach-group">',
-                    '    <!--기본 파일첨부 -->',
-                    '    <div class="file-attach dropZone">',
-                    '        <div class="attach-info-text">',
-                    '            <p>여기에 파일을 끌어 놓거나 <a href="#" class="openSelectFile">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : ' + fileMaxSize + 'MB (허용 확장자 : ' + extensions.join(", ") + ')</p>',
-                    '        </div>',
-                    '    </div>',
-                    '    <!--//기본 파일첨부 -->',
+            DynamicLoadManager.jsLoad("/assets/core/common/js/fileUtils.js", function() {
+                self.on("instanceReady", function() {
+                    var $editorWrap = $(editorWrapClass);
+                    var uploadHtml = [
+                        '<!--에디터 파일 첨부 영역  -->',
+                        '<div class="file-attach-group">',
+                        '    <!--기본 파일첨부 -->',
+                        '    <div class="file-attach dropZone">',
+                        '        <div class="attach-info-text">',
+                        '            <p>여기에 파일을 끌어 놓거나 <a href="#" class="openSelectFile">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : ' + fileMaxSize + 'MB (허용 확장자 : ' + extensions.join(", ") + ' )</p>',
+                        '        </div>',
+                        '    </div>',
+                        '    <!--//기본 파일첨부 -->',
 
-                    '    <!-- 파일 업로드 시  -->',
-                    '    <div class="file-attach xe-hidden fileuploadStatus">',
-                    '        <div class="attach-info-text">',
-                    '            <p>파일 업로드 중(<span class="uploadProgress">0</span>%)</p>',
-                    '        </div>',
-                    '    </div>',
+                        '    <!-- 파일 업로드 시  -->',
+                        '    <div class="file-attach xe-hidden fileuploadStatus dropZone">',
+                        '        <div class="attach-info-text">',
+                        '            <p>파일 업로드 중(<span class="uploadProgress">0</span>%)</p>',
+                        '        </div>',
+                        '    </div>',
 
-                    '    <!--[D] 파일 업로드 시 display:block; 변경 및 0~100% 값으로 progress-->',
-                    '    <div class="attach-progress">',
-                    '        <div class="attach-progress-bar" style="width:0%"></div>',
-                    '    </div>',
+                        '    <!--[D] 파일 업로드 시 display:block; 변경 및 0~100% 값으로 progress-->',
+                        '    <div class="attach-progress">',
+                        '        <div class="attach-progress-bar" style="width:0%"></div>',
+                        '    </div>',
 
-                    '   <!--// 파일 업로드 시  -->',
-                    '    <div class="file-view xe-hidden">',
-                    '        <strong><span class="fileCount">8</span>개 파일 첨부됨. (12MB/20MB)</strong>',
-                    '        <ul class="thumbnail-list"></ul>',
-                    '        <ul class="file-attach-list"></ul>',
-                    '    </div>',
-                    '</div>',
-                    '<!--//에디터 파일 첨부 영역  -->'
-                ].join("\n");
+                        '   <!--// 파일 업로드 시  -->',
+                        '    <div class="file-view xe-hidden">',
+                        '        <strong><span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + attachMaxSize + 'MB)</strong>',
+                        '        <ul class="thumbnail-list"></ul>',
+                        '        <ul class="file-attach-list"></ul>',
+                        '    </div>',
+                        '</div>',
+                        '<!--//에디터 파일 첨부 영역  -->'
+                    ].join("\n");
 
-                $editorWrap.after("<div class='wrap-ckeditor-fileupload xe-hidden'><input type='file' name='file' multiple /></div><div class='ckeditor-fileupload-area'></div>");
-                $editorWrap.nextAll(".ckeditor-fileupload-area:first").html(uploadHtml);
+                    $editorWrap.after("<div class='wrap-ckeditor-fileupload xe-hidden'><input type='file' name='file' multiple /></div><div class='ckeditor-fileupload-area'></div>")
+                        .nextAll(".ckeditor-fileupload-area:first").html(uploadHtml);
 
-                var $fileUploadArea = $editorWrap.nextAll(".ckeditor-fileupload-area:first")
-                    , $dropZone = $fileUploadArea.find(".dropZone");
+                    var $fileUploadArea = $editorWrap.nextAll(".ckeditor-fileupload-area:first")
+                        , $dropZone = $fileUploadArea.find(".dropZone:not(.fileuploadStatus)");
 
-                //파일첨부 클릭되었을때
-                $dropZone.find(".openSelectFile").on('click', function(e) {
-                    e.preventDefault();
-                    $editorWrap.nextAll(".wrap-ckeditor-fileupload").find("input[type=file]").trigger("click");
-                });
+                    var $thumbnaiList = $fileUploadArea.find(".thumbnail-list")
+                        , $fileAttachList = $fileUploadArea.find(".file-attach-list");
 
-                $editorWrap.nextAll(".wrap-ckeditor-fileupload:first").find("input[name=file]").fileupload({
-                    url: uploadUrl,
-                    type: "post",
-                    dataType: 'json',
-                    dropZone: $editorWrap.nextAll(".ckeditor-fileupload-area:first").find(".dropZone"),
-                    progressall: function(e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                    //이미지 본문 삽입
+                    $thumbnaiList.on('click', '.btnAddImage', function() {
+                        var $this = $(this);
+                        self.addContents("<img src='" + $this.data("src") + "' data-attach='" + $this.data("id") + "'/>");
 
-                        if(!$dropZone.hasClass("xe-hidden")) {
-                            $dropZone.addClass("xe-hidden");
-                        }
+                    });
 
-                        if($dropZone.nextAll(".fileuploadStatus").hasClass("xe-hidden")) {
-                            $dropZone.nextAll(".fileuploadStatus").removeClass("xe-hidden");
-                        }
+                    //파일 본문 삽입
+                    $fileAttachList.on('click', '.btnAddFile', function() {
+                        //downloadUrl
+                        var $this = $(this);
+                        self.addContents("<a href='" + downloadUrl + "/" + $this.data("id") + "' data-attach='" + $this.data("id") + "'>" + $this.data("name") + "</a>");
 
-                        $fileUploadArea.find(".attach-progress-bar").css(
-                            'width',
-                            progress + '%'
-                        );
-                        $fileUploadArea.find(".uploadProgress").text(progress);
+                    });
 
-                    },
-                    dragover: function() {
-                        $dropZone.addClass("drag");
-                    },
-                    dragleave: function() {
-                        $dropZone.removeClass("drag");
-                    },
-                    add: function(e, data) {
+                    //첨부파일 삭제
+                    $fileUploadArea.on('click', '.btnDelFile', function() {
+                        var $this = $(this);
+                        var id = $this.data("id");
 
-                        console.log(data);
+                        console.log($(self.props.editor.window.getFrame().$).contents().find('[data-attach=' + id + ']').length);
 
-                        var isValid = true;
-                        var uploadFile = data.files[0];
-                        if (!(/png|jpe?g|gif/i).test(uploadFile.name)) {
-                            alert('png, jpg, gif 만 가능합니다');
-                            isValid = false;
-                        } else if (uploadFile.size > 5000000) { // 5mb
-                            alert('파일 용량은 5메가를 초과할 수 없습니다.');
-                            isValid = false;
-                        }
+                        $(self.props.editor.window.getFrame().$).contents().find('[data-attach=' + id + ']').remove();
 
-                        if (isValid) {
-                            data.submit();
-                        }
-                    },
-                    done: function(e, data) {
+                        // XE.ajax({
+                        //     url: destroyUrl + "/" + id
+                        //     , type: 'post'
+                        //     , dataType: 'json'
+                        //     , success: function(res) {
+                        //         if(res.deleted) {
+                        //
+                        //         }else {
+                        //             XE.toast("xe-danger", "첨부파일이 삭제되지 않았습니다");
+                        //         }
+                        //     }
+                        // });
+                    });
 
-                        console.log('done', e, data);
 
-                        var $thumbnaiList = $fileUploadArea.find(".thumbnail-list")
-                            , $fileAttachList = $fileUploadArea.find(".file-attach-list");
+                    //파일첨부 클릭되었을때
+                    $dropZone.find(".openSelectFile").on('click', function(e) {
+                        e.preventDefault();
+                        $editorWrap.nextAll(".wrap-ckeditor-fileupload:first").find("input[type=file]").trigger("click");
+                    });
 
-                        var tmplImage = [
-                            '<li>',
-                            '   <img src="../../assets_temp/store/@tmp_thum3.jpg" alt="thumbnail">',
-                            '   <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
-                            '   <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
-                            '</li>'
-                        ].join("\n");
+                    $editorWrap.nextAll(".wrap-ckeditor-fileupload:first").find("input[name=file]").fileupload({
+                        url: uploadUrl,
+                        type: "post",
+                        dataType: 'json',
+                        sequentialUploads: true,
+                        autoUpload: false,
+                        dropZone: $editorWrap.nextAll(".ckeditor-fileupload-area:first").find(".dropZone"),
+                        maxFileSize: fileMaxSize * 1024 * 1024,
+                        progressall: function(e, data) {
 
-                        var tmplFile = [
-                            '<li>',
-                            '   <p class="xe-pull-left">텍스트파일.txt (250KB)</p>',
-                            '   <div class="xe-pull-right">',
-                            '       <button type="button">본문에 넣기</button>',
-                            '       <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
-                            '   </div>',
-                            '</li>',
-                        ].join("\n");
+                            var progress = parseInt(data.loaded / data.total * 100, 10);
 
-                        $fileUploadArea
+                            console.log(progress);
+
+                            $fileUploadArea.find(".attach-progress-bar").css(
+                                'width',
+                                progress + '%'
+                            );
+                            $fileUploadArea.find(".uploadProgress").text(progress);
+
+                            //모든 파일이 업로드 되었을때
+                            if(progress === 100) {
+                                $fileUploadArea
                                     .find(".dropZone").removeClass("xe-hidden drag")
-                                    .nextAll(".fileuploadStatus").addClass("xe-hidden")
+                                    .nextAll(".fileuploadStatus:first").addClass("xe-hidden")
                                     .find(".uploadProgress").text(0);
 
-                        $fileUploadArea.find(".attach-progress-bar").css(
-                            'width',
-                            0 + '%'
-                        );
+                                $fileUploadArea.find(".attach-progress-bar").css({
+                                    width: 0 + '%'
+                                }).parents(".attach-progress").hide();
+                            }
 
-                        $fileUploadArea.find(".file-view").removeClass("xe-hidden");
+                        },
+                        dragover: function() {
+                            $dropZone.addClass("drag");
+                        },
+                        dragleave: function() {
+                            $dropZone.removeClass("drag");
+                        },
+                        add: function(e, data) {
 
-                    },
-                    fail: function(e, data) {
-                        $fileUploadArea
-                            .find(".dropZone").removeClass("xe-hidden drag")
-                            .nextAll(".fileuploadStatus").addClass("xe-hidden")
-                            .find(".uploadProgress").text(0);
+                            var valid = true
+                                , extValid = false;
+                            var files = data.files;
 
-                        $fileUploadArea.find(".attach-progress-bar").css(
-                            'width',
-                            0 + '%'
-                        );
 
-                        console.log('fail', e, data);
-                    }
+                            var uploadFileName = files[0].name;
+                            var fSize = files[0].size;
 
+                            for (var i = 0; i < extensions.length; i++) {
+                                var sCurExtension = extensions[i];
+
+                                if (uploadFileName.substr(uploadFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() === sCurExtension.toLowerCase()) {
+                                    extValid = true;
+                                    break;
+                                }
+                            }
+
+                            //[1]확장자
+                            if(!extValid) {
+                                XE.toast("xe-warning", "[" + extensions.join(", ") + "] 확장자만 업로드 가능합니다. [" + uploadFileName + "]");
+                                valid = false;
+                            }
+
+                            //[2]파일 사이즈
+                            if(fSize > fileMaxSize * 1024 * 1024) {
+                                XE.toast("xe-warning", "파일 용량은 " + fileMaxSize + "MB를 초과할 수 없습니다. [" + uploadFileName + "]");
+                                valid = false;
+                            }
+
+                            //[3]전체 파일 사이즈
+                            if(attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
+                                XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
+                                valid = false;
+                            }
+
+                            if(!$dropZone.hasClass("xe-hidden")) {
+                                $dropZone.addClass("xe-hidden");
+                            }
+
+                            if($dropZone.nextAll(".fileuploadStatus:first").hasClass("xe-hidden")) {
+                                $dropZone.nextAll(".fileuploadStatus:first").removeClass("xe-hidden");
+                            }
+
+                            if($fileUploadArea.find(".attach-progress").is(":hidden")) {
+                                $fileUploadArea.find(".attach-progress").show();
+                            }
+
+                            if(valid) {
+                                data.submit();
+                            }
+                        },
+                        done: function(e, data) {
+
+                            var file = data.result.file
+                                , fileName = file.clientname
+                                , fileSize = file.size
+                                , thumbImageUrl = (data.result.thumbnails)? data.result.thumbnails[2].url : ''
+                                , mime = file.mime
+                                , id = file.id;
+
+                            fileCount++;
+                            fileTotalSize = fileTotalSize + fileSize;
+
+                            if(FileUtils.isImage(mime)) {
+                                var tmplImage = [
+                                    '<li>',
+                                    '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
+                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
+                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '</li>'
+                                ].join("\n");
+
+                                $thumbnaiList.append(tmplImage);
+
+                            }else {
+                                var tmplFile = [
+                                    '<li>',
+                                    '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.humanFileSize(fileSize, true) + ')</p>',
+                                    '   <div class="xe-pull-right">',
+                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">본문에 넣기</button>',
+                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '   </div>',
+                                    '</li>',
+                                ].join("\n");
+
+                                $fileAttachList.append(tmplFile);
+                            }
+
+                            $fileUploadArea.find(".file-view").removeClass("xe-hidden");
+
+                            //첨부파일 갯수 표시
+                            $fileUploadArea.find(".fileCount").text(fileCount);
+
+                            //첨부파일 용량 표시
+                            $fileUploadArea.find(".currentFilesSize").text(FileUtils.humanFileSize(fileTotalSize, true));
+
+                        },
+                        fail: function(e, data) {
+                            $fileUploadArea
+                                .find(".dropZone").removeClass("xe-hidden drag")
+                                .nextAll(".fileuploadStatus:first").addClass("xe-hidden")
+                                .find(".uploadProgress").text(0);
+
+                            $fileUploadArea.find(".attach-progress-bar").css(
+                                'width',
+                                0 + '%'
+                            );
+
+                            if($fileUploadArea.find(".attach-progress").is(":visible")) {
+                                $fileUploadArea.find(".attach-progress").hide();
+                            }
+
+                            console.log('fail', e, data);
+                        }
+
+                    });
                 });
             });
         }
     }
 });
+
+
+
