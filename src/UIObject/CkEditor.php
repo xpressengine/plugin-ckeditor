@@ -34,7 +34,7 @@ class CkEditor extends AbstractUIObject
 
     protected static $plugins = [];
 
-    const FILE_UPLOAD_PATH = 'attached/ckeditor';
+    const FILE_UPLOAD_PATH = 'public/ckeditor';
     const THUMBNAIL_TYPE = 'spill';
 
     protected function getDefaultSetting()
