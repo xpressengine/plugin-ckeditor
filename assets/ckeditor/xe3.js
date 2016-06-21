@@ -66,7 +66,8 @@ var xe3CkEditorConfig = {
         // removeButtons : 'Cut,Copy,Paste,Undo,Redo,Anchor,Underline,Strike,Subscript,Superscript',
         // removeDialogTabs : 'link:advanced',
         extraPlugins: 'resize',
-        resize_dir: 'vertical'
+        resize_dir: 'vertical',
+        language: XE.getLocale()
     },
     put: function(config) {
         this.configs = $.extend(this.configs, config);
