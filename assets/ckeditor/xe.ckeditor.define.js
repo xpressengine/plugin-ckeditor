@@ -499,6 +499,7 @@ XEeditor.define({
                                     '   <div class="xe-pull-right">',
                                     '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">본문에 넣기</button>',
                                     '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '       <input type="hidden" name="files[]" value="' + id + '" />',
                                     '   </div>',
                                     '</li>',
                                 ].join("\n");
