@@ -537,7 +537,7 @@ XEeditor.define({
                             var file = files[i]
                                 , fileName = file.clientname
                                 , fileSize = file.size
-                                , thumbImageUrl = (data.result.thumbnails)? data.result.thumbnails[2].url : ''
+                                , thumbImageUrl = (file.thumbnails)? file.thumbnails[2].url : ''
                                 , mime = file.mime
                                 , id = file.id;
 
