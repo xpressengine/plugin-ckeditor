@@ -313,40 +313,35 @@ XEeditor.define({
                     $fileUploadArea.on('click', '.btnDelFile', function() {
                         var $this = $(this);
                         var fileSize = $this.data("size");
-                        if(confirm("첨부파일을 삭제하시겠습니까?")) {
+                        if(confirm("첨부된 파일을 삭제하시겠습니까?")) {
                             var id = $this.data("id");
 
-                            setTimeout(function() {
+                            XE.ajax({
+                                url: destroyUrl + "/" + id
+                                , type: 'post'
+                                , dataType: 'json'
+                                , success: function(res) {
+                                    if(res.deleted) {
+                                        fileTotalSize = fileTotalSize - fileSize;
 
-                                fileTotalSize = fileTotalSize - fileSize;
+                                        $(self.props.editor.window.getFrame().$).contents().find('[data-cke-attach=' + id + ']').remove();
 
-                                $(self.props.editor.window.getFrame().$).contents().find('[data-cke-attach=' + id + ']').remove();
+                                        //첨부파일 갯수 표시
+                                        $fileUploadArea.find(".fileCount").text(--fileCount);
 
-                                //첨부파일 갯수 표시
-                                $fileUploadArea.find(".fileCount").text(--fileCount);
+                                        //첨부파일 용량 표시
+                                        $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
 
-                                //첨부파일 용량 표시
-                                $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
+                                        $this.closest("li").remove();
 
-                                $this.closest("li").remove();
-
-                                if(fileCount === 0) {
-                                    $fileUploadArea.find(".file-view").addClass("xe-hidden");
+                                        if(fileCount === 0) {
+                                            $fileUploadArea.find(".file-view").addClass("xe-hidden");
+                                        }
+                                    }else {
+                                        XE.toast("xe-danger", "첨부파일이 삭제되지 않았습니다");
+                                    }
                                 }
-                            }, 300);
-
-                            // XE.ajax({
-                            //     url: destroyUrl + "/" + id
-                            //     , type: 'post'
-                            //     , dataType: 'json'
-                            //     , success: function(res) {
-                            //         if(res.deleted) {
-                            //
-                            //         }else {
-                            //             XE.toast("xe-danger", "첨부파일이 삭제되지 않았습니다");
-                            //         }
-                            //     }
-                            // });
+                            });
                         }
                     });
 
