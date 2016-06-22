@@ -487,6 +487,7 @@ XEeditor.define({
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
                                     '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
                                     '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '   <input type="hidden" name="files[]" value="' + id + '" />',
                                     '</li>'
                                 ].join("\n");
 
