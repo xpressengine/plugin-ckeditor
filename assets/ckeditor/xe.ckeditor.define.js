@@ -239,7 +239,8 @@ XEeditor.define({
                 , attachMaxSize = customOptions.attachMaxSize
                 , fileMaxSize = customOptions.fileMaxSize
                 , extensions = customOptions.extensions
-                , uploadPermission = customOptions.perms.upload;
+                , uploadPermission = customOptions.perms.upload
+                , files = customOptions.files || [];
 
             var fileCount = 0
                 , fileTotalSize = 0;
@@ -529,6 +530,56 @@ XEeditor.define({
                         }
 
                     });
+
+                    //업로드된 파일이 있다면 화면에 그리기
+                    if(files.length > 0) {
+                        for(var i = 0, max = files.length; i < max; i += 1) {
+                            var file = files[i]
+                                , fileName = file.clientname
+                                , fileSize = file.size
+                                , thumbImageUrl = (data.result.thumbnails)? data.result.thumbnails[2].url : ''
+                                , mime = file.mime
+                                , id = file.id;
+
+                            fileCount++;
+                            fileTotalSize = fileTotalSize + fileSize;
+
+                            if(FileUtils.isImage(mime)) {
+                                var tmplImage = [
+                                    '<li>',
+                                    '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
+                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
+                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '   <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '</li>'
+                                ].join("\n");
+
+                                $thumbnaiList.append(tmplImage);
+
+                            }else {
+                                var tmplFile = [
+                                    '<li>',
+                                    '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.formatSizeUnits(fileSize) + ')</p>',
+                                    '   <div class="xe-pull-right">',
+                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">본문에 넣기</button>',
+                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '       <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '   </div>',
+                                    '</li>',
+                                ].join("\n");
+
+                                $fileAttachList.append(tmplFile);
+                            }
+
+                            $fileUploadArea.find(".file-view").removeClass("xe-hidden");
+
+                            //첨부파일 갯수 표시
+                            $fileUploadArea.find(".fileCount").text(fileCount);
+
+                            //첨부파일 용량 표시
+                            $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
+                        }
+                    }
                 });
             });
         }
