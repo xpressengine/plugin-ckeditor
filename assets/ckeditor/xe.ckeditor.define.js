@@ -256,8 +256,7 @@ XEeditor.define({
                         '    <!--기본 파일첨부 -->',
                         '    <div class="file-attach dropZone">',
                         '        <div class="attach-info-text">',
-                        //'            <p>' + XE.Lang.trans("ckeditor::dropzoneLimit", { fileMaxSize: FileUtils.formatSizeUnits(fileMaxSize * 1024 * 1024), extensions: extensions.join(", "), sAtag: '<a href="#" class="openSelectFile">', eAtag: '</a>' }) + '</p>', //여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
-                        '            <p>여기에 파일을 끌어 놓거나 <a href="#" class="openSelectFile">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : ' + fileMaxSize + 'MB (허용 확장자 : ' + extensions.join(", ") + ' )</p>',
+                        '            <p>' + XE.Lang.trans("ckeditor::dropzoneLimit", { fileMaxSize: FileUtils.formatSizeUnits(fileMaxSize * 1024 * 1024), extensions: extensions.join(", "), sAtag: '<a href="#" class="openSelectFile">', eAtag: '</a>' }) + '</p>', //여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
                         '        </div>',
                         '    </div>',
                         '    <!--//기본 파일첨부 -->',
@@ -265,8 +264,7 @@ XEeditor.define({
                         '    <!-- 파일 업로드 시  -->',
                         '    <div class="file-attach xe-hidden fileuploadStatus dropZone">',
                         '        <div class="attach-info-text">',
-                        //'            <p>' + XE.Lang.trans("ckeditor:uploadingFile", {progressTag: '<span class="uploadProgress">0</span>%'}) + '</p>', //파일 업로드중 <span class="uploadProgress">0</span>%
-                        '            <p>파일 업로드 중(<span class="uploadProgress">0</span>%)</p>',
+                        '            <p>' + XE.Lang.trans("ckeditor::uploadingFile", {progressTag: '<span class="uploadProgress">0</span>%'}) + '</p>', //파일 업로드중 <span class="uploadProgress">0</span>%
                         '        </div>',
                         '    </div>',
 
@@ -274,10 +272,10 @@ XEeditor.define({
                         '    <div class="attach-progress">',
                         '        <div class="attach-progress-bar" style="width:0%"></div>',
                         '    </div>',
-
+                        //<span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + FileUtils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
                         '   <!--// 파일 업로드 시  -->',
                         '    <div class="file-view xe-hidden">',
-                        '        <strong><span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + FileUtils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')</strong>',
+                        '        <strong>' + XE.Lang.trans("ckeditor::attachementDescription", {fileCount: '<span class="fileCount">0</span>', currentFilesSize: '<span class="currentFilesSize">0MB</span>', attachMaxSize: FileUtils.formatSizeUnits(attachMaxSize * 1024 * 1024)}) + '</strong>',
                         '        <ul class="thumbnail-list"></ul>',
                         '        <ul class="file-attach-list"></ul>',
                         '    </div>',
@@ -351,8 +349,8 @@ XEeditor.define({
                         e.preventDefault();
 
                         if(!uploadPermission) {
-                            //XE.toast('xe-warning', XE.Lang.trans("ckeditor::msgUploadingPermission")); //"파일 업로드 권한이 없습니다"
-                            XE.toast('xe-warning', "파일 업로드 권한이 없습니다");
+                            XE.toast('xe-warning', XE.Lang.trans("ckeditor::msgUploadingPermission")); //"파일 업로드 권한이 없습니다"
+                            //XE.toast('xe-warning', "파일 업로드 권한이 없습니다");
                             $dropZone.removeClass("drag");
                             return false;
                         }
@@ -399,8 +397,8 @@ XEeditor.define({
                         },
                         drop: function() {
                             if(!uploadPermission) {
-                                //XE.toast('xe-warning', XE.Lang.trans("ckeditor::msgUploadingPermission")); //"파일 업로드 권한이 없습니다"
-                                XE.toast('xe-warning', "파일 업로드 권한이 없습니다");
+                                XE.toast('xe-warning', XE.Lang.trans("ckeditor::msgUploadingPermission")); //"파일 업로드 권한이 없습니다"
+                                // XE.toast('xe-warning', "파일 업로드 권한이 없습니다");
                                 $dropZone.removeClass("drag");
                                 return false;
                             }
@@ -426,23 +424,25 @@ XEeditor.define({
 
                             //[1]확장자
                             if(!extValid) {
-                                XE.toast("xe-warning", "[" + extensions.join(", ") + "] 확장자만 업로드 가능합니다. [" + uploadFileName + "]");
+                                //XE.toast("xe-warning", "[" + 'extensions.join(", ") + "] 확장자만 업로드 가능합니다. [" + uploadFileName + "]");
+                                XE.toast("xe-warning", XE.Lang.trans("ckeditor::msgAvailableUploadingFiles", {extensions: extensions.join(", "), uploadFileName: uploadFileName}));
                                 valid = false;
                             }
 
                             //[2]파일 사이즈
                             if(fSize > fileMaxSize * 1024 * 1024) {
-                                XE.toast("xe-warning", "파일 용량은 " + fileMaxSize + "MB를 초과할 수 없습니다. [" + uploadFileName + "]");
-                                // XE.toast('xe-warning', XE.Lang.trans('ckeditor::msgMaxFileSize', {
-                                //     fileMaxSize: fileMaxSize,
-                                //     uploadFileName: uploadFileName
-                                // }));
+                                // XE.toast("xe-warning", "파일 용량은 " + fileMaxSize + "MB를 초과할 수 없습니다. [" + uploadFileName + "]");
+                                XE.toast('xe-warning', XE.Lang.trans('ckeditor::msgMaxFileSize', {
+                                    fileMaxSize: fileMaxSize,
+                                    uploadFileName: uploadFileName
+                                }));
                                 valid = false;
                             }
 
                             //[3]전체 파일 사이즈
                             if(attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
-                                XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
+                                //XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
+                                XE.toast("xe-warning", XE.Lang.trans("ckeditor::msgAttachMaxSize", {attachMaxSize: attachMaxSize}));
                                 valid = false;
                             }
 
@@ -481,8 +481,8 @@ XEeditor.define({
                                 var tmplImage = [
                                     '<li>',
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
-                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
-                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
+                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                     '   <input type="hidden" name="files[]" value="' + id + '" />',
                                     '</li>'
                                 ].join("\n");
@@ -494,8 +494,8 @@ XEeditor.define({
                                     '<li>',
                                     '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.formatSizeUnits(fileSize) + ')</p>',
                                     '   <div class="xe-pull-right">',
-                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">본문에 넣기</button>',
-                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
+                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                     '       <input type="hidden" name="files[]" value="' + id + '" />',
                                     '   </div>',
                                     '</li>',
@@ -528,7 +528,6 @@ XEeditor.define({
                                 $fileUploadArea.find(".attach-progress").hide();
                             }
                         }
-
                     });
 
                     //업로드된 파일이 있다면 화면에 그리기
@@ -548,8 +547,8 @@ XEeditor.define({
                                 var tmplImage = [
                                     '<li>',
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
-                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>',
-                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
+                                    '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                     '   <input type="hidden" name="files[]" value="' + id + '" />',
                                     '</li>'
                                 ].join("\n");
@@ -561,8 +560,8 @@ XEeditor.define({
                                     '<li>',
                                     '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.formatSizeUnits(fileSize) + ')</p>',
                                     '   <div class="xe-pull-right">',
-                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">본문에 넣기</button>',
-                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>',
+                                    '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
+                                    '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                     '       <input type="hidden" name="files[]" value="' + id + '" />',
                                     '   </div>',
                                     '</li>',
