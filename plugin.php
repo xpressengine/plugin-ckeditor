@@ -35,30 +35,30 @@ class Plugin extends AbstractPlugin
      */
     public function install()
     {
-        XeConfig::set(Editors\CkEditor::getId(), [
-            'height' => 400,
-            'fontSize' => '14px',
-            'fontFamily' => null,
-            'uploadActive' => true,
-            'fileMaxSize' => 2,
-            'attachMaxSize' => 10,
-            'extensions' => '*',
-            'tools' => []
-        ]);
-
-        $data = [
-            Grant::RATING_TYPE => Rating::MEMBER,
-            Grant::GROUP_TYPE => [],
-            Grant::USER_TYPE => [],
-            Grant::EXCEPT_TYPE => [],
-            Grant::VGROUP_TYPE => [],
-        ];
-
-        $grant = new Grant();
-        $grant->set('html', $data);
-        $grant->set('tool', $data);
-        $grant->set('upload', $data);
-        app('xe.permission')->register(Editors\CkEditor::getId(), $grant);
+//        XeConfig::set(Editors\CkEditor::getId(), [
+//            'height' => 400,
+//            'fontSize' => '14px',
+//            'fontFamily' => null,
+//            'uploadActive' => true,
+//            'fileMaxSize' => 2,
+//            'attachMaxSize' => 10,
+//            'extensions' => '*',
+//            'tools' => []
+//        ]);
+//
+//        $data = [
+//            Grant::RATING_TYPE => Rating::MEMBER,
+//            Grant::GROUP_TYPE => [],
+//            Grant::USER_TYPE => [],
+//            Grant::EXCEPT_TYPE => [],
+//            Grant::VGROUP_TYPE => [],
+//        ];
+//
+//        $grant = new Grant();
+//        $grant->set('html', $data);
+//        $grant->set('tool', $data);
+//        $grant->set('upload', $data);
+//        app('xe.permission')->register(Editors\CkEditor::getId(), $grant);
     }
 
     /**
@@ -94,6 +94,7 @@ class Plugin extends AbstractPlugin
      */
     public function boot()
     {
+        XeSkin::setDefaultSkin(Editors\CkEditor::getId(), 'editor/ckeditor@ckEditor/skin/ckeditor@default');
         XeSkin::setDefaultSettingsSkin($this->getId(), 'editor/ckeditor@ckEditor/settingsSkin/ckeditor@default');
 
         Route::settings($this->getId(), function () {
@@ -105,16 +106,16 @@ class Plugin extends AbstractPlugin
             return $this;
         }, true);
 
-        // 인스턴스를 생성할때 각 인스턴스가 사용할 권한 레코드를 등록함
-        intercept('XeEditor@setInstance', 'ckeditor.permission', function ($target, $instanceId, $editorId) {
-            $result = $target($instanceId, $editorId);
-
-            if ($editorId === Editors\CkEditor::getId()) {
-                app('xe.permission')->register(Editors\CkEditor::getPermKey($instanceId), new Grant());
-            }
-
-            return $result;
-        });
+//        // 인스턴스를 생성할때 각 인스턴스가 사용할 권한 레코드를 등록함
+//        intercept('XeEditor@setInstance', 'ckeditor.permission', function ($target, $instanceId, $editorId) {
+//            $result = $target($instanceId, $editorId);
+//
+//            if ($editorId === Editors\CkEditor::getId()) {
+//                app('xe.permission')->register(Editors\CkEditor::getPermKey($instanceId), new Grant());
+//            }
+//
+//            return $result;
+//        });
     }
 
     /**
