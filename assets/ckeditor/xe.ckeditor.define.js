@@ -337,7 +337,7 @@ XEeditor.define({
                                             $fileUploadArea.find(".file-view").addClass("xe-hidden");
                                         }
                                     }else {
-                                        XE.toast("xe-danger", "첨부파일이 삭제되지 않았습니다");
+                                        XE.toast("xe-danger", XE.Lang.trans("ckeditor::msgFailDeleteFile"));    //첨부파일이 삭제되지 않았습니다.
                                     }
                                 }
                             });
