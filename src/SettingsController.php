@@ -50,7 +50,7 @@ class SettingsController extends Controller
         return XePresenter::make('form', [
             'instanceId' => $instanceId,
             'config' => $config,
-            'permArgs' => $this->getPermArguments(Editors\CkEditor::getPermKey($instanceId), ['html', 'tool']),
+            'permArgs' => $this->getPermArguments(Editors\CkEditor::getPermKey($instanceId), ['html', 'tool', 'upload']),
             'items' => $items,
         ]);
     }
@@ -65,10 +65,14 @@ class SettingsController extends Controller
             'height' => $request->get('height'),
             'fontSize' => $request->get('fontSize'),
             'fontFamily' => empty($request->get('fontFamily')) ? null : $request->get('fontFamily'),
+            'uploadActive' => !!$request->get('uploadActive', false),
+            'fileMaxSize' => $request->get('fileMaxSize', 0),
+            'attachMaxSize' => $request->get('attachMaxSize', 0),
+            'extensions' => empty($request->get('extensions')) ? null : $request->get('extensions'),
             'tools' => $request->get('tools', [])
         ]);
 
-        $this->permissionRegister($request, Editors\CkEditor::getPermKey($instanceId), ['html', 'tool']);
+        $this->permissionRegister($request, Editors\CkEditor::getPermKey($instanceId), ['html', 'tool', 'upload']);
 
         return redirect()->route('manage.plugin.cke.setting', $instanceId);
     }

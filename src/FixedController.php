@@ -1,47 +1,28 @@
 <?php
-/**
- * CkEditorPluginInterface
- *
- * @category    CkEditor
- * @package     CkEditor
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   LGPL-2.1
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
- * @link      https://xpressengine.io
- */
-
 namespace Xpressengine\Plugins\CkEditor;
 
 use App\Http\Controllers\Controller;
 use XePresenter;
+use Xpressengine\Http\Request;
+use Xpressengine\Media\Models\Image;
+use Xpressengine\Plugins\CkEditor\Exceptions\NotFoundUploadFileException;
+use Xpressengine\Storage\File;
+use Xpressengine\Storage\Storage;
+use Xpressengine\Tag\TagHandler;
+use Xpressengine\User\Models\User;
+use Auth;
 
-/**
- * CkEditorPluginInterface
- *
- * CkEditor 모듈에 plugin 을 등록하려면 이 interface 를 사용하세요.
- *
- * @category    CkEditor
- * @package     CkEditor
- */
 class FixedController extends Controller
 {
     /**
      * file upload
      *
-     * @return string|\Xpressengine\Presenter\RendererInterface
-     * @throws Exception
-     * @throws \Xpressengine\Media\Exceptions\NotAvailableException
-     * @throws \Xpressengine\Storage\Exceptions\InvalidFileException
+     * @param Request $request request
+     * @param Storage $storage storage
+     * @return mixed
      */
-    public function fileUpload()
+    public function fileUpload(Request $request, Storage $storage)
     {
-        /** @var \Illuminate\Http\Request $request */
-        $request = app('request');
-
-        /** @var \Xpressengine\Storage\Storage $storage */
-        $storage = app('xe.storage');
-
         $uploadedFile = null;
         if ($request->file('file') !== null) {
             $uploadedFile = $request->file('file');
@@ -50,10 +31,10 @@ class FixedController extends Controller
         }
 
         if ($uploadedFile === null) {
-            throw new \Exception;
+            throw new NotFoundUploadFileException;
         }
 
-        $file = $storage->upload($uploadedFile, UIObject\CkEditor::FILE_UPLOAD_PATH);
+        $file = $storage->upload($uploadedFile, Editors\CkEditor::FILE_UPLOAD_PATH);
 
         /** @var \Xpressengine\Media\MediaManager $mediaManager */
         $mediaManager = app('xe.media');
@@ -61,7 +42,7 @@ class FixedController extends Controller
         $thumbnails = null;
         if ($mediaManager->is($file) === true) {
             $media = $mediaManager->make($file);
-            $thumbnails = $mediaManager->createThumbnails($media, UIObject\CkEditor::THUMBNAIL_TYPE);
+            $thumbnails = $mediaManager->createThumbnails($media, Editors\CkEditor::THUMBNAIL_TYPE);
 
             $media = $media->toArray();
 
@@ -78,123 +59,128 @@ class FixedController extends Controller
     }
 
     /**
-     * get file's source
+     * get file source
      *
-     * @param string $url url
-     * @param string $id  id
+     * @param string $id document id
      * @return void
      */
     public function fileSource($id)
     {
-        /** @var \Xpressengine\Storage\Storage $storage */
-        $storage = app('xe.storage');
-        $file = $storage->get($id);
+        if (empty($id)) {
+            throw new \Exception('File id required');
+        }
+//        if (Gate::denies(
+//            BoardPermissionHandler::ACTION_READ,
+//            new Instance($boardPermission->name($this->instanceId)))
+//        ) {
+//            throw new AccessDeniedHttpException;
+//        }
+
+        $file = File::find($id);
 
         /** @var \Xpressengine\Media\MediaManager $mediaManager */
-        $mediaManager = \App::make('xe.media');
+        $mediaManager = app('xe.media');
         if ($mediaManager->is($file) === true) {
-            /** @var \Xpressengine\Media\Handlers\ImageHandler $handler */
-            $handler = $mediaManager->getHandler(\Xpressengine\Media\Spec\Media::TYPE_IMAGE);
             $dimension = 'L';
             if (\Agent::isMobile() === true) {
                 $dimension = 'M';
             }
+            $media = Image::getThumbnail(
+                $mediaManager->make($file),
+                Editors\CkEditor::THUMBNAIL_TYPE,
+                $dimension
+            );
 
-            $media = $handler->getThumbnail($mediaManager->make($file), UIObject\CkEditor::THUMBNAIL_TYPE, $dimension);
-            $file = $media->getFile();
+            header('Content-type: ' . $media->mime);
+            echo $media->getContent();
         }
-
-        header('Content-type: ' . $file->mime);
-        echo $storage->read($file);
     }
 
     /**
-     * download file
+     * file download
      *
-     * @param string $url url
-     * @param string $id  id
-     * @throws \Xpressengine\Storage\Exceptions\NotExistsException
+     * @param $id
      * @return void
      */
     public function fileDownload($id)
     {
+        if (empty($id)) {
+            throw new \Exception('File id required');
+        }
+
+//        if (Gate::denies(
+//            BoardPermissionHandler::ACTION_READ,
+//            new Instance($boardPermission->name($this->instanceId)))
+//        ) {
+//            throw new AccessDeniedHttpException;
+//        }
+
+        $file = File::find($id);
+
         /** @var \Xpressengine\Storage\Storage $storage */
         $storage = app('xe.storage');
-        $file = $storage->get($id);
-
-        header('Content-type: ' . $file->mime);
-
         $storage->download($file);
+    }
+
+    public function fileDestroy($id)
+    {
+        if (empty($id)) {
+            throw new \Exception('File id required');
+        }
+
+        /** @var \Xpressengine\Storage\Storage $storage */
+        $storage = app('xe.storage');
+        $storage->remove(File::find($id));
+
+        return XePresenter::makeApi([
+            'deleted' => true,
+        ]);
     }
 
     /**
      * 해시태그 suggestion 리스트
      *
-     * @param string $url url
-     * @param string $id  id
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @param Request $request
+     * @param TagHandler $tag
+     * @param string|null $id
+     * @return mixed
      */
-    public function hashTag($id = null)
+    public function hashTag(Request $request, TagHandler $tag, $id = null)
     {
-        /** @var \Illuminate\Http\Request $request */
-        $request = app('request');
-        /** @var \Xpressengine\Tag\TagHandler tag */
-        $tag = \App::make('xe.tag');
+        $tags = $tag->similar($request->get('string'));
 
-        $terms = $tag->autoCompletion($request->get('string'));
-
-        $words = [];
-        foreach ($terms as $tagEntity) {
-            $words[] = $tagEntity->word;
+        $suggestions = [];
+        foreach ($tags as $tag) {
+            $suggestions[] = [
+                'id' => $tag->id,
+                'word' => $tag->word,
+            ];
         }
 
-        return XePresenter::makeApi($words);
+        return XePresenter::makeApi($suggestions);
     }
 
     /**
      * 멘션 suggestion 리스트
      *
-     * @param string $url url
-     * @param string $id  id
-     * @return \Xpressengine\Presenter\RendererInterface
+     * @param Request $request
+     * @param string|null $id
+     * @return mixed
      */
-    public function mention($id = null)
+    public function mention(Request $request, $id = null)
     {
-        /** @var \Illuminate\Http\Request $request */
-        $request = app('request');
-        $string = $request->get('string');
-        $userIds = [];
-
-        /** @var \Xpressengine\Member\Repositories\Database\MemberRepository $member */
-        $member = app('xe.members');
-
-        if (count($userIds) < 10) {
-            $users = $member->getConnection()->table('member')->whereNotIn('id', $userIds)
-                ->where('displayName', 'like', $string . '%')->get(['id']);
-            foreach ($users as $user) {
-                $userIds[] = $user['id'];
-            }
-        }
-
-        $users = $member->getConnection()->table('member')->whereIn('id', $userIds)
-            ->where('displayName', 'like', $string . '%')->get(['id', 'displayName', 'profileImage']);
-
-        foreach ($users as $user) {
-            $key = array_search($user['id'], $userIds);
-            if ($key !== null && $key !== false) {
-                unset($userIds[$key]);
-            }
-        }
-
-        // 본인은 안나오게 하자..
         $suggestions = [];
+
+        $string = $request->get('string');
+        $users = User::where('displayName', 'like', $string . '%')->where('id', '<>', Auth::user()->getId())->get();
         foreach ($users as $user) {
             $suggestions[] = [
-                'id' => $user['id'],
-                'displayName' => $user['displayName'],
-                'profileImage' => $user['profileImage'],
+                'id' => $user->getId(),
+                'displayName' => $user->getDisplayName(),
+                'profileImage' => $user->profileImage,
             ];
         }
+
         return XePresenter::makeApi($suggestions);
     }
 
