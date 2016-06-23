@@ -18,14 +18,10 @@ use XeFrontend;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
 use Xpressengine\Editor\EditorHandler;
-use Xpressengine\Media\MediaManager;
-use Xpressengine\Media\Models\Image;
 use Xpressengine\Permission\Instance;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
 use Illuminate\Contracts\Auth\Access\Gate;
-use Xpressengine\Storage\File;
-use Xpressengine\Storage\Storage;
 
 /**
  * CkEditor
@@ -47,79 +43,23 @@ class CkEditor extends AbstractEditor
 
     protected $fileInputName = 'files';
 
-    /**
-     * @deprecated
-     */
-    const FILE_UPLOAD_PATH = 'public/plugin/ckeditor';
-
-    /**
-     * @deprecated
-     */
-    const THUMBNAIL_TYPE = 'spill';
-
     public function __construct(
         EditorHandler $editors,
         UrlGenerator $urls,
         PluginRegister $register,
         Gate $gate,
-        Storage $storage,
-        MediaManager $medias,
         $instanceId
     ) {
         parent::__construct($editors, $urls, $instanceId);
 
         $this->register = $register;
         $this->gate = $gate;
-        $this->storage = $storage;
-        $this->medias = $medias;
     }
 
     public static function boot()
     {
-//        self::registerFixedRoute();
+        //
     }
-
-//    /**
-//     * Register fixed route for slug
-//     *
-//     * @return void
-//     */
-//    protected static function registerFixedRoute()
-//    {
-//        Route::fixed('ckEditor', function () {
-//            $c = 'FixedController';
-//            Route::post('/file/upload', ['as' => 'fixed.ckEditor.file.upload', 'uses' => $c.'@fileUpload']);
-//            Route::get('/file/source/{id?}', ['as' => 'fixed.ckEditor.file.source', 'uses' => $c.'@fileSource']);
-//            Route::get('/file/download/{id?}', ['as' => 'fixed.ckEditor.file.download', 'uses' => $c.'@fileDownload']);
-//            Route::post('/file/destroy/{id?}', ['as' => 'fixed.ckEditor.file.destroy', 'uses' => $c.'@fileDestroy']);
-//            Route::get('/hashTag/{id?}', ['as' => 'fixed.ckEditor.hashTag', 'uses' => $c.'@hashTag']);
-//            Route::get('/mention/{id?}', ['as' => 'fixed.ckEditor.mention', 'uses' => $c.'@mention']);
-//        }, ['namespace' => 'Xpressengine\Plugins\CkEditor']);
-//    }
-
-//    /**
-//     * Set arguments for the editor
-//     *
-//     * @param array $arguments arguments
-//     * @return $this
-//     */
-//    public function setArguments($arguments = [])
-//    {
-//        return parent::setArguments(array_merge([
-//            'editorOptions' => [
-//                'fileUpload' => [
-//                    'upload_url' => route('fixed.ckEditor.file.upload'),
-//                    'source_url' => route('fixed.ckEditor.file.source'),
-//                    'download_url' => route('fixed.ckEditor.file.download'),
-//                    'destroy_url' => route('fixed.ckEditor.file.destroy'),
-//                ],
-//                'suggestion' => [
-//                    'hashtag_api' => route('fixed.ckEditor.hashTag'),
-//                    'mention_api' => route('fixed.ckEditor.mention'),
-//                ],
-//            ]
-//        ], $arguments));
-//    }
 
     /**
      * Get the evaluated contents of the object.
@@ -175,17 +115,6 @@ class CkEditor extends AbstractEditor
         }
     }
 
-    /**
-     * @param $instanceId
-     * @return string
-     * 
-     * @deprecated
-     */
-    public static function getPermKey($instanceId)
-    {
-        return static::getConfigKey($instanceId);
-    }
-
     public function getName()
     {
         return 'XEckeditor';
@@ -200,27 +129,12 @@ class CkEditor extends AbstractEditor
         $data['extensions'] = isset($data['extensions']) ? array_map(function ($v) {
             return trim($v);
         }, explode(',', $data['extensions'])) : [];
-//        $instance = new Instance(static::getPermKey($this->instanceId));
         $instance = new Instance($this->editors->getPermKey($this->instanceId));
         $data['perms'] = [
             'html' => $this->gate->allows('html', $instance),
             'tool' => $this->gate->allows('tool', $instance),
             'upload' => $this->gate->allows('upload', $instance),
         ];
-        
-        
-//        if ($this->targetId) {
-//            $data['files'] = [];
-//            $files = File::getByFileable($this->targetId);
-//            foreach ($files as $file) {
-//                $thumbnails = null;
-//                if ($this->medias->is($file)) {
-//                    $thumbnails = Image::getThumbnails($this->medias->make($file), static::THUMBNAIL_TYPE);
-//                }
-//
-//                $data['files'][] = array_merge($file->toArray(), ['thumbnails' => $thumbnails]);
-//            }
-//        }
 
         $data['files'] = $this->files;
 
@@ -254,50 +168,5 @@ class CkEditor extends AbstractEditor
         }
 
         return $content;
-    }
-
-    /**
-     * Get uri string for editor setting by instance identifier
-     *
-     * @param string $instanceId instance identifier
-     * @return string|null
-     *
-     * @deprecated
-     */
-    public static function getInstanceSettingURI($instanceId)
-    {
-        return route('manage.plugin.cke.setting', $instanceId);
-    }
-
-    /**
-     * Perform any final actions for the store action lifecycle
-     *
-     * @param array       $inputs     request inputs
-     * @param string|null $targetId   target id
-     * @return void
-     *
-     * @deprecated
-     */
-    public function terminate($inputs = [], $targetId = null)
-    {
-        $targetId = $targetId ?: $this->targetId;
-        if (!$targetId) {
-            return;
-        }
-        
-        $olds = File::getByFileable($targetId);
-        $olds = $olds->getDictionary();
-        $files = File::whereIn('id', array_get($inputs, 'files', []))->get();
-        foreach ($files as $file) {
-            if (!isset($olds[$file->getKey()])) {
-                $this->storage->bind($targetId, $file);
-            } else {
-                unset($olds[$file->getKey()]);
-            }
-        }
-
-        foreach ($olds as $old) {
-            $this->storage->unBind($targetId, $old, true);
-        }
     }
 }

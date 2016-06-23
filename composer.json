@@ -40,11 +40,6 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Skins\\UserSkin",
           "name": "에디터 기본 스킨",
           "description": "front 페이지에서 사용될 스킨"
-        },
-        "editor/ckeditor@ckEditor/settingsSkin/ckeditor@default": {
-          "class": "Xpressengine\\Plugins\\CkEditor\\SettingsSkin",
-          "name": "설정 스킨",
-          "description": "설정페이지에서 사용될 스킨"
         }
       }
     }
