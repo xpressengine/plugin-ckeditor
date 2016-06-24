@@ -35,21 +35,21 @@ XEeditor.define({
             // autoGrow_minHeight : 300,
             // autoGrow_maxHeight : 300,
 
-            // allowedContent: {
-            //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-            //     a: {attributes: ['!href']},
-            //     span: {
-            //         attributes: ['contenteditable', 'data-*'],
-            //         classes: []
-            //     },
-            //     img: {
-            //         attributes: ['*'],
-            //         classes: []
-            //     },
-            //     div: {
+            allowedContent: {
+                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+                a: {attributes: ['!href']},
+                span: {
+                    attributes: ['contenteditable', 'data-*'],
+                    classes: []
+                },
+                img: {
+                    attributes: ['*'],
+                    classes: []
+                },
+                div: {
 
-            //     }
-            // },
+                }
+            },
             removeFormatAttributes: '',
             removeButtons : 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
@@ -88,7 +88,7 @@ XEeditor.define({
     interfaces: {
         initialize: function (selector, options, customOptions) {
 
-            var editor;
+            var editor, self = this;
             var customOptions = customOptions || {}
                 , height = customOptions.height
                 , fontFamily = customOptions.fontFamily
@@ -121,6 +121,7 @@ XEeditor.define({
               command: 'wrapCode',
               icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
             });
+
             editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
               label: 'Wrap diagram',
               command: 'wrapDiagram',
@@ -131,6 +132,7 @@ XEeditor.define({
               label: 'File upload',
               icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
             });
+
             editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
               label: 'Image upload',
               icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
@@ -151,6 +153,34 @@ XEeditor.define({
               exec: function( editor ) {
                 editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
               }
+            });
+
+            this.on("instanceReady", function() {
+                $("." + editor.id).parents("form").on('submit', function() {
+                    var $this = $(this);
+                    var $contents = $(self.getContents());
+
+                    $this.find("input[type=hidden].paramMentions, input[type=hidden].paramHashTags").remove();
+
+                    var idSet = {}, valueSet = {};
+                    $contents.find(".__xe_mention").each(function() {
+                        var id = $(this).data("id");
+
+                        if(!idSet.hasOwnProperty(id)) {
+                            idSet[id] = {};
+                            $this.append("<input type='hidden' class='paramMentions' name='mentions[]' value='" + id + "'>");
+                        }
+                    });
+
+                    $contents.find(".__xe_hashtag").text(function(i, v) {
+                        var value = v.replace(/#(.+)/g, "$1");
+
+                        if(!valueSet.hasOwnProperty(value)) {
+                            $this.append("<input type='hidden' class='paramHashTags' name='hashTags[]' value='" + value + "'>");
+                        }
+                    });
+
+                });
             });
 
             if(height) {
