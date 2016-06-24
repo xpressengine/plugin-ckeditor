@@ -35,11 +35,6 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
           "description": "XE 에서 CkEditor 에 사용 할 플러그인."
-        },
-        "editor/ckeditor@ckEditor/skin/ckeditor@default": {
-          "class": "Xpressengine\\Plugins\\CkEditor\\Skins\\UserSkin",
-          "name": "에디터 기본 스킨",
-          "description": "front 페이지에서 사용될 스킨"
         }
       }
     }

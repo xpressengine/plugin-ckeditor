@@ -71,16 +71,9 @@ class Plugin extends AbstractPlugin
      */
     public function boot()
     {
-        XeSkin::setDefaultSkin(Editors\CkEditor::getId(), 'editor/ckeditor@ckEditor/skin/ckeditor@default');
-
-        Route::settings($this->getId(), function () {
-            Route::get('setting/{instanceId}', ['as' => 'manage.plugin.cke.setting', 'uses' => 'SettingsController@getSetting']);
-            Route::post('setting/{instanceId}', ['as' => 'manage.plugin.cke.setting', 'uses' => 'SettingsController@postSetting']);
-        }, ['namespace' => __NAMESPACE__]);
-
-        app()->bind('xe.plugin.ckeditor', function ($app) {
-            return $this;
-        }, true);
+//        app()->bind('xe.plugin.ckeditor', function ($app) {
+//            return $this;
+//        }, true);
     }
 
     /**

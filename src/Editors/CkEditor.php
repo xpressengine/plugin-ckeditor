@@ -17,8 +17,6 @@ use Illuminate\Contracts\Routing\UrlGenerator;
 use XeFrontend;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
-use Xpressengine\Editor\EditorHandler;
-use Xpressengine\Permission\Instance;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -33,28 +31,11 @@ class CkEditor extends AbstractEditor
 {
     protected $register;
 
-    protected $gate;
-
-    protected $storage;
-
-    protected $medias;
-
     protected static $loaded = false;
 
     protected $fileInputName = 'files';
 
-    public function __construct(
-        EditorHandler $editors,
-        UrlGenerator $urls,
-        PluginRegister $register,
-        Gate $gate,
-        $instanceId
-    ) {
-        parent::__construct($editors, $urls, $instanceId);
-
-        $this->register = $register;
-        $this->gate = $gate;
-    }
+    protected $tagInputName = 'hashTags';
 
     public static function boot()
     {
@@ -85,7 +66,7 @@ class CkEditor extends AbstractEditor
 
     protected function getPlugins()
     {
-        return $this->register->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
+        return app('xe.pluginRegister')->get(self::getId() . PluginRegister::KEY_DELIMITER . 'plugin');
     }
 
     /**
@@ -120,44 +101,9 @@ class CkEditor extends AbstractEditor
         return 'XEckeditor';
     }
 
-    public function getConfigData()
-    {
-        $data = array_except($this->config->all(), 'tools');
-        $data['fontFamily'] = isset($data['fontFamily']) ? array_map(function ($v) {
-            return trim($v);
-        }, explode(',', $data['fontFamily'])) : [];
-        $data['extensions'] = isset($data['extensions']) ? array_map(function ($v) {
-            return trim($v);
-        }, explode(',', $data['extensions'])) : [];
-        $instance = new Instance($this->editors->getPermKey($this->instanceId));
-        $data['perms'] = [
-            'html' => $this->gate->allows('html', $instance),
-            'tool' => $this->gate->allows('tool', $instance),
-            'upload' => $this->gate->allows('upload', $instance),
-        ];
-
-        $data['files'] = $this->files;
-
-        return $data;
-    }
-
-    public function getActivateToolIds()
-    {
-        return $this->config->get('tools', []);
-    }
-
     protected function compileBody($content)
     {
         return $this->compilePlugins($content);
-    }
-
-    protected function getFileView()
-    {
-        if (count($this->files) < 1) {
-            return '';
-        }
-
-        return \XeSkin::getAssigned($this->getId())->setView('files')->setData(['files' => $this->files])->render();
     }
 
     protected function compilePlugins($content)

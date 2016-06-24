@@ -16,9 +16,7 @@ namespace Xpressengine\Plugins\CkEditor\Extension;
 use XeFrontend;
 use Xpressengine\Plugin\AbstractComponent;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
-use Xpressengine\Database\VirtualConnectionInterface;
-use Schema;
-use Illuminate\Database\Schema\Blueprint;
+use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * CkEditorPlugin class
@@ -102,11 +100,11 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
                     $block
                 );
             } else {
-                $block = $this->hashTag($block);
-                $block = $this->mention($block);
-                $block = $this->file($block);
+//                $block = $this->hashTag($block);
+//                $block = $this->mention($block);
+//                $block = $this->file($block);
                 $block = $this->image($block);
-                $block = $this->link($block);
+//                $block = $this->link($block);
                 $blockParts[] = $block;
             }
         }
@@ -158,40 +156,61 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
         ]);
     }
 
-    /**
-     * @param $content
-     */
-    private function hashTag($content)
-    {
-        $pattern = '/<span[a-zA-Z0-9=\"\s\']+?class=\"__xe_hashtag\">#([\xEA-\xED\x80-\xBF-a-zA-Z0-9_]+)<\/span>/';
-        $replace = '<a href="/tag/?tag=$1" class="__xe_hashtag" target="_blank">#$1</a>';
-        return preg_replace($pattern, $replace, $content);
-    }
+//    /**
+//     * @param $content
+//     */
+//    private function hashTag($content)
+//    {
+//        $tags = $this->getData($content, '.__xe_hashtag');
+//        foreach ($tags as $tag) {
+//            $word = ltrim($tag['text'], '#');
+//            $content = str_replace(
+//                $tag['html'],
+//                sprintf('<a href="#%s" class="__xe_hashtag" target="_blank">#%s</a>', $word, $word),
+//                $content
+//            );
+//        }
+//
+//        return $content;
+//    }
+//
+//    /**
+//     * @param $content
+//     */
+//    private function mention($content)
+//    {
+//        $mentions = $this->getData($content, '.__xe_mention', 'data-id');
+//        foreach ($mentions as $mention) {
+//            $name = ltrim($mention['text'], '@');
+//            $content = str_replace(
+//                $mention['html'],
+//                sprintf(
+//                    '<span role="button" class="__xe_member __xe_mention" data-id="%s" data-text="%s">@%s</span>',
+//                    $mention['data-id'],
+//                    $name,
+//                    $name
+//                ),
+//                $content
+//            );
+//        }
+//
+//        return $content;
+//    }
+//
+//    /**
+//     * @param $content
+//     */
+//    private function link($content)
+//    {
+//        return $content;
+//    }
 
-    /**
-     * @param $content
-     */
-    private function mention($content)
-    {
-        $pattern = '/<span[a-zA-Z0-9=\"\s\']+?data-id=\"([-a-z0-9]+)\" class=\"__xe_mention\">@([\xEA-\xED\x80-\xBF-a-zA-Z0-9_]+)<\/span>/';
-        $replace = '<span role="button" class="__xe_member __xe_mention" data-id="$1" data-text="$2">$2</span>';
-        return preg_replace($pattern, $replace, $content);
-    }
-
-    /**
-     * @param $content
-     */
-    private function link($content)
-    {
-        return $content;
-    }
-
-    private function file($content)
-    {
-        $pattern = '/<span[a-zA-Z0-9=\"\s\']+?data-download-link=\"([\/\-\:\.a-zA-Z0-9]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_file\">([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>]+)<\/span>/';
-        $replace = '<a href="$1" data-id="$2" target="_blank" class="__xe_file"><i class="xi-file-download"></i> $3</a>';
-        return preg_replace($pattern, $replace, $content);
-    }
+//    private function file($content)
+//    {
+//        $pattern = '/<span[a-zA-Z0-9=\"\s\']+?data-download-link=\"([\/\-\:\.a-zA-Z0-9]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_file\">([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>]+)<\/span>/';
+//        $replace = '<a href="$1" data-id="$2" target="_blank" class="__xe_file"><i class="xi-file-download"></i> $3</a>';
+//        return preg_replace($pattern, $replace, $content);
+//    }
 
     private function image($content)
     {
@@ -230,4 +249,30 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             return sprintf('<img title="%s" data-id="%s" src="%s" class="__xe_image" />', $title, $id, $src);
         }, $content);
     }
+
+//    private function getData($content, $selector, $attributes = [])
+//    {
+//        $attributes = !is_array($attributes) ? [$attributes] : $attributes;
+//
+//        $crawler = $this->createCrawler($content);
+//        return $crawler->filter($selector)->each(function ($node, $i) use ($attributes) {
+//            $dom = $node->getNode(0);
+//            $data = [
+//                'html' => $dom->ownerDocument->saveHTML($dom),
+//                'inner' => $node->html(),
+//                'text' => $node->text(),
+//            ];
+//
+//            foreach ($attributes as $attr) {
+//                $data[$attr] = $node->attr($attr);
+//            }
+//
+//            return $data;
+//        });
+//    }
+//
+//    private function createCrawler($content)
+//    {
+//        return new Crawler($content);
+//    }
 }
