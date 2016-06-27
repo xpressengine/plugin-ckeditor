@@ -103,7 +103,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 //                $block = $this->hashTag($block);
 //                $block = $this->mention($block);
 //                $block = $this->file($block);
-                $block = $this->image($block);
+//                $block = $this->image($block);
 //                $block = $this->link($block);
                 $blockParts[] = $block;
             }
@@ -212,43 +212,43 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 //        return preg_replace($pattern, $replace, $content);
 //    }
 
-    private function image($content)
-    {
-        /** @var \Xpressengine\Storage\Storage $storage */
-        $storage = app('xe.storage');
-        /** @var \Xpressengine\Media\MediaManager $mediaManager */
-        $mediaManager = app('xe.media');
-        /** @var \Xpressengine\Media\Handlers\ImageHandler $handler */
-        $handler = $mediaManager->getHandler(\Xpressengine\Media\Models\Media::TYPE_IMAGE);
-
-        $dimension = 'L';
-        if (\Agent::isMobile() === true) {
-            $dimension = 'M';
-        }
-
-        $pattern = '/<img[a-zA-Z0-9=\"\s\']+?title=\"([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>#]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_image\" src=\"([\/\-\:\.a-zA-Z0-9]+)\" \/>/';
-        return preg_replace_callback($pattern, function ($matches) use ($storage, $mediaManager, $handler, $dimension) {
-            $title = $matches[1];
-            $id = $matches[2];
-            $src = null;
-
-//            $file = File::find($id);
-//            $media = Image::getThumbnail(
-//                $mediaManager->make($file),
-//                BoardModule::THUMBNAIL_TYPE,
-//                $dimension
-//            );
+//    private function image($content)
+//    {
+//        /** @var \Xpressengine\Storage\Storage $storage */
+//        $storage = app('xe.storage');
+//        /** @var \Xpressengine\Media\MediaManager $mediaManager */
+//        $mediaManager = app('xe.media');
+//        /** @var \Xpressengine\Media\Handlers\ImageHandler $handler */
+//        $handler = $mediaManager->getHandler(\Xpressengine\Media\Models\Media::TYPE_IMAGE);
 //
-////             여기 url 없다함
-////             $src = $media->url();
-
-            if ($src == null) {
-                $src = $matches[3];
-            }
-
-            return sprintf('<img title="%s" data-id="%s" src="%s" class="__xe_image" />', $title, $id, $src);
-        }, $content);
-    }
+//        $dimension = 'L';
+//        if (\Agent::isMobile() === true) {
+//            $dimension = 'M';
+//        }
+//
+//        $pattern = '/<img[a-zA-Z0-9=\"\s\']+?title=\"([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>#]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_image\" src=\"([\/\-\:\.a-zA-Z0-9]+)\" \/>/';
+//        return preg_replace_callback($pattern, function ($matches) use ($storage, $mediaManager, $handler, $dimension) {
+//            $title = $matches[1];
+//            $id = $matches[2];
+//            $src = null;
+//
+////            $file = File::find($id);
+////            $media = Image::getThumbnail(
+////                $mediaManager->make($file),
+////                BoardModule::THUMBNAIL_TYPE,
+////                $dimension
+////            );
+////
+//////             여기 url 없다함
+//////             $src = $media->url();
+//
+//            if ($src == null) {
+//                $src = $matches[3];
+//            }
+//
+//            return sprintf('<img title="%s" data-id="%s" src="%s" class="__xe_image" />', $title, $id, $src);
+//        }, $content);
+//    }
 
 //    private function getData($content, $selector, $attributes = [])
 //    {
