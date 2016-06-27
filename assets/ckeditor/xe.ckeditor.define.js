@@ -90,22 +90,24 @@ XEeditor.define({
 
             var editor, self = this;
             var customOptions = customOptions || {}
-                , height = customOptions.height
-                , fontFamily = customOptions.fontFamily
-                , fontSize = customOptions.fontSize
-                , perms = customOptions.perms || {};
+                , height = options.height
+                , fontFamily = options.fontFamily
+                , fontSize = options.fontSize
+                , perms = options.perms || {};
+
+            $.extend(customOptions, options);
 
             if(!perms.html) {
-                options.removeButtons = (options.removeButtons !== "")? options.removeButtons + ",Source" : options.removeButtons;
+                customOptions.removeButtons = (!customOptions.removeButtons)? customOptions.removeButtons + ",Source" : "Source";
             }
 
             if(!perms.tool) {
-                options.removePlugins = (options.removePlugins !== "")? options.removePlugins + ",toolbar" : options.removePlugins;
+                customOptions.removePlugins = (!customOptions.removePlugins)? customOptions.removePlugins + ",toolbar" : "toolbar";
             }
 
             CKEDITOR.env.isCompatible = true;
 
-            editor = CKEDITOR.replace(selector, options || {});
+            editor = CKEDITOR.replace(selector, customOptions || {});
             editor.on('change', function(e) {
                 e.editor.updateElement();
             });
@@ -163,20 +165,20 @@ XEeditor.define({
                     $this.find("input[type=hidden].paramMentions, input[type=hidden].paramHashTags").remove();
 
                     var idSet = {}, valueSet = {};
-                    $contents.find(".__xe_mention").each(function() {
-                        var id = $(this).data("id");
+                    $contents.find("." + options.names.mention.class).each(function() {
+                        var id = $(this).attr(options.names.mention.identifier);
 
                         if(!idSet.hasOwnProperty(id)) {
                             idSet[id] = {};
-                            $this.append("<input type='hidden' class='paramMentions' name='mentions[]' value='" + id + "'>");
+                            $this.append("<input type='hidden' class='paramMentions' name='" + options.names.mention.input + "[]' value='" + id + "'>");
                         }
                     });
 
-                    $contents.find(".__xe_hashtag").text(function(i, v) {
+                    $contents.find("." + options.names.tag).text(function(i, v) {
                         var value = v.replace(/#(.+)/g, "$1");
 
                         if(!valueSet.hasOwnProperty(value)) {
-                            $this.append("<input type='hidden' class='paramHashTags' name='hashTags[]' value='" + value + "'>");
+                            $this.append("<input type='hidden' class='paramHashTags' name='" + options.names.tag.input + "[]' value='" + value + "'>");
                         }
                     });
 
@@ -202,7 +204,7 @@ XEeditor.define({
             }
 
             if(customOptions.uploadActive) {
-                this.renderFileUploader(customOptions);
+                this.renderFileUploader(options);
             }
 
         },
@@ -266,6 +268,7 @@ XEeditor.define({
             var uploadUrl = this.props.options.fileUpload.upload_url
                 , downloadUrl = this.props.options.fileUpload.download_url
                 , destroyUrl = this.props.options.fileUpload.destroy_url
+                , sourceUrl = this.props.options.fileUpload.source_url
                 , attachMaxSize = customOptions.attachMaxSize
                 , fileMaxSize = customOptions.fileMaxSize
                 , extensions = customOptions.extensions
@@ -326,7 +329,7 @@ XEeditor.define({
                     $thumbnaiList.on('click', '.btnAddImage', function() {
                         var $this = $(this);
 
-                        self.addContents("<img src='" + $this.data("src") + "' data-cke-attach='" + $this.data("id") + "'/>");
+                        self.addContents("<img src='" + $this.data("src") + "' class='" + $this.attr(customOptions.names.file.image.class) + "' data-cke-attach='" + $this.attr(customOptions.names.file.image.identifier) + "'/>");
 
                     });
 
@@ -334,7 +337,7 @@ XEeditor.define({
                     $fileAttachList.on('click', '.btnAddFile', function() {
                         //downloadUrl
                         var $this = $(this);
-                        self.addContents("<a href='" + downloadUrl + "/" + $this.data("id") + "' data-cke-attach='" + $this.data("id") + "'>" + $this.data("name") + "</a>");
+                        self.addContents("<a href='" + downloadUrl + "/" + $this.attr(customOptions.names.file.identifier) + "' class='" + $this.attr(customOptions.names.file.image.class) + "' data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "'>" + $this.data("name") + "</a>");
 
                     });
 
@@ -342,8 +345,8 @@ XEeditor.define({
                     $fileUploadArea.on('click', '.btnDelFile', function() {
                         var $this = $(this);
                         var fileSize = $this.data("size");
-                        if(confirm("첨부된 파일을 삭제하시겠습니까?")) {
-                            var id = $this.data("id");
+                        if(confirm(XE.Lang.trans("ckeditor::msgDeleteFile"))) {
+                            var id = $this.attr(customOptions.names.file.identifier);
 
                             XE.ajax({
                                 url: destroyUrl + "/" + id
@@ -513,7 +516,7 @@ XEeditor.define({
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
                                     '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
                                     '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
-                                    '   <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                     '</li>'
                                 ].join("\n");
 
@@ -526,7 +529,7 @@ XEeditor.define({
                                     '   <div class="xe-pull-right">',
                                     '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
                                     '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
-                                    '       <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '       <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                     '   </div>',
                                     '</li>',
                                 ].join("\n");

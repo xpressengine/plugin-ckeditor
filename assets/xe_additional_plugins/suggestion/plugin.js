@@ -305,7 +305,7 @@
 
                     $.each(autolist, function(index, data){
                         var css = (index === 0) ? 'selected' : '';
-                        $list.append('<li class="suggestions-list '+ css +'" data-keyword="' + data.word +'" data-id="' + data.id + '"># ' + data.word + '</li>');
+                        $list.append('<li class="suggestions-list '+ css +'" data-keyword="' + data.word +'"># ' + data.word + '</li>');
                     });
                     $(editor.container.$).append($list);
                     autocomplete.$suggestion_list = $list;
@@ -411,10 +411,10 @@
 
         // replace text
         if(this.is_hashtag_observing()) {
-            parent.html(parent.html().replace(/#`@`(.+)`@`/g, "<span contenteditable='false' class='__xe_hashtag'>#$1</span>"));
+            parent.html(parent.html().replace(/#`@`(.+)`@`/g, "<span contenteditable='false' class='" + editor.config.names.tag.class + "'>#$1</span>"));
         }
         else if(this.is_mention_observing()) {
-            parent.html(parent.html().replace(/@`@`(.+)`@`/g, "<span contenteditable='false' data-id='" + data.id + "' class='__xe_mention'>@$1</span>"));
+            parent.html(parent.html().replace(/@`@`(.+)`@`/g, "<span contenteditable='false' " + editor.config.names.mention.identifier + "='" + data.id + "' class='" + editor.config.names.mention.class + "'>@$1</span>"));
         }
 
         // move cursor focus end of text

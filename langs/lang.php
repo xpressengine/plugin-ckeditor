@@ -41,6 +41,9 @@ return [
         'ko' => '첨부삭제',
         'en' => 'Delete attachment',
     ],
-    //
+    'msgDeleteFile' => [
+        'ko' => '첨부된 파일을 삭제하시겠습니까?',
+        'en' => 'Are you sure you want to delete the attachment?'
+    ]
 ];
 
