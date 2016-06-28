@@ -16,7 +16,6 @@ namespace Xpressengine\Plugins\CkEditor\Extension;
 use XeFrontend;
 use Xpressengine\Plugin\AbstractComponent;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * CkEditorPlugin class
@@ -100,11 +99,6 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
                     $block
                 );
             } else {
-//                $block = $this->hashTag($block);
-//                $block = $this->mention($block);
-//                $block = $this->file($block);
-//                $block = $this->image($block);
-//                $block = $this->link($block);
                 $blockParts[] = $block;
             }
         }
@@ -155,124 +149,4 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             "</div>",
         ]);
     }
-
-//    /**
-//     * @param $content
-//     */
-//    private function hashTag($content)
-//    {
-//        $tags = $this->getData($content, '.__xe_hashtag');
-//        foreach ($tags as $tag) {
-//            $word = ltrim($tag['text'], '#');
-//            $content = str_replace(
-//                $tag['html'],
-//                sprintf('<a href="#%s" class="__xe_hashtag" target="_blank">#%s</a>', $word, $word),
-//                $content
-//            );
-//        }
-//
-//        return $content;
-//    }
-//
-//    /**
-//     * @param $content
-//     */
-//    private function mention($content)
-//    {
-//        $mentions = $this->getData($content, '.__xe_mention', 'data-id');
-//        foreach ($mentions as $mention) {
-//            $name = ltrim($mention['text'], '@');
-//            $content = str_replace(
-//                $mention['html'],
-//                sprintf(
-//                    '<span role="button" class="__xe_member __xe_mention" data-id="%s" data-text="%s">@%s</span>',
-//                    $mention['data-id'],
-//                    $name,
-//                    $name
-//                ),
-//                $content
-//            );
-//        }
-//
-//        return $content;
-//    }
-//
-//    /**
-//     * @param $content
-//     */
-//    private function link($content)
-//    {
-//        return $content;
-//    }
-
-//    private function file($content)
-//    {
-//        $pattern = '/<span[a-zA-Z0-9=\"\s\']+?data-download-link=\"([\/\-\:\.a-zA-Z0-9]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_file\">([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>]+)<\/span>/';
-//        $replace = '<a href="$1" data-id="$2" target="_blank" class="__xe_file"><i class="xi-file-download"></i> $3</a>';
-//        return preg_replace($pattern, $replace, $content);
-//    }
-
-//    private function image($content)
-//    {
-//        /** @var \Xpressengine\Storage\Storage $storage */
-//        $storage = app('xe.storage');
-//        /** @var \Xpressengine\Media\MediaManager $mediaManager */
-//        $mediaManager = app('xe.media');
-//        /** @var \Xpressengine\Media\Handlers\ImageHandler $handler */
-//        $handler = $mediaManager->getHandler(\Xpressengine\Media\Models\Media::TYPE_IMAGE);
-//
-//        $dimension = 'L';
-//        if (\Agent::isMobile() === true) {
-//            $dimension = 'M';
-//        }
-//
-//        $pattern = '/<img[a-zA-Z0-9=\"\s\']+?title=\"([\xEA-\xED\x80-\xBF-a-zA-Z0-9_\(\)\s\.\&;\:\<\>#]+)\" data-id=\"([\/\-a-z0-9]+)\" class=\"__xe_image\" src=\"([\/\-\:\.a-zA-Z0-9]+)\" \/>/';
-//        return preg_replace_callback($pattern, function ($matches) use ($storage, $mediaManager, $handler, $dimension) {
-//            $title = $matches[1];
-//            $id = $matches[2];
-//            $src = null;
-//
-////            $file = File::find($id);
-////            $media = Image::getThumbnail(
-////                $mediaManager->make($file),
-////                BoardModule::THUMBNAIL_TYPE,
-////                $dimension
-////            );
-////
-//////             여기 url 없다함
-//////             $src = $media->url();
-//
-//            if ($src == null) {
-//                $src = $matches[3];
-//            }
-//
-//            return sprintf('<img title="%s" data-id="%s" src="%s" class="__xe_image" />', $title, $id, $src);
-//        }, $content);
-//    }
-
-//    private function getData($content, $selector, $attributes = [])
-//    {
-//        $attributes = !is_array($attributes) ? [$attributes] : $attributes;
-//
-//        $crawler = $this->createCrawler($content);
-//        return $crawler->filter($selector)->each(function ($node, $i) use ($attributes) {
-//            $dom = $node->getNode(0);
-//            $data = [
-//                'html' => $dom->ownerDocument->saveHTML($dom),
-//                'inner' => $node->html(),
-//                'text' => $node->text(),
-//            ];
-//
-//            foreach ($attributes as $attr) {
-//                $data[$attr] = $node->attr($attr);
-//            }
-//
-//            return $data;
-//        });
-//    }
-//
-//    private function createCrawler($content)
-//    {
-//        return new Crawler($content);
-//    }
 }
