@@ -17,19 +17,19 @@ XEeditor.define({
                 }.bind(this)
             },
             toolbarGroups: [
-              { name: 'clipboard',   groups: [ 'undo', 'clipboard' ] },
-              { name: 'editing',     groups: [ 'find', 'selection' ] },
-              { name: 'links' },
-              { name: 'insert' },
-              { name: 'tools' },
-              { name: 'document',    groups: [ 'mode' ] },
-              '/',
-              { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-              { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
-              '/',
-              { name: 'styles' },
-              { name: 'colors' },
-              { name: 'others' }
+                { name: 'clipboard',   groups: [ 'undo', 'clipboard' ] },
+                { name: 'editing',     groups: [ 'find', 'selection' ] },
+                { name: 'links' },
+                { name: 'insert' },
+                { name: 'tools' },
+                { name: 'document',    groups: [ 'mode' ] },
+                '/',
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ] },
+                '/',
+                { name: 'styles' },
+                { name: 'colors' },
+                { name: 'others' }
             ],
             // height : 300,
             // autoGrow_minHeight : 300,
@@ -62,17 +62,17 @@ XEeditor.define({
             name: 'extractor',
             path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
         },
-        // {
-        //     name: 'fileUpload',
-        //     path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
-        // },
-        {
-            name: 'suggestion',
-            path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
-        },{
-            name: 'sourcearea',
-            path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
-        }],
+            // {
+            //     name: 'fileUpload',
+            //     path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
+            // },
+            {
+                name: 'suggestion',
+                path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
+            },{
+                name: 'sourcearea',
+                path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
+            }],
         addPlugins: function(plugins) {
             if(plugins.length > 0) {
                 for(var i = 0, max = plugins.length; i < max; i += 1) {
@@ -119,42 +119,42 @@ XEeditor.define({
             });
 
             editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
-              label: 'Wrap code',
-              command: 'wrapCode',
-              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
+                label: 'Wrap code',
+                command: 'wrapCode',
+                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
             });
 
             editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
-              label: 'Wrap diagram',
-              command: 'wrapDiagram',
-              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
+                label: 'Wrap diagram',
+                command: 'wrapDiagram',
+                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
             });
 
             editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
-              label: 'File upload',
-              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
+                label: 'File upload',
+                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
             });
 
             editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
-              label: 'Image upload',
-              icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
+                label: 'Image upload',
+                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
             });
 
             editor.addCommand( 'fileUpload', {
-              exec: function() {
-                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-              }
+                exec: function() {
+                    editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+                }
             });
 
             editor.addCommand( 'wrapCode', {
-              exec: function( editor ) {
-                editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
-              }
+                exec: function( editor ) {
+                    editor.insertText( '```javascript\n' + editor.getSelection().getSelectedText() + '\n```' );
+                }
             });
             editor.addCommand( 'wrapDiagram', {
-              exec: function( editor ) {
-                editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
-              }
+                exec: function( editor ) {
+                    editor.insertText( '```diagram\n' + editor.getSelection().getSelectedText() + '\n```' );
+                }
             });
 
             this.on("instanceReady", function() {
@@ -174,7 +174,7 @@ XEeditor.define({
                         }
                     });
 
-                    $contents.find("." + options.names.tag.class).text(function(i, v) {
+                    $contents.find("." + options.names.tag).text(function(i, v) {
                         var value = v.replace(/#(.+)/g, "$1");
 
                         if(!valueSet.hasOwnProperty(value)) {
@@ -328,17 +328,31 @@ XEeditor.define({
                     //이미지 본문 삽입
                     $thumbnaiList.on('click', '.btnAddImage', function() {
                         var $this = $(this);
+                        var imageHtml = [
+                            "<img ",
+                            "src='" + $this.data("src") + "' ",
+                            "class='" + customOptions.names.file.image.class + "' ",
+                            "data-cke-attach='" + $this.attr(customOptions.names.file.image.identifier) + "' ",
+                            customOptions.names.file.image.identifier + "=" + $this.attr(customOptions.names.file.image.identifier),
+                            "/>"
+                        ].join("");
 
-                        self.addContents("<img src='" + $this.data("src") + "' class='" + $this.attr(customOptions.names.file.image.class) + "' data-cke-attach='" + $this.attr(customOptions.names.file.image.identifier) + "'/>");
-
+                        self.addContents(imageHtml);
                     });
 
                     //파일 본문 삽입
                     $fileAttachList.on('click', '.btnAddFile', function() {
                         //downloadUrl
                         var $this = $(this);
-                        self.addContents("<a href='" + downloadUrl + "/" + $this.attr(customOptions.names.file.identifier) + "' class='" + $this.attr(customOptions.names.file.image.class) + "' data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "'>" + $this.data("name") + "</a>");
+                        var fileHtml = [
+                            "<a href='" + downloadUrl + "/" + customOptions.names.file.identifier + "' ",
+                            "class='" + customOptions.names.file.class + "' ",
+                            "data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "' ",
+                            customOptions.names.file.identifier + "=" + $this.attr(customOptions.names.file.identifier),
+                            ">" + $this.data("name") + "</a>"
+                        ].join("");
 
+                        self.addContents(fileHtml);
                     });
 
                     //첨부파일 삭제
@@ -449,7 +463,10 @@ XEeditor.define({
                             for (var i = 0; i < extensions.length; i++) {
                                 var sCurExtension = extensions[i];
 
-                                if (uploadFileName.substr(uploadFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() === sCurExtension.toLowerCase()) {
+                                if(sCurExtension === '*') {
+                                    extValid = true;
+                                    break;
+                                }else if (uploadFileName.substr(uploadFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() === sCurExtension.toLowerCase()) {
                                     extValid = true;
                                     break;
                                 }
@@ -458,17 +475,25 @@ XEeditor.define({
                             //[1]확장자
                             if(!extValid) {
                                 //XE.toast("xe-warning", "[" + 'extensions.join(", ") + "] 확장자만 업로드 가능합니다. [" + uploadFileName + "]");
-                                XE.toast("xe-warning", XE.Lang.trans("ckeditor::msgAvailableUploadingFiles", {extensions: extensions.join(", "), uploadFileName: uploadFileName}));
+                                XE.toast(
+                                    "xe-warning",
+                                    XE.Lang.trans("ckeditor::msgAvailableUploadingFiles", {extensions: extensions.join(", "), uploadFileName: uploadFileName}
+                                    )
+                                );
+
                                 valid = false;
                             }
 
                             //[2]파일 사이즈
                             if(fSize > fileMaxSize * 1024 * 1024) {
                                 // XE.toast("xe-warning", "파일 용량은 " + fileMaxSize + "MB를 초과할 수 없습니다. [" + uploadFileName + "]");
-                                XE.toast('xe-warning', XE.Lang.trans('ckeditor::msgMaxFileSize', {
-                                    fileMaxSize: fileMaxSize,
-                                    uploadFileName: uploadFileName
-                                }));
+                                XE.toast(
+                                    'xe-warning',
+                                    XE.Lang.trans('ckeditor::msgMaxFileSize', {
+                                        fileMaxSize: fileMaxSize,
+                                        uploadFileName: uploadFileName
+                                    })
+                                );
                                 valid = false;
                             }
 
@@ -603,7 +628,7 @@ XEeditor.define({
                                 $fileAttachList.append(tmplFile);
                             }
 
-                            $fileUploadArea.find(".file-view").removeClass("xe-hidden");
+                            // $fileUploadArea.find(".file-view").removeClass("xe-hidden");
 
                             //첨부파일 갯수 표시
                             $fileUploadArea.find(".fileCount").text(fileCount);
@@ -611,6 +636,8 @@ XEeditor.define({
                             //첨부파일 용량 표시
                             $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
                         }
+
+                        $fileUploadArea.find(".file-view").removeClass("xe-hidden");
                     }
                 });
             });
