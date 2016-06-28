@@ -333,8 +333,8 @@ XEeditor.define({
                             "src='" + $this.data("src") + "' ",
                             "class='" + customOptions.names.file.image.class + "' ",
                             "data-cke-attach='" + $this.attr(customOptions.names.file.image.identifier) + "' ",
-                            customOptions.names.file.image.identifier + "=" + $this.attr(customOptions.names.file.image.identifier),
-                            "/>"
+                            customOptions.names.file.image.identifier + "='" + $this.attr(customOptions.names.file.image.identifier),
+                            "' />"
                         ].join("");
 
                         self.addContents(imageHtml);
@@ -348,8 +348,8 @@ XEeditor.define({
                             "<a href='" + downloadUrl + "/" + customOptions.names.file.identifier + "' ",
                             "class='" + customOptions.names.file.class + "' ",
                             "data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "' ",
-                            customOptions.names.file.identifier + "=" + $this.attr(customOptions.names.file.identifier),
-                            ">" + $this.data("name") + "</a>"
+                            customOptions.names.file.identifier + "='" + $this.attr(customOptions.names.file.identifier),
+                            "' >" + $this.data("name") + "</a>"
                         ].join("");
 
                         self.addContents(fileHtml);
