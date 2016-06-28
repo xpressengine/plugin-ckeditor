@@ -607,7 +607,7 @@ XEeditor.define({
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
                                     '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
                                     '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
-                                    '   <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                     '</li>'
                                 ].join("\n");
 
@@ -620,7 +620,7 @@ XEeditor.define({
                                     '   <div class="xe-pull-right">',
                                     '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
                                     '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
-                                    '       <input type="hidden" name="files[]" value="' + id + '" />',
+                                    '       <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                     '   </div>',
                                     '</li>',
                                 ].join("\n");
