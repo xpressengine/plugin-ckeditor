@@ -174,7 +174,7 @@ XEeditor.define({
                         }
                     });
 
-                    $contents.find("." + options.names.tag).text(function(i, v) {
+                    $contents.find("." + options.names.tag.class).text(function(i, v) {
                         var value = v.replace(/#(.+)/g, "$1");
 
                         if(!valueSet.hasOwnProperty(value)) {
