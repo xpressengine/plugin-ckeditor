@@ -58,10 +58,11 @@ XEeditor.define({
             resize_dir: 'vertical',
             extraAllowedContent: 'style;*[id,rel](*){*}'
         },
-        plugins: [{
-            name: 'extractor',
-            path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
-        },
+        plugins: [
+            // {
+            //     name: 'extractor',
+            //     path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
+            // },
             // {
             //     name: 'fileUpload',
             //     path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
