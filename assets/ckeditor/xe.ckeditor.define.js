@@ -628,8 +628,6 @@ XEeditor.define({
                                 $fileAttachList.append(tmplFile);
                             }
 
-                            // $fileUploadArea.find(".file-view").removeClass("xe-hidden");
-
                             //첨부파일 갯수 표시
                             $fileUploadArea.find(".fileCount").text(fileCount);
 
@@ -641,6 +639,20 @@ XEeditor.define({
                     }
                 });
             });
+        },
+        reset: function() {
+            var editorWrapClass = "." + this.props.editor.id
+                , $editorWrap = $(editorWrapClass);
+
+            //upload된 파일 삭제
+            if(this.props.options.uploadActive) {
+                var uploadArea = $editorWrap.nextAll(".ckeditor-fileupload-area:first");
+                uploadArea.find(".thumbnail-list li").remove();
+                uploadArea.find(".file-attach-list li").remove();
+            }
+
+            //contents 초기화
+            this.setContents("");
         }
     }
 });
