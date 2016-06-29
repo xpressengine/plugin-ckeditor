@@ -647,9 +647,10 @@ XEeditor.define({
 
             //upload된 파일 삭제
             if(this.props.options.uploadActive) {
-                var uploadArea = $editorWrap.nextAll(".ckeditor-fileupload-area:first");
-                uploadArea.find(".thumbnail-list li").remove();
-                uploadArea.find(".file-attach-list li").remove();
+                var $fileUploadArea = $editorWrap.nextAll(".ckeditor-fileupload-area:first");
+                $fileUploadArea.find(".thumbnail-list li").remove();
+                $fileUploadArea.find(".file-attach-list li").remove();
+                $fileUploadArea.find(".file-view").addClass("xe-hidden");
             }
 
             //contents 초기화
