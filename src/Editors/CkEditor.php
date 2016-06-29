@@ -31,16 +31,11 @@ class CkEditor extends AbstractEditor
 {
     protected static $loaded = false;
 
-    protected $fileInputName = 'files';
-
-    protected $tagInputName = 'hashTags';
-    
-    protected $mentionInputName = 'mentions';
-
-    public static function boot()
-    {
-        //
-    }
+//    protected $fileInputName = 'files';
+//
+//    protected $tagInputName = 'hashTags';
+//
+//    protected $mentionInputName = 'mentions';
 
     /**
      * Get the evaluated contents of the object.
@@ -95,11 +90,32 @@ class CkEditor extends AbstractEditor
         }
     }
 
+    /**
+     * Get a editor name
+     *
+     * @return string
+     */
     public function getName()
     {
         return 'XEckeditor';
     }
 
+    /**
+     * Determine if a editor html usable.
+     *
+     * @return boolean
+     */
+    public function htmlable()
+    {
+        return true;
+    }
+
+    /**
+     * Compile content body
+     *
+     * @param string $content content
+     * @return string
+     */
     protected function compileBody($content)
     {
         return $this->compilePlugins($content);
