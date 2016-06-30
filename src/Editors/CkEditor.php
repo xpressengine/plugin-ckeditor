@@ -31,12 +31,6 @@ class CkEditor extends AbstractEditor
 {
     protected static $loaded = false;
 
-//    protected $fileInputName = 'files';
-//
-//    protected $tagInputName = 'hashTags';
-//
-//    protected $mentionInputName = 'mentions';
-
     /**
      * Get the evaluated contents of the object.
      *
