@@ -18,6 +18,7 @@ use Xpressengine\Plugin\AbstractPlugin;
 use XeSkin;
 use Route;
 use XeConfig;
+use Xpressengine\Translation\Translator;
 use Xpressengine\User\Rating;
 
 /**
@@ -36,6 +37,9 @@ class Plugin extends AbstractPlugin
     public function install()
     {
         //
+        /** @var Translator $trans */
+        $trans = app('xe.translator');
+        $trans->putFromLangDataSource('ckeditor', base_path('plugins/ckeditor/langs/lang.php'));
     }
 
     /**
