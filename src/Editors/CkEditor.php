@@ -87,6 +87,14 @@ class CkEditor extends AbstractEditor
             XeFrontend::css([
                 asset($path . '/editor.css'),
             ])->load();
+
+            $lang = require realpath(__DIR__.'/../../langs') . '/lang.php';
+
+            $keywords = array_keys($lang);
+
+            XeFrontend::translation(array_map(function ($keyword) {
+                return 'ckeditor::' . $keyword;
+            }, $keywords));
         }
     }
 
