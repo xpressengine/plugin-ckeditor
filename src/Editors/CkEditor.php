@@ -84,6 +84,20 @@ class CkEditor extends AbstractEditor
                 asset($path . '/xe.ckeditor.define.js'),
             ])->before('assets/core/common/js/xe.editor.core.js')->load();
 
+            XeFrontend::translation([
+                'ckeditor::dropzoneLimit',
+                'ckeditor::attachementDescription',
+                'ckeditor::uploadingFile',
+                'ckeditor::attachementDescription',
+                'ckeditor::msgDeleteFile',
+                'ckeditor::msgFailDeleteFile',
+                'ckeditor::msgUploadingPermission',
+                'ckeditor::msgAvailableUploadingFiles',
+                'ckeditor::msgMaxFileSize',
+                'ckeditor::msgAttachMaxSize',
+                'ckeditor::addContentToBody',
+                'ckeditor::deleteAttachment',
+            ]);
             XeFrontend::css([
                 asset($path . '/editor.css'),
             ])->load();
