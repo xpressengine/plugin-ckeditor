@@ -534,6 +534,10 @@ XEeditor.define({
                             }
 
                         },
+                        submit: function(e, data) {
+                            //파일 업로드시 상위 form요소의 input value들이 모두 submit되어 추가
+                            data.formData = {};
+                        },
                         done: function (e, data) {
 
                             var file = data.result.file
