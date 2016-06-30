@@ -82,7 +82,7 @@ class CkEditor extends AbstractEditor
                 asset($path . '/ckeditor.js'),
                 asset($path . '/styles.js'),
                 asset($path . '/xe.ckeditor.define.js'),
-            ])->load();
+            ])->before('assets/core/common/js/xe.editor.core.js')->load();
 
             XeFrontend::css([
                 asset($path . '/editor.css'),
