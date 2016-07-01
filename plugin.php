@@ -36,10 +36,6 @@ class Plugin extends AbstractPlugin
      */
     public function install()
     {
-        //
-        /** @var Translator $trans */
-        $trans = app('xe.translator');
-        $trans->putFromLangDataSource('ckeditor', base_path('plugins/ckeditor/langs/lang.php'));
     }
 
     /**
@@ -88,6 +84,8 @@ class Plugin extends AbstractPlugin
      */
     public function activate($installedVersion = null)
     {
-        //
+        /** @var Translator $trans */
+        $trans = app('xe.translator');
+        $trans->putFromLangDataSource('ckeditor', base_path('plugins/ckeditor/langs/lang.php'));
     }
 }
