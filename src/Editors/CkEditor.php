@@ -14,7 +14,6 @@
 namespace Xpressengine\Plugins\CkEditor\Editors;
 
 use Illuminate\Contracts\Routing\UrlGenerator;
-use XeFrontend;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
 use Xpressengine\Plugin\PluginRegister;
@@ -69,7 +68,7 @@ class CkEditor extends AbstractEditor
             self::$loaded = true;
 
             $path = str_replace(base_path(), '', realpath(__DIR__.'/../../assets/ckeditor'));
-            XeFrontend::js([
+            $this->frontend->js([
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
@@ -78,21 +77,7 @@ class CkEditor extends AbstractEditor
                 asset($path . '/xe.ckeditor.define.js'),
             ])->before('assets/core/common/js/xe.editor.core.js')->load();
 
-            XeFrontend::translation([
-                'ckeditor::dropzoneLimit',
-                'ckeditor::attachementDescription',
-                'ckeditor::uploadingFile',
-                'ckeditor::attachementDescription',
-                'ckeditor::msgDeleteFile',
-                'ckeditor::msgFailDeleteFile',
-                'ckeditor::msgUploadingPermission',
-                'ckeditor::msgAvailableUploadingFiles',
-                'ckeditor::msgMaxFileSize',
-                'ckeditor::msgAttachMaxSize',
-                'ckeditor::addContentToBody',
-                'ckeditor::deleteAttachment',
-            ]);
-            XeFrontend::css([
+            $this->frontend->css([
                 asset($path . '/editor.css'),
             ])->load();
 
@@ -100,7 +85,7 @@ class CkEditor extends AbstractEditor
 
             $keywords = array_keys($lang);
 
-            XeFrontend::translation(array_map(function ($keyword) {
+            $this->frontend->translation(array_map(function ($keyword) {
                 return 'ckeditor::' . $keyword;
             }, $keywords));
         }
