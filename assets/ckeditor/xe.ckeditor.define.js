@@ -7,6 +7,7 @@ XEeditor.define({
         configs: {
             skin: 'xe-minimalist',
             customConfig: '',
+            language: CKEDITOR.lang.languages.hasOwnProperty(XE.Lang.getCurrentLocale())? XE.Lang.getCurrentLocale() : 'en',
             contentsCss: CKEDITOR.basePath + 'content.css',
             on: {
                 focus: function () {
