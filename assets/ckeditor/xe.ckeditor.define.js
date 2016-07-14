@@ -36,26 +36,27 @@ XEeditor.define({
             // autoGrow_minHeight : 300,
             // autoGrow_maxHeight : 300,
 
-            allowedContent: {
-                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-                a: {attributes: ['!href']},
-                span: {
-                    attributes: ['contenteditable', 'data-*'],
-                    classes: []
-                },
-                img: {
-                    attributes: ['*'],
-                    classes: []
-                },
-                div: {}
-            },
+            // allowedContent: {
+            //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+            //     a: {attributes: ['!href']},
+            //     span: {
+            //         attributes: ['contenteditable', 'data-*'],
+            //         classes: []
+            //     },
+            //     img: {
+            //         attributes: ['*'],
+            //         classes: []
+            //     },
+            //     div: {}
+            // },
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
             // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
-            extraAllowedContent: 'style;*[id,rel](*){*}'
+            extraAllowedContent: 'style;*[id,rel](*){*}',
+            format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div'
         },
         plugins: [
             // {
