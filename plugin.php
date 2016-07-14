@@ -49,19 +49,20 @@ class Plugin extends AbstractPlugin
     /**
      * @return boolean
      */
-    public function checkInstalled($installedVersion = NULL)
+    public function checkUpdated($installedVersion = NULL)
     {
-        // TODO: Implement checkInstall() method.
+        if (version_compare($installedVersion, '0.9.1', '<=')) {
+            return false;
+        }
 
         return true;
     }
 
-    /**
-     * @return boolean
-     */
-    public function checkUpdated($installedVersion = NULL)
+    public function update($installedVersion = null)
     {
-        // TODO: Implement checkUpdate() method.
+        /** @var Translator $trans */
+        $trans = app('xe.translator');
+        $trans->putFromLangDataSource('ckeditor', base_path('plugins/ckeditor/langs/lang.php'));
     }
 
     /**
