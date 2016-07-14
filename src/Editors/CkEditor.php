@@ -119,7 +119,7 @@ class CkEditor extends AbstractEditor
      */
     protected function compileBody($content)
     {
-        return $this->compilePlugins($content);
+        return sprintf('<div class="__xe_contents_compiler" id="xe-editor-content">%s</div>', $this->compilePlugins($content));
     }
 
     protected function compilePlugins($content)
