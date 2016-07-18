@@ -20,7 +20,7 @@ use View;
 
 /**
  * Class FieldType
- * @package Xpressengine\FieldTypes\Category
+ * @package App\FieldTypes\Category
  */
 class CkEditor extends AbstractType
 {
