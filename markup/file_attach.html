@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi">
+    <title>XE3 editor</title>
+
+    <!-- core -->
+    <link href="../../../assets/core/common/css/xe-common.css" rel="stylesheet" media="all">
+    <link href="../../../assets/core/xe-ui-component/xe-ui-component.css" rel="stylesheet" media="all">
+    <link href="http://cdn.jsdelivr.net/xeicon/2.0.0/xeicon.min.css" rel="stylesheet" media="all">
+    <script>var xeBaseURL = '../../../';</script>
+    <script src="../../../assets/core/common/js/dynamicLoadManager.js"></script>
+    <script src="../../../assets/jspm_packages/system.js"></script>
+    <script src="../../../assets/systemjs.config.js"></script>
+    <script src="../../../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../../../assets/core/common/js/xe.bundle.js"></script>
+
+    <!-- additional -->
+    <link rel="stylesheet" href="../../plugin-ckeditor/assets/ckeditor/editor.css">                  
+</head>
+<body>
+<div class="xe-container">
+    <!--에디터 파일 첨부 영역  -->
+    <div class="file-attach-group">
+        <!--기본 파일첨부 -->
+        <div class="file-attach">
+            <div class="attach-info-text">
+                <p>여기에 파일을 끌어 놓거나 <a href="#">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : 2.00MB (허용 확장자 : *.*)</p>
+            </div>
+        </div>
+        <!--//기본 파일첨부 -->
+        <!--파일 드레그 시 .darg 추가-->
+        <div class="file-attach drag">
+            <div class="attach-info-text">
+                <p>여기에 파일을 끌어 놓거나 <a href="#">파일 첨부</a>를 클릭하세요.<br>파일 크기 제한 : 2.00MB (허용 확장자 : *.*)</p>
+            </div>
+        </div>
+        <!--//파일 드레그 시 -->
+        <!-- 파일 업로드 시  -->
+        <div class="file-attach">
+            <div class="attach-info-text">
+                <p>파일 업로드 중(68%)</p>
+            </div>
+        </div>
+        <!--[D] 파일 업로드 시 display:block; 변경 및 0~100% 값으로 progress-->
+        <div class="attach-progress" style="display:block">
+            <div class="attach-progress-bar" style="width:68%"></div>
+        </div>
+        <!--// 파일 업로드 시  -->
+        <div class="file-view">
+            <strong>8개 파일 첨부됨. (12MB/20MB)</strong>
+            <ul class="thumbnail-list">
+                <li>                    
+                    <img src="sample/@thum_img.jpg" alt="thumbnail">
+                    <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>
+                    <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                </li>
+                <li>
+                    <img src="sample/@thum_img.jpg" alt="thumbnail">
+                    <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>
+                    <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                </li>
+                <li>
+                    <img src="sample/@thum_img.jpg" alt="thumbnail">
+                    <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>
+                    <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                </li>
+                <li>
+                    <img src="sample/@thum_img.jpg" alt="thumbnail">
+                    <button type="button" class="btn-insert"><i class="xi-arrow-up"></i><span class="xe-sr-only">본문삽입</span></button>
+                    <button type="button" class="btn-delete"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                </li>
+            </ul>
+            <ul class="file-attach-list">
+                <li>
+                    <p class="xe-pull-left">텍스트파일.txt (250KB)</p>
+                    <div class="xe-pull-right">
+                        <button type="button">본문에 넣기</button>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                    </div>
+                </li>
+                <li>
+                    <p class="xe-pull-left">텍스트파일.txt (250KB)</p>
+                    <div class="xe-pull-right">
+                        <button type="button">본문에 넣기</button>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                    </div>
+                </li>
+                <li>
+                    <p class="xe-pull-left">이미지 외 기타파일.txt (250KB)</p>
+                    <div class="xe-pull-right">
+                        <button type="button">본문에 넣기</button>
+                        <button type="button"><i class="xi-close-thin"></i><span class="xe-sr-only">첨부삭제</span></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--//에디터 파일 첨부 영역  -->    
+</div>
+</body>
+</html>
