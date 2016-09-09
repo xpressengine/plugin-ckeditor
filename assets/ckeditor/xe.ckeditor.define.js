@@ -55,7 +55,7 @@ XEeditor.define({
             // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
-            extraAllowedContent: 'style;*[id,rel](*){*}',
+            extraAllowedContent: 'style;*[id,rel,!data-*](*){*}',
             format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div'
         },
         plugins: [
@@ -355,7 +355,7 @@ XEeditor.define({
                         //downloadUrl
                         var $this = $(this);
                         var fileHtml = [
-                            "<a href='" + downloadUrl + "/" + customOptions.names.file.identifier + "' ",
+                            "<a href='" + downloadUrl + "/" + $this.attr(customOptions.names.file.identifier) + "' ",
                             "class='" + customOptions.names.file.class + "' ",
                             "data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "' ",
                             customOptions.names.file.identifier + "='" + $this.attr(customOptions.names.file.identifier),
