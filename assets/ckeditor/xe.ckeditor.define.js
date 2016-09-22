@@ -49,6 +49,12 @@ XEeditor.define({
             //     },
             //     div: {}
             // },
+            allowedContent: {
+                span: {
+                    attributes: ['contenteditable', 'data-*'],
+                    classes: ['__xe_hashtag', '__xe_mention']
+                }
+            },
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
