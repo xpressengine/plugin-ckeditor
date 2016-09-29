@@ -35,25 +35,18 @@ XEeditor.define({
             // height : 300,
             // autoGrow_minHeight : 300,
             // autoGrow_maxHeight : 300,
-
-            // allowedContent: {
-            //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-            //     a: {attributes: ['!href']},
-            //     span: {
-            //         attributes: ['contenteditable', 'data-*'],
-            //         classes: []
-            //     },
-            //     img: {
-            //         attributes: ['*'],
-            //         classes: []
-            //     },
-            //     div: {}
-            // },
             allowedContent: {
                 span: {
                     attributes: ['contenteditable', 'data-*'],
                     classes: ['__xe_hashtag', '__xe_mention']
-                }
+                },
+                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+                a: {attributes: ['!href']},
+                img: {
+                    attributes: ['*'],
+                    classes: []
+                },
+                div: {}
             },
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
@@ -228,11 +221,17 @@ XEeditor.define({
             var editor = this.props.editor;
             var self = this;
 
+            console.log('toolInfoList', toolInfoList);
+
             for (var i = 0, max = toolInfoList.length; i < max; i += 1) {
                 var component = toolsMap[toolInfoList[i].id];
 
                 if (toolInfoList[i].enable) {
-                    var editorOption = component.props;
+                    var editorOption = component.props || {};
+
+                    //icon추가
+                    editorOption.options.icon = toolInfoList[i].icon;
+
                     editor.ui.add(editorOption.name, CKEDITOR.UI_BUTTON, editorOption.options);
 
                     if (editorOption.hasOwnProperty('options')
@@ -240,8 +239,6 @@ XEeditor.define({
 
                         editor.addCommand(editorOption.options.command, {
                             exec: function () {
-                                //var Tool = XEeditor.tools.get(component.id);
-
                                 component.events.iconClick(function (content) {
                                     var dom = XEeditor.attachDomId(content, component.id);
 
@@ -257,7 +254,10 @@ XEeditor.define({
                             var domSelector = XEeditor.getDomSelector(component.id);
                             var editorIframe = CKEDITOR.instances[self.selector].document.$;
 
-                            component.events.elementDoubleClick(component.id, editorIframe, domSelector);
+                            // component.events.elementDoubleClick(component.id, editorIframe, domSelector);
+
+                            $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick);
+                            
                         });
 
                     }
