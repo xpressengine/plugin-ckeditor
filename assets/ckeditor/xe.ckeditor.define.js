@@ -221,8 +221,6 @@ XEeditor.define({
             var editor = this.props.editor;
             var self = this;
 
-            console.log('toolInfoList', toolInfoList);
-
             for (var i = 0, max = toolInfoList.length; i < max; i += 1) {
                 var component = toolsMap[toolInfoList[i].id];
 
@@ -239,10 +237,15 @@ XEeditor.define({
 
                         editor.addCommand(editorOption.options.command, {
                             exec: function () {
-                                component.events.iconClick(function (content) {
+                                component.events.iconClick(CKEDITOR.instances['xeContentEditor'], function (content, cb) {
                                     var dom = XEeditor.attachDomId(content, component.id);
 
                                     self.addContents(dom);
+
+                                    if(cb) {
+                                        cb();
+                                    }
+
                                 });
                             }
                         });
@@ -254,10 +257,22 @@ XEeditor.define({
                             var domSelector = XEeditor.getDomSelector(component.id);
                             var editorIframe = CKEDITOR.instances[self.selector].document.$;
 
-                            // component.events.elementDoubleClick(component.id, editorIframe, domSelector);
+                            //double click시 호출
+                            $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
 
-                            $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick);
-                            
+                            //submit시 호출
+                            if(component.events.beforeSubmit) {
+                                $("." + editor.id).parents("form").on('submit', function () {
+                                    component.events.beforeSubmit(editor);
+                                });
+                            }
+
+                            //load되면 호출
+                            if(component.events.editorLoaded) {
+                                component.events.editorLoaded(editor);
+                            }
+
+
                         });
 
                     }
