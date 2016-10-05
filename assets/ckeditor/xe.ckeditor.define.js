@@ -237,7 +237,8 @@ XEeditor.define({
 
                         editor.addCommand(editorOption.options.command, {
                             exec: function () {
-                                component.events.iconClick(CKEDITOR.instances['xeContentEditor'], function (content, cb) {
+                                //component.events.iconClick(CKEDITOR.instances['xeContentEditor'], function (content, cb) {
+                                component.events.iconClick(CKEDITOR.instances[self.selector], function (content, cb) {
                                     var dom = XEeditor.attachDomId(content, component.id);
 
                                     self.addContents(dom);
@@ -251,32 +252,29 @@ XEeditor.define({
                         });
                     }
 
-                    if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
+                    CKEDITOR.instances[self.selector].on("instanceReady", function () {
+                        var domSelector = XEeditor.getDomSelector(component.id);
+                        var editorIframe = CKEDITOR.instances[self.selector].document.$;
 
-                        CKEDITOR.instances[self.selector].on("instanceReady", function () {
-                            var domSelector = XEeditor.getDomSelector(component.id);
-                            var editorIframe = CKEDITOR.instances[self.selector].document.$;
-
-                            //double click시 호출
+                        //double click시 호출
+                        if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
                             $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
+                        }
 
-                            //submit시 호출
-                            if(component.events.beforeSubmit) {
-                                $("." + editor.id).parents("form").on('submit', function () {
-                                    component.events.beforeSubmit(editor);
-                                });
-                            }
+                        //submit시 호출
+                        if(component.events.beforeSubmit) {
+                            $("." + editor.id).parents("form").on('submit', function () {
+                                component.events.beforeSubmit(editor);
+                            });
+                        }
 
-                            //load되면 호출
-                            if(component.events.editorLoaded) {
-                                component.events.editorLoaded(editor);
-                            }
+                        //load되면 호출
+                        if(component.events.editorLoaded) {
+                            component.events.editorLoaded(editor);
+                        }
 
 
-                        });
-
-                    }
-
+                    });
 
                 }
             }
