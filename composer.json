@@ -2,7 +2,7 @@
   "name": "xpressengine-plugin/ckeditor",
   "description": "XpressEngine's plugin for bundle (XE)",
   "keywords": ["xpressengine bundle", "XE CkEditor"],
-  "version": "0.9.3",
+  "version": "0.9.4",
   "support": {
     "email": "developers@xpressengine.com"
   },

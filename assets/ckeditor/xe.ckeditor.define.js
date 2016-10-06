@@ -35,27 +35,26 @@ XEeditor.define({
             // height : 300,
             // autoGrow_minHeight : 300,
             // autoGrow_maxHeight : 300,
-
-            // allowedContent: {
-            //     p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-            //     a: {attributes: ['!href']},
-            //     span: {
-            //         attributes: ['contenteditable', 'data-*'],
-            //         classes: []
-            //     },
-            //     img: {
-            //         attributes: ['*'],
-            //         classes: []
-            //     },
-            //     div: {}
-            // },
+            allowedContent: {
+                span: {
+                    attributes: ['contenteditable', 'data-*'],
+                    classes: ['__xe_hashtag', '__xe_mention']
+                },
+                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
+                a: {attributes: ['!href']},
+                img: {
+                    attributes: ['*'],
+                    classes: []
+                },
+                div: {}
+            },
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
             // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
-            extraAllowedContent: 'style;*[id,rel](*){*}',
+            extraAllowedContent: 'style;*[id,rel,!data-*,xe-tool-id](*){*}',
             format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div'
         },
         plugins: [
@@ -226,7 +225,11 @@ XEeditor.define({
                 var component = toolsMap[toolInfoList[i].id];
 
                 if (toolInfoList[i].enable) {
-                    var editorOption = component.props;
+                    var editorOption = component.props || {};
+
+                    //icon추가
+                    editorOption.options.icon = toolInfoList[i].icon;
+
                     editor.ui.add(editorOption.name, CKEDITOR.UI_BUTTON, editorOption.options);
 
                     if (editorOption.hasOwnProperty('options')
@@ -234,28 +237,44 @@ XEeditor.define({
 
                         editor.addCommand(editorOption.options.command, {
                             exec: function () {
-                                //var Tool = XEeditor.tools.get(component.id);
-
-                                component.events.iconClick(function (content) {
+                                //component.events.iconClick(CKEDITOR.instances['xeContentEditor'], function (content, cb) {
+                                component.events.iconClick(CKEDITOR.instances[self.selector], function (content, cb) {
                                     var dom = XEeditor.attachDomId(content, component.id);
 
                                     self.addContents(dom);
+
+                                    if(cb) {
+                                        cb();
+                                    }
+
                                 });
                             }
                         });
                     }
 
-                    if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
+                    CKEDITOR.instances[self.selector].on("instanceReady", function () {
+                        var domSelector = XEeditor.getDomSelector(component.id);
+                        var editorIframe = CKEDITOR.instances[self.selector].document.$;
 
-                        CKEDITOR.instances[self.selector].on("instanceReady", function () {
-                            var domSelector = XEeditor.getDomSelector(component.id);
-                            var editorIframe = CKEDITOR.instances[self.selector].document.$;
+                        //double click시 호출
+                        if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
+                            $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
+                        }
 
-                            component.events.elementDoubleClick(component.id, editorIframe, domSelector);
-                        });
+                        //submit시 호출
+                        if(component.events.beforeSubmit) {
+                            $("." + editor.id).parents("form").on('submit', function () {
+                                component.events.beforeSubmit(editor);
+                            });
+                        }
 
-                    }
+                        //load되면 호출
+                        if(component.events.editorLoaded) {
+                            component.events.editorLoaded(editor);
+                        }
 
+
+                    });
 
                 }
             }
@@ -281,7 +300,7 @@ XEeditor.define({
 
             var self = this;
 
-            DynamicLoadManager.jsLoad("/assets/core/common/js/fileUtils.js", function () {
+            DynamicLoadManager.jsLoad("/assets/core/common/js/utils.js", function () {
                 self.on("instanceReady", function () {
                     var $editorWrap = $(editorWrapClass);
                     var uploadHtml = [
@@ -291,7 +310,7 @@ XEeditor.define({
                         '    <div class="file-attach dropZone">',
                         '        <div class="attach-info-text">',
                         '            <p>' + XE.Lang.trans("ckeditor::dropzoneLimit", {
-                            fileMaxSize: FileUtils.formatSizeUnits(fileMaxSize * 1024 * 1024),
+                            fileMaxSize: Utils.formatSizeUnits(fileMaxSize * 1024 * 1024),
                             extensions: extensions.join(", "),
                             sAtag: '<a href="#" class="openSelectFile">',
                             eAtag: '</a>'
@@ -311,13 +330,13 @@ XEeditor.define({
                         '    <div class="attach-progress">',
                         '        <div class="attach-progress-bar" style="width:0%"></div>',
                         '    </div>',
-                        //<span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + FileUtils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
+                        //<span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + Utils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
                         '   <!--// 파일 업로드 시  -->',
                         '    <div class="file-view xe-hidden">',
                         '        <strong>' + XE.Lang.trans("ckeditor::attachementDescription", {
                             fileCount: '<span class="fileCount">0</span>',
                             currentFilesSize: '<span class="currentFilesSize">0MB</span>',
-                            attachMaxSize: FileUtils.formatSizeUnits(attachMaxSize * 1024 * 1024)
+                            attachMaxSize: Utils.formatSizeUnits(attachMaxSize * 1024 * 1024)
                         }) + '</strong>',
                         '        <ul class="thumbnail-list"></ul>',
                         '        <ul class="file-attach-list"></ul>',
@@ -355,7 +374,7 @@ XEeditor.define({
                         //downloadUrl
                         var $this = $(this);
                         var fileHtml = [
-                            "<a href='" + downloadUrl + "/" + customOptions.names.file.identifier + "' ",
+                            "<a href='" + downloadUrl + "/" + $this.attr(customOptions.names.file.identifier) + "' ",
                             "class='" + customOptions.names.file.class + "' ",
                             "data-cke-attach='" + $this.attr(customOptions.names.file.identifier) + "' ",
                             customOptions.names.file.identifier + "='" + $this.attr(customOptions.names.file.identifier),
@@ -386,7 +405,7 @@ XEeditor.define({
                                         $fileUploadArea.find(".fileCount").text(--fileCount);
 
                                         //첨부파일 용량 표시
-                                        $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
+                                        $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
 
                                         $this.closest("li").remove();
 
@@ -552,7 +571,7 @@ XEeditor.define({
                             fileCount++;
                             fileTotalSize = fileTotalSize + fileSize;
 
-                            if (FileUtils.isImage(mime)) {
+                            if (Utils.isImage(mime)) {
                                 var tmplImage = [
                                     '<li>',
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
@@ -567,7 +586,7 @@ XEeditor.define({
                             } else {
                                 var tmplFile = [
                                     '<li>',
-                                    '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.formatSizeUnits(fileSize) + ')</p>',
+                                    '   <p class="xe-pull-left">' + fileName + ' (' + Utils.formatSizeUnits(fileSize) + ')</p>',
                                     '   <div class="xe-pull-right">',
                                     '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
                                     '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
@@ -585,7 +604,7 @@ XEeditor.define({
                             $fileUploadArea.find(".fileCount").text(fileCount);
 
                             //첨부파일 용량 표시
-                            $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
+                            $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
 
                         },
                         fail: function (e, data) {
@@ -618,7 +637,7 @@ XEeditor.define({
                             fileCount++;
                             fileTotalSize = fileTotalSize + fileSize;
 
-                            if (FileUtils.isImage(mime)) {
+                            if (Utils.isImage(mime)) {
                                 var tmplImage = [
                                     '<li>',
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
@@ -633,7 +652,7 @@ XEeditor.define({
                             } else {
                                 var tmplFile = [
                                     '<li>',
-                                    '   <p class="xe-pull-left">' + fileName + ' (' + FileUtils.formatSizeUnits(fileSize) + ')</p>',
+                                    '   <p class="xe-pull-left">' + fileName + ' (' + Utils.formatSizeUnits(fileSize) + ')</p>',
                                     '   <div class="xe-pull-right">',
                                     '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
                                     '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
@@ -649,7 +668,7 @@ XEeditor.define({
                             $fileUploadArea.find(".fileCount").text(fileCount);
 
                             //첨부파일 용량 표시
-                            $fileUploadArea.find(".currentFilesSize").text(FileUtils.formatSizeUnits(fileTotalSize));
+                            $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
                         }
 
                         $fileUploadArea.find(".file-view").removeClass("xe-hidden");
