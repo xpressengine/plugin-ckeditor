@@ -16,7 +16,7 @@ use View;
 class CkEditorDefault extends AbstractSkin
 {
 
-    protected static $id = 'FieldType/xpressengine@CkEditor/FieldSkin/xpressengine@default';
+    protected static $id = 'FieldType/ckeditor@CkEditor/FieldSkin/ckeditor@default';
     protected $name = 'defult';
     protected $description = 'CkEditor 기본 스킨';
 
@@ -49,6 +49,7 @@ class CkEditorDefault extends AbstractSkin
         return View::make('ckeditor::views/FieldType/CkEditor/Default/edit', [
             'config' => $config,
             'content' => $args[$config->get('id') . 'Contents'],
+            'args' => $args,
         ])->render();
     }
 
@@ -58,6 +59,7 @@ class CkEditorDefault extends AbstractSkin
         return View::make('ckeditor::views/FieldType/CkEditor/Default/show', [
             'config' => $config,
             'content' => $args[$config->get('id') . 'Contents'],
+            'args' => $args,
         ])->render();
     }
 

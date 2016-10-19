@@ -15,8 +15,10 @@ use Xpressengine\DynamicField\ColumnEntity;
 use Xpressengine\DynamicField\ColumnDataType;
 use Xpressengine\Config\ConfigEntity;
 use Illuminate\Database\Query\Builder;
+use Xpressengine\Plugins\CkEditor\Editors\CkEditor as CkEditorComponent;
 use Xpressengine\Plugins\CkEditor\FieldSkin\CkEditorDefault;
 use View;
+use XeEditor;
 
 /**
  * Class FieldType
@@ -28,7 +30,7 @@ class CkEditor extends AbstractType
     /**
      * @var string
      */
-    protected static $id = 'FieldType/xpressengine@CkEditor';
+    protected static $id = 'FieldType/ckeditor@CkEditor';
 
     // 네임스페이스 이름..
     protected $name = 'CK Editor';
@@ -107,5 +109,12 @@ class CkEditor extends AbstractType
     public static function getSettingsURI()
     {
         return null;
+    }
+
+    public function create(ColumnEntity $column)
+    {
+        parent::create($column);
+
+        XeEditor::setInstance($this->config->get('group') . '_' . $this->config->get('id'), CkEditorComponent::getId());
     }
 }
