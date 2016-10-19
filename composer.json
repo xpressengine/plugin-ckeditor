@@ -26,16 +26,6 @@
           "name": "CkEditor",
           "description": "XE 에서 사용할 기본 에디터"
         },
-        "FieldType/ckeditor@CkEditor": {
-          "class": "Xpressengine\\Plugins\\CkEditor\\FieldType\\CkEditor",
-          "name": "CkEditor dynamic field",
-          "description": "에디터 Dynamic field"
-        },
-        "FieldType/ckeditor@CkEditor/FieldSkin/ckeditor@default": {
-          "class": "Xpressengine\\Plugins\\CkEditor\\FieldSkin\\CkEditorDefault",
-          "name": "CkEditor skin",
-          "description": "에디터 Dynamic field skin"
-        },
         "editor/ckeditor@ckEditor/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
