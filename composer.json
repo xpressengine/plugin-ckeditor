@@ -2,7 +2,7 @@
   "name": "xpressengine-plugin/ckeditor",
   "description": "XpressEngine's plugin for bundle (XE)",
   "keywords": ["xpressengine bundle", "XE CkEditor"],
-  "version": "0.9.4",
+  "version": "0.9.5",
   "support": {
     "email": "developers@xpressengine.com"
   },
@@ -25,11 +25,6 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Editors\\CkEditor",
           "name": "CkEditor",
           "description": "XE 에서 사용할 기본 에디터"
-        },
-        "FieldType/ckeditor@CkEditor": {
-          "class": "Xpressengine\\Plugins\\CkEditor\\FieldType\\CkEditor",
-          "name": "CkEditor",
-          "description": "에디터 Dynamic field"
         },
         "editor/ckeditor@ckEditor/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",

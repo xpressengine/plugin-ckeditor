@@ -46,7 +46,9 @@ XEeditor.define({
                     attributes: ['*'],
                     classes: []
                 },
-                div: {}
+                div: {
+                    attributes: ['xe-tool-id']
+                }
             },
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
@@ -235,24 +237,26 @@ XEeditor.define({
                     if (editorOption.hasOwnProperty('options')
                         && editorOption.options.hasOwnProperty('command')) {
 
-                        editor.addCommand(editorOption.options.command, {
-                            exec: function () {
-                                //component.events.iconClick(CKEDITOR.instances['xeContentEditor'], function (content, cb) {
-                                component.events.iconClick(CKEDITOR.instances[self.selector], function (content, cb) {
-                                    var dom = XEeditor.attachDomId(content, component.id);
+                        editor.addCommand(editorOption.options.command, function(component) {
+                            return {
+                                exec: function (editor) {
+                                    component.events.iconClick(editor, function (content, cb) {
+                                        var dom = XEeditor.attachDomId(content, component.id);
 
-                                    self.addContents(dom);
+                                        self.addContents(dom);
 
-                                    if(cb) {
-                                        cb();
-                                    }
+                                        if(cb) {
+                                            cb();
+                                        }
 
-                                });
+                                    });
+                                }
                             }
-                        });
+                        }(component));
                     }
 
-                    CKEDITOR.instances[self.selector].on("instanceReady", function () {
+                    CKEDITOR.instances[self.selector].on("instanceReady", function (e) {
+                        var component = e.listenerData.component;
                         var domSelector = XEeditor.getDomSelector(component.id);
                         var editorIframe = CKEDITOR.instances[self.selector].document.$;
 
@@ -273,8 +277,7 @@ XEeditor.define({
                             component.events.editorLoaded(editor);
                         }
 
-
-                    });
+                    }, null, {component: component});
 
                 }
             }
