@@ -32,49 +32,25 @@ XEeditor.define({
                 {name: 'colors'},
                 {name: 'others'}
             ],
-            // height : 300,
-            // autoGrow_minHeight : 300,
-            // autoGrow_maxHeight : 300,
-            allowedContent: {
-                span: {
-                    attributes: ['contenteditable', 'data-*'],
-                    classes: ['__xe_hashtag', '__xe_mention']
-                },
-                p: {}, strong: {}, em: {}, i: {}, u: {}, br: {}, ul: {}, ol: {}, table: {},
-                a: {attributes: ['!href']},
-                img: {
-                    attributes: ['*'],
-                    classes: []
-                },
-                div: {
-                    attributes: ['xe-tool-id']
-                }
-            },
+            allowedContent: true,
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            // removeDialogTabs : 'link:advanced',
             extraPlugins: 'resize',
             resize_dir: 'vertical',
-            extraAllowedContent: 'style;*[id,rel,!data-*,xe-tool-id](*){*}',
-            format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div'
+            format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+            entities: false,
+            htmlEncodeOutput: false
         },
         plugins: [
-            // {
-            //     name: 'extractor',
-            //     path: CKEDITOR.basePath + '../xe_additional_plugins/extractor/plugin.js'
-            // },
-            // {
-            //     name: 'fileUpload',
-            //     path: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/plugin.js'
-            // },
             {
                 name: 'suggestion',
                 path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
             }, {
                 name: 'sourcearea',
                 path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
-            }],
+            }
+        ],
         addPlugins: function (plugins) {
             if (plugins.length > 0) {
                 for (var i = 0, max = plugins.length; i < max; i += 1) {
