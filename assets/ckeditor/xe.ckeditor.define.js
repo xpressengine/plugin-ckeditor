@@ -543,7 +543,6 @@ XEeditor.define({
                             var file = data.result.file
                                 , fileName = file.clientname
                                 , fileSize = file.size
-                                , thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
                                 , mime = file.mime
                                 , id = file.id;
 
@@ -551,6 +550,7 @@ XEeditor.define({
                             fileTotalSize = fileTotalSize + fileSize;
 
                             if (Utils.isImage(mime)) {
+                                var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
                                 var tmplImage = [
                                     '<li>',
                                     '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
