@@ -264,3 +264,28 @@
     font-size: 15px;
   }
 }
+
+/* ckeditor hashtag */
+.suggestions {
+  overflow-y: auto;
+  position: absolute;
+  max-height: 366px;
+  margin: 0;
+  padding: 8px 0;
+  border: 1px solid #51586b ;
+  border-radius: 0 0 2px 2px;
+  background-color: #fff;
+  z-index: 1;
+  list-style-type: none;
+}
+
+.suggestions li {
+  padding: 5px 10px;
+  margin: 0;
+}
+
+.suggestions li:hover, .suggestions li.active {
+  background-color: #2389ee ;
+  color: #000;
+  cursor: pointer;
+}
