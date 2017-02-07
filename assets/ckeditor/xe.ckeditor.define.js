@@ -15,7 +15,7 @@ XEeditor.define({
                 },
                 blur: function (e) {
                     $(e.editor.container.$).removeClass('active');
-                }.bind(this)
+                }
             },
             toolbarGroups: [
                 {name: 'clipboard', groups: ['undo', 'clipboard']},
@@ -108,27 +108,22 @@ XEeditor.define({
                 icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
             });
 
-            editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
-                label: 'File upload',
-                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
-            });
-
-            editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
-                label: 'Image upload',
-                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
-            });
-
-            editor.addCommand('fileUpload', {
-                exec: function () {
-                    editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');
-                }
-            });
+            // editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
+            //     label: 'File upload',
+            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
+            // });
+						//
+            // editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
+            //     label: 'Image upload',
+            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
+            // });
 
             editor.addCommand('wrapCode', {
                 exec: function (editor) {
                     editor.insertText('```javascript\n' + editor.getSelection().getSelectedText() + '\n```');
                 }
             });
+
             editor.addCommand('wrapDiagram', {
                 exec: function (editor) {
                     editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');

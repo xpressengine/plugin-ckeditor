@@ -1,7 +1,6 @@
 @charset "utf-8";
 
 /* 파일 첨부 영역 */
-
 .file-view ul, .file-attach-list p {
   margin: 0;
   padding: 0; }
