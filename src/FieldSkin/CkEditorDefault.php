@@ -16,7 +16,7 @@ use View;
 class CkEditorDefault extends AbstractSkin
 {
 
-    protected static $id = 'FieldType/ckeditor@CkEditor/FieldSkin/ckeditor@default';
+    protected static $id = 'fieldType/ckeditor@CkEditor/fieldSkin/ckeditor@default';
     protected $name = 'defult';
     protected $description = 'CkEditor 기본 스킨';
 
