@@ -30,7 +30,7 @@ class CkEditor extends AbstractType
     /**
      * @var string
      */
-    protected static $id = 'FieldType/ckeditor@CkEditor';
+    protected static $id = 'fieldType/ckeditor@CkEditor';
 
     // 네임스페이스 이름..
     protected $name = 'CK Editor';
