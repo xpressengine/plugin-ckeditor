@@ -362,6 +362,8 @@ XEeditor.define({
                     $fileUploadArea.on('click', '.btnDelFile', function () {
                         var $this = $(this);
                         var fileSize = $this.data("size");
+                        var $contentsWrap = $('<div />');
+
                         if (confirm(XE.Lang.trans("ckeditor::msgDeleteFile"))) {
                             var id = $this.attr(customOptions.names.file.identifier);
 
@@ -382,6 +384,14 @@ XEeditor.define({
                                         $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
 
                                         $this.closest("li").remove();
+
+                                        $contentsWrap.append($(self.getContents()));
+
+                                        $contentsWrap.find('[data-id=' + id + ']').each(function () {
+                                            $(this).remove();
+                                        });
+
+                                        self.setContents($contentsWrap.html());
 
                                         if (fileCount === 0) {
                                             $fileUploadArea.find(".file-view").addClass("xe-hidden");
