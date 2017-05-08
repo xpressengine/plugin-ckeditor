@@ -109,27 +109,49 @@ XEeditor.define({
             //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
             // });
 
-            // editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
-            //     label: 'align left',
-            //     command: 'alignLeft',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
-            // });
-						//
-            // editor.addCommand('alignLeft', {
-            //     exec: function (editor) {
-            //         var selection = editor.getSelection();
-            //         if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
-            //             var selectedContent = selection.getSelectedElement().$.outerHTML;
-            //             var id = $(selectedContent).data('id');
-            //             var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
-						//
-            //             $target.css({
-            //                 float: 'left',
-            //                 marginRight: '10px'
-            //             });
-            //         }
-            //     }
-            // });
+            editor.ui.add('ImageLeft', CKEDITOR.UI_BUTTON, {
+                label: 'align left',
+                command: 'alignLeft',
+                icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_left.png'
+            });
+						
+            editor.addCommand('alignLeft', {
+                exec: function (editor) {
+                    var selection = editor.getSelection();
+                    if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
+                        var selectedContent = selection.getSelectedElement().$.outerHTML;
+                        var id = $(selectedContent).data('id');
+                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+						
+                        $target.css({
+                            float: 'left',
+                            marginRight: '10px'
+                        });
+                    }
+                }
+            });
+
+            editor.ui.add('ImageRight', CKEDITOR.UI_BUTTON, {
+                label: 'align right',
+                command: 'alignRight',
+                icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_right.png'
+            });
+
+            editor.addCommand('alignRight', {
+                exec: function (editor) {
+                    var selection = editor.getSelection();
+                    if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
+                        var selectedContent = selection.getSelectedElement().$.outerHTML;
+                        var id = $(selectedContent).data('id');
+                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+
+                        $target.css({
+                            float: 'right',
+                            marginLeft: '10px'
+                        });
+                    }
+                }
+            });
 
             // editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
             //     label: 'File upload',
