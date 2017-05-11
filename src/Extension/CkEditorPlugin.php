@@ -145,7 +145,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             "<div class='code-wrap'>",
             "<div class='plugins'>",
             "<span class='language' style='display:none;'>$language</span>",
-            "<span class='expend'><i class='xi-fullscreen'></i></span>",
+            "<span class='expend'><i class='xi-overscan'></i></span>",
             "</div>",
             "<pre class='line-numbers language-$language' data-line='$line' data-language='$language'><code class='language-$language'>$code</code></pre>",
             "</div>",
