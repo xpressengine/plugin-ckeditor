@@ -8,7 +8,7 @@ XEeditor.define({
             skin: 'xe-minimalist',
             customConfig: '',
             language: CKEDITOR.lang.languages.hasOwnProperty(XE.Lang.getCurrentLocale())? XE.Lang.getCurrentLocale() : 'en',
-            contentsCss: CKEDITOR.basePath + 'content.css',
+            contentsCss: [ CKEDITOR.basePath + 'content.css' ],
             on: {
                 focus: function () {
                     $(this.container.$).addClass('active');
@@ -38,7 +38,7 @@ XEeditor.define({
             removePlugins: 'stylescombo',
             extraPlugins: 'resize,justify,tableresize,codesnippet',
             resize_dir: 'vertical',
-            format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+            // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
             htmlEncodeOutput: false
         },
@@ -292,6 +292,19 @@ XEeditor.define({
                         if(component.events.editorLoaded) {
                             component.events.editorLoaded(editor);
                         }
+
+                        if(component.css) {
+                            if(typeof component.css === 'string') {
+                                this.document.appendStyleSheet( component.css );
+                                editor.config.contentsCss.push(component.css);
+                            } else if(component.css instanceof Array) {
+                                for(var i = 0, max = component.css.length; i < max; i += 1) {
+                                    this.document.appendStyleSheet( component.css[i] );
+                                    editor.config.contentsCss.push(component.css[i]);
+                                }
+                            }
+                        }
+
 
                     }, null, {component: component});
 
