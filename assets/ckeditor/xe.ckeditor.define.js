@@ -8,7 +8,7 @@ XEeditor.define({
             skin: 'xe-minimalist',
             customConfig: '',
             language: CKEDITOR.lang.languages.hasOwnProperty(XE.Lang.getCurrentLocale())? XE.Lang.getCurrentLocale() : 'en',
-            contentsCss: CKEDITOR.basePath + 'content.css',
+            contentsCss: [ CKEDITOR.basePath + 'content.css' ],
             on: {
                 focus: function () {
                     $(this.container.$).addClass('active');
@@ -36,9 +36,9 @@ XEeditor.define({
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify',
+            extraPlugins: 'resize,justify,tableresize,codesnippet',
             resize_dir: 'vertical',
-            format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
+            // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
             htmlEncodeOutput: false
         },
@@ -46,7 +46,8 @@ XEeditor.define({
             {
                 name: 'suggestion',
                 path: CKEDITOR.basePath + '../xe_additional_plugins/suggestion/plugin.js'
-            }, {
+            },
+            {
                 name: 'sourcearea',
                 path: CKEDITOR.basePath + '../xe_additional_plugins/sourcearea/plugin.js'
             }
@@ -96,16 +97,60 @@ XEeditor.define({
                 , options: options
             });
 
-            editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
-                label: 'Wrap code',
-                command: 'wrapCode',
-                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
+            // editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
+            //     label: 'Wrap code',
+            //     command: 'wrapCode',
+            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
+            // });
+
+            // editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
+            //     label: 'Wrap diagram',
+            //     command: 'wrapDiagram',
+            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
+            // });
+
+            editor.ui.add('ImageLeft', CKEDITOR.UI_BUTTON, {
+                label: 'align left',
+                command: 'alignLeft',
+                icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_left.png'
+            });
+						
+            editor.addCommand('alignLeft', {
+                exec: function (editor) {
+                    var selection = editor.getSelection();
+                    if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
+                        var selectedContent = selection.getSelectedElement().$.outerHTML;
+                        var id = $(selectedContent).data('id');
+                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+						
+                        $target.css({
+                            float: 'left',
+                            marginRight: '10px'
+                        });
+                    }
+                }
             });
 
-            editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
-                label: 'Wrap diagram',
-                command: 'wrapDiagram',
-                icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
+            editor.ui.add('ImageRight', CKEDITOR.UI_BUTTON, {
+                label: 'align right',
+                command: 'alignRight',
+                icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_right.png'
+            });
+
+            editor.addCommand('alignRight', {
+                exec: function (editor) {
+                    var selection = editor.getSelection();
+                    if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
+                        var selectedContent = selection.getSelectedElement().$.outerHTML;
+                        var id = $(selectedContent).data('id');
+                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+
+                        $target.css({
+                            float: 'right',
+                            marginLeft: '10px'
+                        });
+                    }
+                }
             });
 
             // editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
@@ -118,17 +163,17 @@ XEeditor.define({
             //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
             // });
 
-            editor.addCommand('wrapCode', {
-                exec: function (editor) {
-                    editor.insertText('```javascript\n' + editor.getSelection().getSelectedText() + '\n```');
-                }
-            });
+            // editor.addCommand('wrapCode', {
+            //     exec: function (editor) {
+            //         editor.insertText('```javascript\n' + editor.getSelection().getSelectedText() + '\n```');
+            //     }
+            // });
 
-            editor.addCommand('wrapDiagram', {
-                exec: function (editor) {
-                    editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');
-                }
-            });
+            // editor.addCommand('wrapDiagram', {
+            //     exec: function (editor) {
+            //         editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');
+            //     }
+            // });
 
             this.on("instanceReady", function () {
                 $("." + editor.id).parents("form").on('submit', function () {
@@ -248,6 +293,19 @@ XEeditor.define({
                             component.events.editorLoaded(editor);
                         }
 
+                        if(component.css) {
+                            if(typeof component.css === 'string') {
+                                this.document.appendStyleSheet( component.css );
+                                editor.config.contentsCss.push(component.css);
+                            } else if(component.css instanceof Array) {
+                                for(var i = 0, max = component.css.length; i < max; i += 1) {
+                                    this.document.appendStyleSheet( component.css[i] );
+                                    editor.config.contentsCss.push(component.css[i]);
+                                }
+                            }
+                        }
+
+
                     }, null, {component: component});
 
                 }
@@ -362,6 +420,8 @@ XEeditor.define({
                     $fileUploadArea.on('click', '.btnDelFile', function () {
                         var $this = $(this);
                         var fileSize = $this.data("size");
+                        var $contentsWrap = $('<div />');
+
                         if (confirm(XE.Lang.trans("ckeditor::msgDeleteFile"))) {
                             var id = $this.attr(customOptions.names.file.identifier);
 
@@ -382,6 +442,14 @@ XEeditor.define({
                                         $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
 
                                         $this.closest("li").remove();
+
+                                        $contentsWrap.append($(self.getContents()));
+
+                                        $contentsWrap.find('[data-id=' + id + ']').each(function () {
+                                            $(this).remove();
+                                        });
+
+                                        self.setContents($contentsWrap.html());
 
                                         if (fileCount === 0) {
                                             $fileUploadArea.find(".file-view").addClass("xe-hidden");

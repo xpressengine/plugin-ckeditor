@@ -50,7 +50,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
         return implode('', [
             $object->contentCompile($content),
-            '<script>$(function(){mermaid.initialize({startOnLoad:true})});</script>',
+//            '<script>$(function(){mermaid.initialize({startOnLoad:true})});</script>',
         ]);
     }
 
@@ -61,13 +61,15 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
             $path = str_replace(base_path(), '', realpath(__DIR__ . '/../../assets/compiler'));
             // requirejs 를 load 하기 전에 붙여야 한다.
-            XeFrontend::js(asset($path . '/mermaid.min.js'))->appendTo('head')->load();
-            XeFrontend::js([asset($path . '/contentsCompiler.js'), asset($path . '/prism.js')])->load();
+//            XeFrontend::js(asset($path . '/mermaid.min.js'))->appendTo('head')->load();
+//            XeFrontend::js([asset($path . '/contentsCompiler.js'), asset($path . '/prism.js')])->load();
+            XeFrontend::js([asset($path . '/contentsCompiler.js'), ])->load();
             XeFrontend::css([
                 asset($path . '/hashTag.css'),
-                asset($path . '/prism.css'),
-                asset($path . '/mermaid.css'),
-                asset($path . '/mermaid.forest.css'),
+                asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'),
+//                asset($path . '/prism.css'),
+//                asset($path . '/mermaid.css'),
+//                asset($path . '/mermaid.forest.css'),
             ])->load();
         }
     }
@@ -134,7 +136,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
     private function diagram($code)
     {
-        return "<div class='mermaid'>$code</div>";
+//        return "<div class='mermaid'>$code</div>";
     }
 
     private function codes($language, $line, $code)
@@ -143,7 +145,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             "<div class='code-wrap'>",
             "<div class='plugins'>",
             "<span class='language' style='display:none;'>$language</span>",
-            "<span class='expend'><i class='xi-fullscreen'></i></span>",
+            "<span class='expend'><i class='xi-overscan'></i></span>",
             "</div>",
             "<pre class='line-numbers language-$language' data-line='$line' data-language='$language'><code class='language-$language'>$code</code></pre>",
             "</div>",
