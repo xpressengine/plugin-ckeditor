@@ -26,21 +26,20 @@ XEeditor.define({
                 {name: 'document', groups: ['mode']},
                 '/',
                 {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi']},
-                '/',
+                {name: 'paragraph', groups: ['list', 'blocks', 'align', 'colors', 'font', 'bidi']},
                 {name: 'styles'},
-                {name: 'colors'},
+                '/',
                 {name: 'others'}
             ],
             allowedContent: true,
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet',
+            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font',
             resize_dir: 'vertical',
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
-            htmlEncodeOutput: false
+            htmlEncodeOutput: false,
         },
         plugins: [
             {
@@ -84,6 +83,18 @@ XEeditor.define({
                 customOptions.removePlugins = (!customOptions.removePlugins) ? customOptions.removePlugins + ",toolbar" : "toolbar";
             }
 
+            if(CKEDITOR.env.mobile) {
+                customOptions.toolbar = [
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline' ] },
+                    { name: 'paragraph', groups: [ 'align' ], items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight'] },
+                    { name: 'links', items: [ 'Link' ] },
+                    { name: 'insert', items: [ 'Image' ] }
+                ];
+
+                // customOptions.toolbarCanCollapse = true;
+                // customOptions.toolbarStartupExpanded = false;
+            }
+
             CKEDITOR.env.isCompatible = true;
 
             editor = CKEDITOR.replace(selector, customOptions || {});
@@ -114,7 +125,7 @@ XEeditor.define({
                 command: 'alignLeft',
                 icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_left.png'
             });
-						
+
             editor.addCommand('alignLeft', {
                 exec: function (editor) {
                     var selection = editor.getSelection();
@@ -122,7 +133,7 @@ XEeditor.define({
                         var selectedContent = selection.getSelectedElement().$.outerHTML;
                         var id = $(selectedContent).data('id');
                         var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
-						
+
                         $target.css({
                             float: 'left',
                             marginRight: '10px'
@@ -293,14 +304,14 @@ XEeditor.define({
                             component.events.editorLoaded(editor);
                         }
 
-                        if(component.css) {
-                            if(typeof component.css === 'string') {
-                                this.document.appendStyleSheet( component.css );
-                                editor.config.contentsCss.push(component.css);
-                            } else if(component.css instanceof Array) {
-                                for(var i = 0, max = component.css.length; i < max; i += 1) {
-                                    this.document.appendStyleSheet( component.css[i] );
-                                    editor.config.contentsCss.push(component.css[i]);
+                        if(component.css && component.css()) {
+                            if(typeof component.css() === 'string') {
+                                this.document.appendStyleSheet( component.css() );
+                                editor.config.contentsCss.push(component.css());
+                            } else if(component.css() instanceof Array) {
+                                for(var i = 0, max = component.css().length; i < max; i += 1) {
+                                    this.document.appendStyleSheet( component.css()[i] );
+                                    editor.config.contentsCss.push(component.css()[i]);
                                 }
                             }
                         }
@@ -736,5 +747,6 @@ XEeditor.define({
     }
 });
 
-
-
+$(function() {
+    CKEDITOR.dtd.$removeEmpty['i'] = false
+})
