@@ -35,7 +35,7 @@ XEeditor.define({
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font',
+            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font,iframe',
             resize_dir: 'vertical',
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
@@ -253,6 +253,7 @@ XEeditor.define({
 
                         //double click시 호출
                         if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
+                            console.log('domSelector', domSelector);
                             $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
                         }
 
