@@ -253,7 +253,6 @@ XEeditor.define({
 
                         //double click시 호출
                         if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
-                            console.log('domSelector', domSelector);
                             $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
                         }
 
