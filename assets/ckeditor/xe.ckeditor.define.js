@@ -91,8 +91,7 @@ XEeditor.define({
                     { name: 'insert', items: [ 'Image' ] }
                 ];
 
-                // customOptions.toolbarCanCollapse = true;
-                // customOptions.toolbarStartupExpanded = false;
+                customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
             }
 
             CKEDITOR.env.isCompatible = true;
@@ -107,18 +106,6 @@ XEeditor.define({
                 , selector: selector
                 , options: options
             });
-
-            // editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
-            //     label: 'Wrap code',
-            //     command: 'wrapCode',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
-            // });
-
-            // editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
-            //     label: 'Wrap diagram',
-            //     command: 'wrapDiagram',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
-            // });
 
             editor.ui.add('ImageLeft', CKEDITOR.UI_BUTTON, {
                 label: 'align left',
@@ -164,28 +151,6 @@ XEeditor.define({
                 }
             });
 
-            // editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
-            //     label: 'File upload',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
-            // });
-						//
-            // editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
-            //     label: 'Image upload',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
-            // });
-
-            // editor.addCommand('wrapCode', {
-            //     exec: function (editor) {
-            //         editor.insertText('```javascript\n' + editor.getSelection().getSelectedText() + '\n```');
-            //     }
-            // });
-
-            // editor.addCommand('wrapDiagram', {
-            //     exec: function (editor) {
-            //         editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');
-            //     }
-            // });
-
             this.on("instanceReady", function () {
                 $("." + editor.id).parents("form").on('submit', function () {
                     var $this = $(this);
@@ -210,7 +175,6 @@ XEeditor.define({
                             $this.append("<input type='hidden' class='paramHashTags' name='" + options.names.tag.input + "[]' value='" + value + "'>");
                         }
                     });
-
                 });
             });
 
@@ -273,7 +237,7 @@ XEeditor.define({
                                         self.addContents(dom);
 
                                         if(cb) {
-                                            cb();
+                                            cb($(editor.document.$.querySelectorAll('[xe-tool-id="' + component.id + '"]')));
                                         }
 
                                     });
@@ -315,8 +279,7 @@ XEeditor.define({
                                 }
                             }
                         }
-
-
+                        
                     }, null, {component: component});
 
                 }
