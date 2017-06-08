@@ -145,7 +145,7 @@
   border: 0;
 }
 #xe-editor-content iframe {
-  display: block;
+  /*display: block;*/
   margin-bottom: 20px;
 }
 #xe-editor-content a[href] {

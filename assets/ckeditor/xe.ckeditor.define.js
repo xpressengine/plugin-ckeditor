@@ -26,21 +26,20 @@ XEeditor.define({
                 {name: 'document', groups: ['mode']},
                 '/',
                 {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-                {name: 'paragraph', groups: ['list', 'indent', 'blocks', 'align', 'bidi']},
-                '/',
+                {name: 'paragraph', groups: ['list', 'blocks', 'align', 'colors', 'font', 'bidi']},
                 {name: 'styles'},
-                {name: 'colors'},
+                '/',
                 {name: 'others'}
             ],
             allowedContent: true,
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet',
+            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font',
             resize_dir: 'vertical',
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
-            htmlEncodeOutput: false
+            htmlEncodeOutput: false,
         },
         plugins: [
             {
@@ -84,6 +83,17 @@ XEeditor.define({
                 customOptions.removePlugins = (!customOptions.removePlugins) ? customOptions.removePlugins + ",toolbar" : "toolbar";
             }
 
+            if(CKEDITOR.env.mobile) {
+                customOptions.toolbar = [
+                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline' ] },
+                    { name: 'paragraph', groups: [ 'align' ], items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight'] },
+                    { name: 'links', items: [ 'Link' ] },
+                    { name: 'insert', items: [ 'Image' ] }
+                ];
+
+                customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
+            }
+
             CKEDITOR.env.isCompatible = true;
 
             editor = CKEDITOR.replace(selector, customOptions || {});
@@ -97,24 +107,12 @@ XEeditor.define({
                 , options: options
             });
 
-            // editor.ui.add('Code', CKEDITOR.UI_BUTTON, {
-            //     label: 'Wrap code',
-            //     command: 'wrapCode',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/code.png'
-            // });
-
-            // editor.ui.add('Diagram', CKEDITOR.UI_BUTTON, {
-            //     label: 'Wrap diagram',
-            //     command: 'wrapDiagram',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/diagram.png'
-            // });
-
             editor.ui.add('ImageLeft', CKEDITOR.UI_BUTTON, {
                 label: 'align left',
                 command: 'alignLeft',
                 icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_left.png'
             });
-						
+
             editor.addCommand('alignLeft', {
                 exec: function (editor) {
                     var selection = editor.getSelection();
@@ -122,7 +120,7 @@ XEeditor.define({
                         var selectedContent = selection.getSelectedElement().$.outerHTML;
                         var id = $(selectedContent).data('id');
                         var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
-						
+
                         $target.css({
                             float: 'left',
                             marginRight: '10px'
@@ -153,28 +151,6 @@ XEeditor.define({
                 }
             });
 
-            // editor.ui.add('FileUpload', CKEDITOR.UI_BUTTON, {
-            //     label: 'File upload',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/fileupload.png'
-            // });
-						//
-            // editor.ui.add('ImageUpload', CKEDITOR.UI_BUTTON, {
-            //     label: 'Image upload',
-            //     icon: CKEDITOR.basePath + '../xe_additional_plugins/fileUpload/icons/imageupload.png'
-            // });
-
-            // editor.addCommand('wrapCode', {
-            //     exec: function (editor) {
-            //         editor.insertText('```javascript\n' + editor.getSelection().getSelectedText() + '\n```');
-            //     }
-            // });
-
-            // editor.addCommand('wrapDiagram', {
-            //     exec: function (editor) {
-            //         editor.insertText('```diagram\n' + editor.getSelection().getSelectedText() + '\n```');
-            //     }
-            // });
-
             this.on("instanceReady", function () {
                 $("." + editor.id).parents("form").on('submit', function () {
                     var $this = $(this);
@@ -199,7 +175,6 @@ XEeditor.define({
                             $this.append("<input type='hidden' class='paramHashTags' name='" + options.names.tag.input + "[]' value='" + value + "'>");
                         }
                     });
-
                 });
             });
 
@@ -262,7 +237,7 @@ XEeditor.define({
                                         self.addContents(dom);
 
                                         if(cb) {
-                                            cb();
+                                            cb($(editor.document.$.querySelectorAll('[xe-tool-id="' + component.id + '"]')));
                                         }
 
                                     });
@@ -293,19 +268,18 @@ XEeditor.define({
                             component.events.editorLoaded(editor);
                         }
 
-                        if(component.css) {
-                            if(typeof component.css === 'string') {
-                                this.document.appendStyleSheet( component.css );
-                                editor.config.contentsCss.push(component.css);
-                            } else if(component.css instanceof Array) {
-                                for(var i = 0, max = component.css.length; i < max; i += 1) {
-                                    this.document.appendStyleSheet( component.css[i] );
-                                    editor.config.contentsCss.push(component.css[i]);
+                        if(component.css && component.css()) {
+                            if(typeof component.css() === 'string') {
+                                this.document.appendStyleSheet( component.css() );
+                                editor.config.contentsCss.push(component.css());
+                            } else if(component.css() instanceof Array) {
+                                for(var i = 0, max = component.css().length; i < max; i += 1) {
+                                    this.document.appendStyleSheet( component.css()[i] );
+                                    editor.config.contentsCss.push(component.css()[i]);
                                 }
                             }
                         }
-
-
+                        
                     }, null, {component: component});
 
                 }
@@ -736,5 +710,6 @@ XEeditor.define({
     }
 });
 
-
-
+$(function() {
+    CKEDITOR.dtd.$removeEmpty['i'] = false
+})
