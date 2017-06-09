@@ -1,24 +1,18 @@
 CKEDITOR.plugins.add('touchToolbar', {
 	init: function ( editor ) {
-
-
 		var onlongtouch;
 		var timer, lockTimer;
 		var touchduration = 800;
 		var touches = '';
 
 		function touchstart(e) {
-      e.preventDefault();
-
       if(lockTimer){
         return;
       }
       touches = e.originalEvent.touches[0];
       timer = setTimeout(onlongtouch, touchduration);
       lockTimer = true;
-
       editor.focus();
-
 		}
 
 		function touchend() {
@@ -40,7 +34,7 @@ CKEDITOR.plugins.add('touchToolbar', {
           cke_editor.style.position = 'relative';
           toolbar.style.borderTop = "1px solid #ddd";
           toolbar.style.width = content.offsetWidth + "px";
-          toolbar.style.top = touches.clientY + "px";
+          toolbar.style.top = (touches.clientY - 20) + "px";
           toolbar.style.left = "0px";
           toolbar.style.right = "0px";
           toolbar.style.margin = "0 auto";
@@ -55,9 +49,17 @@ CKEDITOR.plugins.add('touchToolbar', {
 			}
 		};
 
+		resize = function() {
+			var content = document.getElementsByClassName('cke_contents').item(0);
+			var toolbar = document.getElementsByClassName('cke_top').item(0);
+
+			toolbar.style.width = content.offsetWidth + "px";
+		};
+
 		editor.on("instanceReady", function(event) {
 			$(event.editor.document.$).on('touchstart', touchstart);
 			$(event.editor.document.$).on('touchend', touchend);
+			$(window).on('resize', resize);
 		});
 	}
 });

@@ -88,10 +88,10 @@ XEeditor.define({
                     { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline' ] },
                     { name: 'paragraph', groups: [ 'align' ], items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight'] },
                     { name: 'links', items: [ 'Link' ] },
-                    { name: 'insert', items: [ 'Image' ] }
+                    { name: 'insert', items: [ 'Image' ] },
                 ];
 
-                //customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
+               // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
                 customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
 
             }
