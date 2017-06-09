@@ -91,8 +91,9 @@ XEeditor.define({
                     { name: 'insert', items: [ 'Image' ] }
                 ];
 
-                customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
-                // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
+                //customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
+                customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
+
             }
 
             CKEDITOR.env.isCompatible = true;
@@ -280,7 +281,7 @@ XEeditor.define({
                                 }
                             }
                         }
-                        
+
                     }, null, {component: component});
 
                 }
