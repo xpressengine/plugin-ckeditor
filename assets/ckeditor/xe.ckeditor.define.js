@@ -35,7 +35,7 @@ XEeditor.define({
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font',
+            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font,autolink',
             resize_dir: 'vertical',
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
