@@ -98,6 +98,9 @@ XEeditor.define({
 
             CKEDITOR.env.isCompatible = true;
 
+            //nomalize.css
+            //xeBaseURL + '/assets/core/common/css/xe-common.css',
+
             editor = CKEDITOR.replace(selector, customOptions || {});
             editor.on('change', function (e) {
                 e.editor.updateElement();
