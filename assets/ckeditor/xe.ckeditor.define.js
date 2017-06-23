@@ -35,7 +35,7 @@ XEeditor.define({
             removeFormatAttributes: '',
             removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font',
+            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font,autolink',
             resize_dir: 'vertical',
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
@@ -88,13 +88,18 @@ XEeditor.define({
                     { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline' ] },
                     { name: 'paragraph', groups: [ 'align' ], items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight'] },
                     { name: 'links', items: [ 'Link' ] },
-                    { name: 'insert', items: [ 'Image' ] }
+                    { name: 'insert', items: [ 'Image' ] },
                 ];
 
+               // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
                 customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
+
             }
 
             CKEDITOR.env.isCompatible = true;
+
+            //nomalize.css
+            //xeBaseURL + '/assets/core/common/css/xe-common.css',
 
             editor = CKEDITOR.replace(selector, customOptions || {});
             editor.on('change', function (e) {
@@ -279,7 +284,7 @@ XEeditor.define({
                                 }
                             }
                         }
-                        
+
                     }, null, {component: component});
 
                 }
