@@ -410,14 +410,17 @@ XEeditor.define({
                                 , dataType: 'json'
                                 , success: function (res) {
                                     if (res.deleted) {
-                                        fileTotalSize = fileTotalSize - fileSize;
+                                        //fileTotalSize = fileTotalSize - fileSize;
 
                                         $(self.props.editor.window.getFrame().$).contents().find('[data-cke-attach=' + id + ']').remove();
 
                                         //첨부파일 갯수 표시
-                                        $fileUploadArea.find(".fileCount").text(--fileCount);
+                                        var fileCount = parseInt($fileUploadArea.find(".fileCount").text(), 10) - 1;
+                                        $fileUploadArea.find(".fileCount").text(parseInt(fileCount));
+                                        //$fileUploadArea.find(".fileCount").text(--fileCount);
 
                                         //첨부파일 용량 표시
+                                        var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) - fileSize;
                                         $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
 
                                         $this.closest("li").remove();
@@ -551,6 +554,7 @@ XEeditor.define({
                             }
 
                             //[3]전체 파일 사이즈
+                            var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text());
                             if (attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
                                 //XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
                                 XE.toast("warning", XE.Lang.trans("ckeditor::msgAttachMaxSize", {attachMaxSize: attachMaxSize}));
@@ -588,8 +592,10 @@ XEeditor.define({
                                 , mime = file.mime
                                 , id = file.id;
 
-                            fileCount++;
-                            fileTotalSize = fileTotalSize + fileSize;
+                            //fileCount++;
+                            var fileCount = parseInt($fileUploadArea.find(".fileCount").text(), 10) + 1;
+                            var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
+                            //fileTotalSize = fileTotalSize + fileSize;
 
                             if (Utils.isImage(mime)) {
                                 var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
@@ -655,8 +661,9 @@ XEeditor.define({
                                 , mime = file.mime
                                 , id = file.id;
 
-                            fileCount++;
-                            fileTotalSize = fileTotalSize + fileSize;
+                            var fileCount = parseInt($fileUploadArea.find(".fileCount").text(), 10) + 1;
+                            var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
+                            //fileTotalSize = fileTotalSize + fileSize;
 
                             if (Utils.isImage(mime)) {
                                 var tmplImage = [
