@@ -71,7 +71,8 @@ XEeditor.define({
                 , height = options.height
                 , fontFamily = options.fontFamily
                 , fontSize = options.fontSize
-                , perms = options.perms || {};
+                , perms = options.perms || {}
+                , css = options.css || [];
 
             $.extend(customOptions, options);
 
@@ -94,6 +95,16 @@ XEeditor.define({
                // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";
                 customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",xeFixed" : "xeFixed";
 
+            }
+
+            if(css.length > 0) {
+                if(!customOptions.hasOwnProperty('contentsCss')) {
+                    customOptions.contentsCss = [];
+                }
+
+                for(var i = 0, max = css.length ; i < max; i += 1) {
+                    customOptions.contentsCss.push(css[i]);
+                }
             }
 
             CKEDITOR.env.isCompatible = true;
