@@ -40,7 +40,9 @@ XEeditor.define({
             // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
             htmlEncodeOutput: false,
-        },
+            codeSnippet_theme: 'monokai_sublime',
+        }
+        ,
         plugins: [
             {
                 name: 'suggestion',
@@ -108,9 +110,6 @@ XEeditor.define({
             }
 
             CKEDITOR.env.isCompatible = true;
-
-            //nomalize.css
-            //xeBaseURL + '/assets/core/common/css/xe-common.css',
 
             editor = CKEDITOR.replace(selector, customOptions || {});
             editor.on('change', function (e) {
