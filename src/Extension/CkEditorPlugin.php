@@ -51,6 +51,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
         return implode('', [
             $object->contentCompile($content),
 //            '<script>$(function(){mermaid.initialize({startOnLoad:true})});</script>',
+            '<script>$(function () { hljs.initHighlightingOnLoad(); })</script>',
         ]);
     }
 
@@ -63,7 +64,10 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             // requirejs 를 load 하기 전에 붙여야 한다.
 //            XeFrontend::js(asset($path . '/mermaid.min.js'))->appendTo('head')->load();
 //            XeFrontend::js([asset($path . '/contentsCompiler.js'), asset($path . '/prism.js')])->load();
-            XeFrontend::js([asset($path . '/contentsCompiler.js'), ])->load();
+            XeFrontend::js([
+                asset($path . '/contentsCompiler.js'),
+                asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
+            ])->load();
             XeFrontend::css([
                 asset($path . '/hashTag.css'),
                 asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'),
