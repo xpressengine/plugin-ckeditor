@@ -8,7 +8,7 @@ XEeditor.define({
             skin: 'xe-minimalist',
             customConfig: '',
             language: CKEDITOR.lang.languages.hasOwnProperty(XE.Lang.getCurrentLocale())? XE.Lang.getCurrentLocale() : 'en',
-            contentsCss: [ CKEDITOR.basePath + 'content.css' ],
+            contentsCss: [CKEDITOR.basePath + 'content.css'],
             on: {
                 focus: function () {
                     $(this.container.$).addClass('active');
@@ -74,7 +74,7 @@ XEeditor.define({
                 , fontFamily = options.fontFamily
                 , fontSize = options.fontSize
                 , perms = options.perms || {}
-                , css = options.css || [];
+                , stylesheet = options.stylesheet;
 
             $.extend(customOptions, options);
 
@@ -99,13 +99,19 @@ XEeditor.define({
 
             }
 
-            if(css.length > 0) {
-                if(!customOptions.hasOwnProperty('contentsCss')) {
-                    customOptions.contentsCss = [];
+            if(stylesheet) {
+                if(typeof stylesheet === 'string') {
+                    customOptions.contentsCss.push(stylesheet);
                 }
 
-                for(var i = 0, max = css.length ; i < max; i += 1) {
-                    customOptions.contentsCss.push(css[i]);
+                if(stylesheet instanceof Array && stylesheet.length > 0) {
+                    if(!customOptions.hasOwnProperty('contentsCss')) {
+                        customOptions.contentsCss = [];
+                    }
+
+                    for(var i = 0, max = stylesheet.length ; i < max; i += 1) {
+                        customOptions.contentsCss.push(stylesheet[i]);
+                    }
                 }
             }
 
