@@ -1,0 +1,73 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+#container {margin: 0 auto; width: 900px; margin-top:15px;}
+
+div.title {
+	height: 200px;
+	color: #2389EE;
+	text-align: center;
+	margin: auto;
+	font-size: 30px;
+	padding: 200px;
+}
+
+.xe-glyphicons-list {
+	list-style: none;
+}
+
+.xe-glyphicons li {
+	height: 65px;
+	line-height: 1.4;
+	text-align: center;
+	background-color: #f9f9f9;
+	border: 1px solid #fff;
+	font-size: 12px;
+}
+
+.icon-title {
+	text-align: center;
+	word-wrap: break-word;
+}
+
+.xe-glyphicons-list {
+	padding: 0;
+}
+
+.xe-glyphicons-list li {
+	padding-top: 15px;
+}
+
+.xe-glyphicons-list li a {
+	color: #000000;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.xe-glyphicons-list li a:hover {
+	color: #00A6C7;
+}
+
+
+.sub-search{
+	position:relative;
+	width:620px;
+	margin:0 auto
+}
+.sub-search-input {
+	width: 100%;
+	height: 56px;
+	padding: 11px 20px 13px 68px;
+	border: 2px solid #373737;
+	font-size: 22px;
+	letter-spacing: 3px;
+	color: #373737;
+}
+.sub-search-icon {
+	position: absolute;
+	top: 11px;
+	left: 20px;
+	font-size: 28px;
+}

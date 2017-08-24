@@ -2,7 +2,7 @@
   "name": "xpressengine-plugin/ckeditor",
   "description": "XpressEngine's plugin for bundle (XE)",
   "keywords": ["xpressengine bundle", "XE CkEditor"],
-  "version": "0.9.18",
+  "version": "0.9.19",
   "support": {
     "email": "developers@xpressengine.com"
   },
@@ -30,6 +30,21 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
           "description": "XE 에서 CkEditor 에 사용 할 플러그인."
+        },
+        "editortool/iframe_tool@iframe": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\IframeTool\\IframeTool",
+          "name": "iframe Tool",
+          "description": "에디터에서 iframe을 사용"
+        },
+        "editortool/xeicon_tool@xeicon": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\XeiconTool\\XeiconTool",
+          "name": "XEicon Tool",
+          "description": "에디터에서 XEicon을 사용"
+        },
+        "editortool/image_resize_tool@image_resize_crop": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\ImageResizeTool\\ImageResizeTool",
+          "name": "이미지 편집 툴",
+          "description": "이미지 리사이즈, 편집 에디터툴"
         }
       }
     }
@@ -40,7 +55,9 @@
   },
   "autoload": {
     "psr-4": {
-      "Xpressengine\\Plugins\\CkEditor\\": "src/"
+      "Xpressengine\\Plugins\\CkEditor\\": "src/",
+      "Xpressengine\\Plugins\\CkEditor\\Components\\": "components/"
+
     }
   }
 }
