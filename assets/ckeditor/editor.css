@@ -125,13 +125,6 @@
   line-height: 1.42857143;
   color: #696e7a;
 }
-#xe-editor-content b {
-  color: #f00;
-  border: 1px solid #e8e8e8;
-  padding: 0 5px;
-  background: #f9f9f9;
-  font-weight: normal;
-}
 #xe-editor-content p {
   margin-top: 20px;
   margin-bottom: 20px;
