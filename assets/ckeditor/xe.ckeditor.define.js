@@ -739,7 +739,8 @@ XEeditor.define({
                         //fileTotalSize = fileTotalSize + fileSize;
 
                         if (Utils.isImage(mime)) {
-                            var thumbImageUrl = (file.thumbnails) ? file.thumbnails[2].url : '';
+                            var thumbnails = file.thumbnails || [];
+                            var thumbImageUrl = thumbnails.length > 0 ? thumbnails[thumbnails.length - 1].url : '';
                             var tmplImage = [
                                 '<li>',
                                 '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
