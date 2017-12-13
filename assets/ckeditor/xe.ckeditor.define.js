@@ -18,26 +18,27 @@ XEeditor.define({
                 }
             },
             toolbarGroups: [
-                {name: 'clipboard', groups: ['undo', 'clipboard']},
-                {name: 'editing', groups: ['find', 'selection']},
-                {name: 'links'},
-                {name: 'insert'},
-                {name: 'tools'},
-                {name: 'document', groups: ['mode']},
+                { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                { name: 'links', groups: [ 'links' ] },
+                { name: 'insert', groups: [ 'insert' ] },
+                { name: 'forms', groups: [ 'forms' ] },
+                { name: 'tools', groups: [ 'tools' ] },
+                { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
                 '/',
-                {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-                {name: 'paragraph', groups: ['list', 'blocks', 'align', 'colors', 'font', 'bidi']},
-                {name: 'styles'},
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
                 '/',
-                {name: 'others'}
+                { name: 'styles', groups: [ 'styles' ] },
+                { name: 'colors', groups: [ 'colors' ] },
+                { name: 'others', groups: [ 'others' ] },
             ],
             allowedContent: true,
             removeFormatAttributes: '',
-            removeButtons: 'Save,Preview,Print,Cut,Copy,Paste',
+            removeButtons: 'Cut,Copy,Paste,PasteText,PasteFromWord,Anchor',
             removePlugins: 'stylescombo',
-            extraPlugins: 'resize,justify,tableresize,codesnippet,panelbutton,colorbutton,colordialog,tableselection,font,autolink,xePasteImage,html5video,wordcount',
+            extraPlugins: 'xePasteImage,html5video,wordcount',
             resize_dir: 'vertical',
-            // format_tags: 'p;h1;h2;h3;h4;h5;h6;pre;address;div',
             entities: false,
             htmlEncodeOutput: false,
             codeSnippet_theme: 'monokai_sublime',
@@ -88,10 +89,11 @@ XEeditor.define({
 
             if(CKEDITOR.env.mobile) {
                 customOptions.toolbar = [
-                    { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline' ] },
-                    { name: 'paragraph', groups: [ 'align' ], items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight'] },
-                    { name: 'links', items: [ 'Link' ] },
-                    { name: 'insert', items: [ 'Image' ] },
+                    { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+                    { name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight' ] },
+                    { name: 'color', items: [ 'TextColor' ] },
+                    { name: 'list', items: [ 'NumberedList', 'BulletedList' ] },
+                    { name: 'links', items: [ 'Link' ] }
                 ];
 
                // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ",touchToolbar" : "touchToolbar";

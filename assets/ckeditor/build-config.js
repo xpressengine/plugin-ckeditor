@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/5c37e351ad1a7cd8b214d62a578f90c0
+ * (2) http://ckeditor.com/builder/3478591c5e8130b730222948604d62a5
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/5c37e351ad1a7cd8b214d62a578f90c0
+ * (3) http://ckeditor.com/builder/download/3478591c5e8130b730222948604d62a5
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -39,7 +39,6 @@ var CKBUILDER_CONFIG = {
 		'.jshintrc',
 		'.mailmap',
 		'.travis.yml',
-		'README.md',
 		'bender-err.log',
 		'bender-out.log',
 		'bender.ci.js',
@@ -60,7 +59,6 @@ var CKBUILDER_CONFIG = {
 		'codesnippet' : 1,
 		'colorbutton' : 1,
 		'colordialog' : 1,
-		'contextmenu' : 1,
 		'elementspath' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
@@ -75,7 +73,6 @@ var CKBUILDER_CONFIG = {
 		'justify' : 1,
 		'link' : 1,
 		'list' : 1,
-		'liststyle' : 1,
 		'magicline' : 1,
 		'maximize' : 1,
 		'pagebreak' : 1,
@@ -91,8 +88,6 @@ var CKBUILDER_CONFIG = {
 		'stylescombo' : 1,
 		'tab' : 1,
 		'table' : 1,
-		'tableresize' : 1,
-		'tableselection' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
 		'wsc' : 1,
