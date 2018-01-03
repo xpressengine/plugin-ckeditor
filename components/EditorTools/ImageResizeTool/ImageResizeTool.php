@@ -37,14 +37,14 @@ class ImageResizeTool extends AbstractTool
 
                             XeFrontend::css([
                                 asset('assets/vendor/bootstrap/css/bootstrap.min.css'),
-                                Plugin::asset('/components/EditorTools/ImageResizeTool/assets/vendor/jquery-ui.css'),
-                                Plugin::asset('/components/EditorTools/ImageResizeTool/assets/vendor/cropper.min.css'),
+                                asset('assets/vendor/jqueryui/jquery-ui.min.css'),
+                                Plugin::asset('components/EditorTools/ImageResizeTool/assets/vendor/cropper/cropper.min.css'),
                             ])->appendTo('head')->load();
 
                             XeFrontend::js([
-                                Plugin::asset('/components/EditorTools/ImageResizeTool/assets/vendor/jquery-ui.js'),
-                                Plugin::asset('/components/EditorTools/ImageResizeTool/assets/vendor/cropper.min.js'),
-                                Plugin::asset('/components/EditorTools/ImageResizeTool/assets/ImageResize.js'),
+                                asset('assets/vendor/jqueryui/jquery-ui.min.js'),
+                                Plugin::asset('components/EditorTools/ImageResizeTool/assets/vendor/cropper/cropper.min.js'),
+                                Plugin::asset('components/EditorTools/ImageResizeTool/assets/ImageResize.js'),
                             ])->appendTo('body')->load();
 
                             // output

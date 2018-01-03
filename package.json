@@ -1,8 +1,11 @@
 {
   "private": true,
   "devDependencies": {
+    "cropper": "^3.1.3",
     "gulp": "^3.9.1",
-    "gulp-clean-css": "^2.0.7",
-    "gulp-load-plugins": "^1.2.2"
-  }
+    "gulp-clean-css": "^3.9.2",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-uglify": "^3.0.0"
+  },
+  "dependencies": {}
 }
