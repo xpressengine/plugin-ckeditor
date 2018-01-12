@@ -129,14 +129,14 @@ var ImageResize = (function () {
 				formData.append("file", blob, _fileName);
 
 				_this.setButtonDisabledStatus({
-					select: true,
-					toggleResize: true,
-					toggleCrop: true,
-					crop: true,
-					close: true,
-					reset: true,
-					upload: true,
-					append: true
+					select: 'hide',
+					toggleResize: 'hide',
+					toggleCrop: 'hide',
+					crop: 'hide',
+					close: 'hide',
+					reset: 'hide',
+					upload: 'hide',
+					append: 'hide'
 				});
 
 				XE.ajax({
@@ -184,26 +184,26 @@ var ImageResize = (function () {
 
 						//에디터에 넣기 활성화
 						_this.setButtonDisabledStatus({
-							select: false,
-							toggleResize: false,
-							toggleCrop: false,
-							crop: true,
-							close: false,
-							reset: false,
-							upload: false,
-							append: false
+							select: 'show',
+							toggleResize: 'hide',
+							toggleCrop: 'hide',
+							crop: 'hide',
+							close: 'show',
+							reset: 'show',
+							upload: 'hide',
+							append: 'show'
 						});
 					},
 					error: function () {
 						_this.setButtonDisabledStatus({
-							select: false,
-							toggleResize: false,
-							toggleCrop: false,
-							crop: true,
-							close: false,
-							reset: false,
-							upload: false,
-							append: true
+							select: 'show',
+							toggleResize: 'hide',
+							toggleCrop: 'hide',
+							crop: 'hide',
+							close: 'hide',
+							reset: 'hide',
+							upload: 'show',
+							append: 'hide'
 						});
 					}
 				});
@@ -255,14 +255,14 @@ var ImageResize = (function () {
 				$('#imageWrapper').html(canvas);
 
 				_this.setButtonDisabledStatus({
-					select: false,
-					toggleResize: false,
-					toggleCrop: false,
-					crop: true,
-					close: false,
-					reset: false,
-					upload: false,
-					append: true
+					select: 'show',
+					toggleResize: 'show',
+					toggleCrop: 'show',
+					crop: 'hide',
+					close: 'show',
+					reset: 'show',
+					upload: 'show',
+					append: 'hide'
 				});
 
 			}
@@ -286,14 +286,14 @@ var ImageResize = (function () {
 				$('#imageWrapper').html(canvas);
 
 				_this.setButtonDisabledStatus({
-					select: false,
-					toggleResize: false,
-					toggleCrop: false,
-					crop: true,
-					close: false,
-					reset: false,
-					upload: false,
-					append: true
+					select: 'show',
+					toggleResize: 'show',
+					toggleCrop: 'show',
+					crop: 'hide',
+					close: 'show',
+					reset: 'show',
+					upload: 'show',
+					append: 'hide'
 				});
 
 			} else {
@@ -313,14 +313,14 @@ var ImageResize = (function () {
 				});
 
 				_this.setButtonDisabledStatus({
-					select: true,
-					toggleResize: true,
-					toggleCrop: false,
-					crop: false,
-					close: false,
-					reset: false,
-					upload: true,
-					append: true
+					select: 'hide',
+					toggleResize: 'hide',
+					toggleCrop: 'hide',
+					crop: 'show',
+					close: 'hide',
+					reset: 'show',
+					upload: 'hide',
+					append: 'hide'
 				});
 			}
 		},
@@ -356,14 +356,14 @@ var ImageResize = (function () {
 					$('#imageWrapper').html(canvas);
 
 					_this.setButtonDisabledStatus({
-						select: false,
-						toggleResize: false,
-						toggleCrop: false,
-						crop: true,
-						close: false,
-						reset: false,
-						upload: false,
-						append: true
+						select: 'show',
+						toggleResize: 'show',
+						toggleCrop: 'show',
+						crop: 'hide',
+						close: 'show',
+						reset: 'hide',
+						upload: 'show',
+						append: 'hide'
 					});
 
 				}
@@ -389,14 +389,14 @@ var ImageResize = (function () {
 				$('#imageWrapper').html(canvas);
 
 				_this.setButtonDisabledStatus({
-					select: false,
-					toggleResize: false,
-					toggleCrop: false,
-					crop: true,
-					close: false,
-					reset: false,
-					upload: false,
-					append: true
+					select: 'show',
+					toggleResize: 'show',
+					toggleCrop: 'show',
+					crop: 'hide',
+					close: 'show',
+					reset: 'show',
+					upload: 'show',
+					append: 'hide'
 				});
 			} else {
 				_resizeMode = true;
@@ -423,14 +423,14 @@ var ImageResize = (function () {
 				$('#targetImage').resizable(options);
 
 				_this.setButtonDisabledStatus({
-					select: true,
-					toggleResize: false,
-					toggleCrop: true,
-					crop: true,
-					close: true,
-					reset: true,
-					upload: true,
-					append: true
+					select: 'hide',
+					toggleResize: 'show',
+					toggleCrop: 'hide',
+					crop: 'hide',
+					close: 'hide',
+					reset: 'hide',
+					upload: 'hide',
+					append: 'hide'
 				});
 			}
 		},
@@ -474,14 +474,14 @@ var ImageResize = (function () {
 						$('#imageWrapper').html(canvas);
 
 						_this.setButtonDisabledStatus({
-							select: false,
-							toggleResize: false,
-							toggleCrop: false,
-							crop: true,
-							close: false,
-							reset: false,
-							upload: false,
-							append: true
+							select: 'show',
+							toggleResize: 'show',
+							toggleCrop: 'show',
+							crop: 'hide',
+							close: 'show',
+							reset: 'hide',
+							upload: 'show',
+							append: 'hide'
 						});
 
 					}
@@ -540,7 +540,7 @@ var ImageResize = (function () {
 						break;
 				}
 
-				$target.attr('disabled', status);
+				(status === 'show') ? $target.show() : $target.hide();
 			}
 
 		},
