@@ -665,11 +665,13 @@ XEeditor.define({
                         //fileTotalSize = fileTotalSize + fileSize;
 
                         if (Utils.isImage(mime)) {
-                            var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
+                            var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : '';
+                            var media = data.result.media || {};
+                            var mediaUrl = media.url || thumbImageUrl;
                             var tmplImage = [
                                 '<li>',
-                                '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
-                                '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
+                                '   <img src="' + mediaUrl + '" alt="' + fileName + '">',
+                                '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
                                 '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                 '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                 '</li>'
@@ -742,18 +744,19 @@ XEeditor.define({
 
                         if (Utils.isImage(mime)) {
                             var thumbnails = file.thumbnails || [];
+                            var media = file.url|| null;
                             var thumbImageUrl = thumbnails.length > 0 ? thumbnails[thumbnails.length - 1].url : '';
+                            var mediaUrl = file.url || thumbImageUrl;
                             var tmplImage = [
                                 '<li>',
-                                '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
-                                '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
+                                '   <img src="' + mediaUrl + '" alt="' + fileName + '">',
+                                '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::addContentToBody") + '</span></button>',     //본문에 넣기
                                 '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans("ckeditor::deleteAttachment") + '</span></button>',    //첨부삭제
                                 '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                                 '</li>'
                             ].join("\n");
 
                             $thumbnaiList.append(tmplImage);
-
                         } else {
                             var btn = '';
 
