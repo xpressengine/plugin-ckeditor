@@ -9,8 +9,8 @@ $(function() {
         $tempImage.on('load', function() {
 			// 처음 resize 할 때 이미지 크기 기록
 			if ($image.data('width') === undefined) {
-				$image.data('width', $image.width());
-				$image.data('height', $image.height());
+				$image.data('width', $image[0].naturalWidth || $image.width());
+				$image.data('height', $image[0].naturalHeight || $image.height());
 			}
             var width = $image.data('width');
             var height = $image.data('height');
