@@ -1,5 +1,5 @@
 ﻿/**
- * @license Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
+ * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.md or http://ckeditor.com/license
  */
 
@@ -13,10 +13,10 @@
  * (1) http://ckeditor.com/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/3478591c5e8130b730222948604d62a5
+ * (2) http://ckeditor.com/builder/a4fa2aa836d4bbaa31b1a93df778acda
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/3478591c5e8130b730222948604d62a5
+ * (3) http://ckeditor.com/builder/download/a4fa2aa836d4bbaa31b1a93df778acda
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -26,7 +26,7 @@
 
 var CKBUILDER_CONFIG = {
 	skin: 'moono',
-	preset: 'standard',
+	preset: 'full',
 	ignore: [
 		'.DS_Store',
 		'.bender',
@@ -59,6 +59,7 @@ var CKBUILDER_CONFIG = {
 		'codesnippet' : 1,
 		'colorbutton' : 1,
 		'colordialog' : 1,
+		'divarea' : 1,
 		'elementspath' : 1,
 		'enterkey' : 1,
 		'entities' : 1,
@@ -84,13 +85,12 @@ var CKBUILDER_CONFIG = {
 		'showblocks' : 1,
 		'showborders' : 1,
 		'sourcearea' : 1,
-		'specialchar' : 1,
 		'stylescombo' : 1,
 		'tab' : 1,
 		'table' : 1,
 		'toolbar' : 1,
 		'undo' : 1,
-		'wsc' : 1,
+		'widget' : 1,
 		'wysiwygarea' : 1
 	},
 	languages : {
@@ -113,6 +113,7 @@ var CKBUILDER_CONFIG = {
 		'en-gb' : 1,
 		'eo' : 1,
 		'es' : 1,
+		'es-mx' : 1,
 		'et' : 1,
 		'eu' : 1,
 		'fa' : 1,

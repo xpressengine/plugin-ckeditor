@@ -477,7 +477,7 @@ XEeditor.define({
                             , dataType: 'json'
                             , success: function (res) {
                                 if (res.deleted) {
-                                    var $target = $(self.props.editor.window.getFrame().$).contents().find('[xe-file-id=' + id + ']');
+                                    var $target = $(self.props.editor.editable().$).contents().find('[xe-file-id=' + id + ']');
 
                                     if($target.attr('data-wrapper-class')) {
                                         $target.closest('.' + $target.attr('data-wrapper-class')).remove();
