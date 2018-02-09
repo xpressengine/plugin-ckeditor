@@ -1,6 +1,6 @@
 "use strict";
 
-(function(XE){
+(function(XE, $){
     /**
      * polyfill for IE9 to allow for multiple arguments in setTimeout
      */
@@ -558,4 +558,4 @@
             });
         }
     });
-})(XE);
+})(window.XE, window.jQuery);
