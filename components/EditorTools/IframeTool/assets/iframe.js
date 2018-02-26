@@ -13,27 +13,29 @@ XEeditor.tools.define({
 
 		},
 		beforeSubmit: function(targetEditor) {
-			$(targetEditor.document.$.body).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function() {
-				var $this = $(this);
-				var src = $this.attr('src');
-				var width = $this.attr('width');
-				var height = $this.attr('height');
-				var scrolling = $this.attr('scrolling');
+      // @FIXME CK전용으로만 동작함
+      targetEditor.setMode('wysiwyg');
+        $(targetEditor.container.$).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function() {
+        var $this = $(this);
+        var src = $this.attr('src');
+        var width = $this.attr('width');
+        var height = $this.attr('height');
+        var scrolling = $this.attr('scrolling');
 
-				var $temp = $('<div />');
-				var data = {
-					src: src,
-					width: width,
-					height: height,
-					scrolling: scrolling
-				};
+        var $temp = $('<div />');
+        var data = {
+          src: src,
+          width: width,
+          height: height,
+          scrolling: scrolling
+        };
 
-				$temp.attr('xe-tool-data', JSON.stringify(data).replace(/"/g, "'"));
-				$temp.attr('xe-tool-id', 'editortool/iframe_tool@iframe');
+        $temp.attr('xe-tool-data', JSON.stringify(data).replace(/"/g, "'"));
+        $temp.attr('xe-tool-id', 'editortool/iframe_tool@iframe');
 
-				$this.after($temp[0]);
-				$this.remove();
-			});
+        $this.after($temp[0]);
+        $this.remove();
+      });
 		},
 		editorLoaded: function(targetEditor) {
 			$(targetEditor.document.$.body).find('div[xe-tool-id="editortool/iframe_tool@iframe"]').each(function() {

@@ -19,10 +19,14 @@ XEeditor.tools.define({
 			});
 		},
 		beforeSubmit: function(targetEditor) {
-			$(targetEditor.document.$.body).find('[xe-tool-id="editortool/xeicon_tool@xeicon"]').css('cursor', '');
+      // @FIXME CK전용으로만 동작함
+      targetEditor.setMode('wysiwyg');
+			$(targetEditor.container.$).find('[xe-tool-id="editortool/xeicon_tool@xeicon"]').css('cursor', '');
 		},
 		editorLoaded: function(targetEditor) {
-			$(targetEditor.document.$.body).find('[xe-tool-id="editortool/xeicon_tool@xeicon"]').css('cursor', 'pointer');
+      // @FIXME CK전용으로만 동작함
+      targetEditor.setMode('wysiwyg');
+			$(targetEditor.container.$).find('[xe-tool-id="editortool/xeicon_tool@xeicon"]').css('cursor', 'pointer');
 		}
 	},
 	css: function() {
