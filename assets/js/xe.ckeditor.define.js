@@ -11,10 +11,10 @@ XEeditor.define({
             contentsCss: [CKEDITOR.basePath + 'content.css'],
             on: {
                 focus: function () {
-                    $(this.container.$).addClass('active');
+                    window.jQuery(this.container.$).addClass('active');
                 },
                 blur: function (e) {
-                    $(e.editor.container.$).removeClass('active');
+                    window.jQuery(e.editor.container.$).removeClass('active');
                 }
             },
             toolbarGroups: [
@@ -42,8 +42,7 @@ XEeditor.define({
             entities: false,
             htmlEncodeOutput: false,
             codeSnippet_theme: 'monokai_sublime',
-        }
-        ,
+        },
         plugins: [
             {
                 name: 'suggestion',
@@ -141,8 +140,8 @@ XEeditor.define({
                     var selection = editor.getSelection();
                     if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
                         var selectedContent = selection.getSelectedElement().$.outerHTML;
-                        var id = $(selectedContent).data('id');
-                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+                        var id = window.jQuery(selectedContent).data('id');
+                        var $target = window.jQuery(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
 
                         $target.css({
                             float: 'left',
@@ -163,8 +162,8 @@ XEeditor.define({
                     var selection = editor.getSelection();
                     if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
                         var selectedContent = selection.getSelectedElement().$.outerHTML;
-                        var id = $(selectedContent).data('id');
-                        var $target = $(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
+                        var id = window.jQuery(selectedContent).data('id');
+                        var $target = window.jQuery(editor.document.$.querySelectorAll('[data-id="' + id + '"]'));
 
                         $target.css({
                             float: 'right',
@@ -175,15 +174,15 @@ XEeditor.define({
             });
 
             this.on("instanceReady", function () {
-                $("." + editor.id).parents("form").on('submit', function () {
-                    var $this = $(this);
-                    var $contents = $(self.getContents());
+                window.jQuery("." + editor.id).parents("form").on('submit', function () {
+                    var $this = window.jQuery(this);
+                    var $contents = window.jQuery(self.getContents());
 
                     $this.find("input[type=hidden].paramMentions, input[type=hidden].paramHashTags").remove();
 
                     var idSet = {}, valueSet = {};
                     $contents.find("." + options.names.mention.class).each(function () {
-                        var id = $(this).attr(options.names.mention.identifier);
+                        var id = window.jQuery(this).attr(options.names.mention.identifier);
 
                         if (!idSet.hasOwnProperty(id)) {
                             idSet[id] = {};
@@ -260,7 +259,7 @@ XEeditor.define({
                                         self.addContents(dom);
 
                                         if(cb) {
-                                            cb($(editor.document.$.querySelectorAll('[xe-tool-id="' + component.id + '"]')));
+                                            cb(window.jQuery(editor.document.$.querySelectorAll('[xe-tool-id="' + component.id + '"]')));
                                         }
 
                                     });
@@ -276,12 +275,12 @@ XEeditor.define({
 
                         //double click시 호출
                         if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
-                            $(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
+                            window.jQuery(editorIframe).on('dblclick', domSelector, component.events.elementDoubleClick || function() {});
                         }
 
                         //submit시 호출
                         if(component.events.beforeSubmit) {
-                            $("." + editor.id).parents("form").on('submit', function () {
+                            window.jQuery("." + editor.id).parents("form").on('submit', function () {
                                 component.events.beforeSubmit(editor);
                             });
                         }
@@ -330,7 +329,7 @@ XEeditor.define({
             var self = this;
 
             self.on("instanceReady", function () {
-                var $editorWrap = $(editorWrapClass);
+                var $editorWrap = window.jQuery(editorWrapClass);
                 var uploadHtml = [
                     '<!--에디터 파일 첨부 영역  -->',
                     '<div class="file-attach-group">',
@@ -338,7 +337,7 @@ XEeditor.define({
                     '    <div class="file-attach dropZone">',
                     '        <div class="attach-info-text">',
                     '            <p>' + XE.Lang.trans("ckeditor::dropzoneLimit", {
-                        fileMaxSize: Utils.formatSizeUnits(fileMaxSize * 1024 * 1024),
+                        fileMaxSize: window.XE.util.formatSizeUnits(fileMaxSize * 1024 * 1024),
                         extensions: extensions.join(", "),
                         sAtag: '<a href="#" class="openSelectFile">',
                         eAtag: '</a>'
@@ -358,13 +357,13 @@ XEeditor.define({
                     '    <div class="attach-progress">',
                     '        <div class="attach-progress-bar" style="width:0%"></div>',
                     '    </div>',
-                    //<span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + Utils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
+                    //<span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + window.XE.util.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
                     '   <!--// 파일 업로드 시  -->',
                     '    <div class="file-view xe-hidden">',
                     '        <strong>' + XE.Lang.trans("ckeditor::attachementDescription", {
                         fileCount: '<span class="fileCount">0</span>',
                         currentFilesSize: '<span class="currentFilesSize">0MB</span>',
-                        attachMaxSize: Utils.formatSizeUnits(attachMaxSize * 1024 * 1024)
+                        attachMaxSize: window.XE.util.formatSizeUnits(attachMaxSize * 1024 * 1024)
                     }) + '</strong>',
                     '        <ul class="thumbnail-list"></ul>',
                     '        <ul class="file-attach-list"></ul>',
@@ -386,7 +385,7 @@ XEeditor.define({
 
                 //이미지 본문 삽입
                 $thumbnaiList.on('click', '.btnAddImage', function () {
-                    var $this = $(this);
+                    var $this = window.jQuery(this);
                     var imageHtml = [
                         "<img ",
                         "src='" + $this.data("src") + "' ",
@@ -403,7 +402,7 @@ XEeditor.define({
                 $fileAttachList
                   .on('click', '.btnAddFile', function () {
                     //downloadUrl
-                    var $this = $(this);
+                    var $this = window.jQuery(this);
                     var fileHtml = [
                         "<a href='" + downloadUrl + "/" + $this.attr(customOptions.names.file.identifier) + "' ",
                         "class='" + customOptions.names.file.class + "' ",
@@ -414,7 +413,7 @@ XEeditor.define({
 
                     self.addContents(fileHtml);
                 }).on('click', '.btnAddVideo', function () {
-                    var $this = $(this);
+                    var $this = window.jQuery(this);
                     var className = customOptions.names.file.video? customOptions.names.file.video.class : "__xe_video";
                     var widgetOptions = encodeURIComponent(JSON.stringify({
                         classes:{
@@ -448,7 +447,7 @@ XEeditor.define({
 
                     self.addContents(videoHtml);
                 }).on('click', '.btnAddAudio', function () {
-                    var $this = $(this);
+                    var $this = window.jQuery(this);
                     var className = customOptions.names.file.audio? customOptions.names.file.audio.class : "__xe_audio";
                     var videoHtml = [
                         "<audio contenteditable='false' ",
@@ -464,9 +463,9 @@ XEeditor.define({
 
                 //첨부파일 삭제
                 $fileUploadArea.on('click', '.btnDelFile', function () {
-                    var $this = $(this);
+                    var $this = window.jQuery(this);
                     var fileSize = $this.data("size");
-                    var $contentsWrap = $('<div />');
+                    var $contentsWrap = window.jQuery('<div />');
 
                     if (confirm(XE.Lang.trans("ckeditor::msgDeleteFile"))) {
                         var id = $this.attr(customOptions.names.file.identifier);
@@ -477,7 +476,7 @@ XEeditor.define({
                             , dataType: 'json'
                             , success: function (res) {
                                 if (res.deleted) {
-                                    var $target = $(self.props.editor.editable().$).contents().find('[xe-file-id=' + id + ']');
+                                    var $target = window.jQuery(self.props.editor.editable().$).contents().find('[xe-file-id=' + id + ']');
 
                                     if($target.attr('data-wrapper-class')) {
                                         $target.closest('.' + $target.attr('data-wrapper-class')).remove();
@@ -491,12 +490,12 @@ XEeditor.define({
                                     //$fileUploadArea.find(".fileCount").text(--fileCount);
 
                                     //첨부파일 용량 표시
-                                    var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) - fileSize;
-                                    $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
+                                    var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) - fileSize;
+                                    $fileUploadArea.find(".currentFilesSize").text(window.XE.util.formatSizeUnits(fileTotalSize));
 
                                     $this.closest("li").remove();
 
-                                    $contentsWrap.append($(self.getContents()));
+                                    $contentsWrap.append(window.jQuery(self.getContents()));
 
                                     self.setContents($contentsWrap.html());
 
@@ -621,7 +620,7 @@ XEeditor.define({
                         }
 
                         //[3]전체 파일 사이즈
-                        var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text());
+                        var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text());
                         if (attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
                             //XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
                             XE.toast("warning", XE.Lang.trans("ckeditor::msgAttachMaxSize", {attachMaxSize: attachMaxSize}));
@@ -661,10 +660,10 @@ XEeditor.define({
 
                         //fileCount++;
                         var fileCount = parseInt($fileUploadArea.find(".fileCount").text(), 10) + 1;
-                        var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
+                        var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
                         //fileTotalSize = fileTotalSize + fileSize;
 
-                        if (Utils.isImage(mime)) {
+                        if (window.XE.util.isImage(mime)) {
                             var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : '';
                             var media = data.result.media || {};
                             var mediaUrl = media.url || thumbImageUrl;
@@ -682,15 +681,15 @@ XEeditor.define({
                         } else {
                             var btn = '';
 
-                            if(Utils.isVideo(mime)) {
+                            if(window.XE.util.isVideo(mime)) {
                                 btn = '<button type="button" class="btnAddVideo" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + data.result.media.url + '">비디오 삽입</button>&nbsp;';
-                            } else if(Utils.isAudio(mime)) {
+                            } else if(window.XE.util.isAudio(mime)) {
                                 btn = '<button type="button" class="btnAddAudio" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + data.result.media.url + '">오디오 삽입</button>&nbsp;';
                             }
 
                             var tmplFile = [
                                 '<li>',
-                                '   <p class="xe-pull-left">' + fileName + ' (' + Utils.formatSizeUnits(fileSize) + ')</p>',
+                                '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.util.formatSizeUnits(fileSize) + ')</p>',
                                 '   <div class="xe-pull-right">',
                                         btn,
                                 '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
@@ -709,7 +708,7 @@ XEeditor.define({
                         $fileUploadArea.find(".fileCount").text(fileCount);
 
                         //첨부파일 용량 표시
-                        $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
+                        $fileUploadArea.find(".currentFilesSize").text(window.XE.util.formatSizeUnits(fileTotalSize));
 
                     },
                     fail: function (e, data) {
@@ -739,10 +738,10 @@ XEeditor.define({
                             , id = file.id;
 
                         var fileCount = parseInt($fileUploadArea.find(".fileCount").text(), 10) + 1;
-                        var fileTotalSize = Utils.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
+                        var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find(".currentFilesSize").text()) + fileSize;
                         //fileTotalSize = fileTotalSize + fileSize;
 
-                        if (Utils.isImage(mime)) {
+                        if (window.XE.util.isImage(mime)) {
                             var thumbnails = file.thumbnails || [];
                             var media = file.url|| null;
                             var thumbImageUrl = thumbnails.length > 0 ? thumbnails[thumbnails.length - 1].url : '';
@@ -760,17 +759,17 @@ XEeditor.define({
                         } else {
                             var btn = '';
 
-                            if(Utils.isVideo(mime)) {
+                            if(window.XE.util.isVideo(mime)) {
                                 var path = "/storage/app/" + file.path + "/" + file.filename;
                                 btn = '<button type="button" class="btnAddVideo" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + path + '">비디오 삽입</button>&nbsp;';
-                            } else if(Utils.isAudio(mime)) {
+                            } else if(window.XE.util.isAudio(mime)) {
                                 var path = "/storage/app/" + file.path + "/" + file.filename;
                                 btn = '<button type="button" class="btnAddAudio" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + path + '">오디오 삽입</button>&nbsp;';
                             }
 
                             var tmplFile = [
                                 '<li>',
-                                '   <p class="xe-pull-left">' + fileName + ' (' + Utils.formatSizeUnits(fileSize) + ')</p>',
+                                '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.util.formatSizeUnits(fileSize) + ')</p>',
                                 '   <div class="xe-pull-right">',
                                     btn,
                                 '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans("ckeditor::addContentToBody") + '</button>',     //본문에 넣기
@@ -787,7 +786,7 @@ XEeditor.define({
                         $fileUploadArea.find(".fileCount").text(fileCount);
 
                         //첨부파일 용량 표시
-                        $fileUploadArea.find(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
+                        $fileUploadArea.find(".currentFilesSize").text(window.XE.util.formatSizeUnits(fileTotalSize));
                     }
 
                     $fileUploadArea.find(".file-view").removeClass("xe-hidden");
@@ -796,7 +795,7 @@ XEeditor.define({
         },
         reset: function () {
             var editorWrapClass = "." + this.props.editor.id
-                , $editorWrap = $(editorWrapClass);
+                , $editorWrap = window.jQuery(editorWrapClass);
 
             //upload된 파일 삭제
             if (this.props.options.uploadActive) {
@@ -812,6 +811,6 @@ XEeditor.define({
     }
 });
 
-$(function() {
+window.jQuery(function($) {
     CKEDITOR.dtd.$removeEmpty['i'] = false
 })

@@ -16,6 +16,7 @@ namespace Xpressengine\Plugins\CkEditor\Editors;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Xpressengine\Editor\AbstractEditor;
 use Route;
+use Xpressengine\Plugins\CkEditor\plugin;
 use Xpressengine\Plugin\PluginRegister;
 use Xpressengine\Plugins\CkEditor\CkEditorPluginInterface;
 use Illuminate\Contracts\Auth\Access\Gate;
@@ -68,18 +69,18 @@ class CkEditor extends AbstractEditor
         if (self::$loaded === false) {
             self::$loaded = true;
 
-            $path = str_replace(base_path(), '', realpath(__DIR__.'/../../assets/ckeditor'));
             $this->frontend->js([
                 'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
-                asset($path . '/ckeditor.js'),
-                asset($path . '/styles.js'),
-                asset($path . '/xe.ckeditor.define.js'),
+                plugin::asset('assets/ckeditor/ckeditor.js'),
+                plugin::asset('assets/ckeditor/styles.js'),
+                plugin::asset('assets/js/xe.ckeditor.define.js')
             ])->before('assets/core/common/js/xe.editor.core.js')->load();
 
             $this->frontend->css([
-                asset($path . '/editor.css'),
+                plugin::asset('assets/css/editor.css'),
+                plugin::asset('assets/css/content.css')
             ])->load();
 
             $lang = require realpath(__DIR__.'/../../langs') . '/lang.php';
@@ -120,7 +121,7 @@ class CkEditor extends AbstractEditor
      */
     protected function compileBody($content)
     {
-        return sprintf('<div class="__xe_contents_compiler" id="xe-editor-content">%s</div>', $this->compilePlugins($content));
+        return sprintf('<div class="__xe_contents_compiler">%s</div>', $this->compilePlugins($content));
     }
 
     protected function compilePlugins($content)

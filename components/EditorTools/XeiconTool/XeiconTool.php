@@ -86,21 +86,21 @@ class XeiconTool extends AbstractTool
         XeFrontend::html('ckeditor.xeicon_tool.load_url')->content("
         <script>
             (function() {
-            
+
                 var _url = {
-                    popup: '".route('ckeditor::xeicon_tool.popup')."',      
+                    popup: '".route('ckeditor::xeicon_tool.popup')."',
                     edit_popup: '".route('ckeditor::xeicon_tool.popup-edit')."',
                     css: [
-                        '".asset('/assets/vendor/XEIcon/xeicon.min.css')."'                    
+                        '".asset('/assets/vendor/XEIcon/xeicon.min.css')."'
                     ]
                 };
-            
+
                 var URL = {
                     get: function (type) {
-                        return _url[type];                 
+                        return _url[type];
                     }
                 };
-                
+
                 window.xeiconToolURL = URL;
             })();
         </script>
@@ -109,9 +109,8 @@ class XeiconTool extends AbstractTool
         XeFrontend::js([
             asset($this->getAssetsPath() . '/xeicon.js')
         ])->load();
-        
+
         XeFrontend::css([
-            asset($this->getAssetsPath() . '/style.css'),
             asset('/assets/vendor/XEIcon/xeicon.min.css')
         ])->load();
     }
