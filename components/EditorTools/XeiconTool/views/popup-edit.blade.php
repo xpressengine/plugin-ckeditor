@@ -2612,8 +2612,4 @@
             },
         };
     })();
-
-    $(function() {
-        XEIcon.init();
-    });
 </script>

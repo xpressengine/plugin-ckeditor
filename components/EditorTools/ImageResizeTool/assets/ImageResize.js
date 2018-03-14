@@ -1,4 +1,4 @@
-var ImageResize = (function () {
+window.ImageResize = (function ($) {
   var _this
   var _result
   var _size = {
@@ -48,7 +48,7 @@ var ImageResize = (function () {
       this.$btnCropImage.on('click', this.cropImage)
       this.$btnResetImage.on('click', this.reset)
       this.$btnClose.on('click', function () {
-        self.close()
+        window.close()
       })
 
       this.$btnUpload.on('click', this.upload)
@@ -58,18 +58,18 @@ var ImageResize = (function () {
       var imageHtml = [
         '<img ',
         "src='" + _thumbImageUrl + "' ",
-        "class='" + self.targetEditor.config.names.file.image.class + "' ",
+        "class='" + window.targetEditor.config.names.file.image.class + "' ",
         "xe-file-id='" + _id + "' ",
-        self.targetEditor.config.names.file.image.identifier + "='" + _id,
+        window.targetEditor.config.names.file.image.identifier + "='" + _id,
         "' />"
       ].join('')
 
-      self.appendToolContent(imageHtml)
+      window.appendToolContent(imageHtml)
     },
     preventReloading: function () {
       if (!self.appendToolContent) {
         alert('팝업을 재실행 하세요.')
-        self.close()
+        // window.close()
       }
     },
     isValidUpload: function (blob) {
@@ -81,7 +81,11 @@ var ImageResize = (function () {
        -extensions: extensions,
        -$uploadArea: $uploadArea
        * */
-      var uploadInfo = self.uploadInfo
+       console.log($('body').data('targetEditor'))
+       console.log(self.uploadInfo)
+       console.log(uploadInfo)
+      var uploadInfo = window.uploadInfo
+       console.log(uploadInfo)
       var extensions = uploadInfo.extensions
       var currentFileSize = blob.size
       var attachFileSize = parseFloat(uploadInfo.$uploadArea.find('.currentFilesSize').text()) * 1024 * 1024 + currentFileSize
@@ -138,7 +142,7 @@ var ImageResize = (function () {
         })
 
         XE.ajax({
-          url: self.uploadInfo.uploadUrl,
+          url: window.uploadInfo.uploadUrl,
           type: 'POST',
           processData: false,
           contentType: false,
@@ -163,7 +167,7 @@ var ImageResize = (function () {
               '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
               '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>', // 본문에 넣기
               '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
-              '   <input type="hidden" name="' + self.targetEditor.config.names.file.input + '[]" value="' + id + '" />',
+              '   <input type="hidden" name="' + window.targetEditor.config.names.file.input + '[]" value="' + id + '" />',
               '</li>'
             ].join('\n')
 
@@ -539,4 +543,4 @@ var ImageResize = (function () {
       ]
     }
   }
-})().init()
+})(window.jQuery)
