@@ -11,7 +11,7 @@ window.XEeditor.tools.define({
         var fileMaxSize = targetEditor.config.fileMaxSize
         var extensions = targetEditor.config.extensions
 
-        var cWindow = window.open(window.imageResizeURL.get('popup'), 'createImageResizePopup', 'width=850,height=970,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no')
+        var cWindow = window.open(window.imageResizeURL.get('popup'), 'createImageResizePopup', 'width=850,height=970,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=no')
         console.log('cWindow', cWindow, cWindow.document)
         cWindow.focus()
         var timer = setInterval(checkChild, 500)
