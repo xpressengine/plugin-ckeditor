@@ -97,18 +97,18 @@ class IframeTool extends AbstractTool
         XeFrontend::html('ckeditor.iframe_tool.load_url')->content("
         <script>
             (function() {
-            
+
                 var _url = {
                     popup: '".route('ckeditor::iframe_tool.popup')."',
                     whiteList: [".call_user_func($wls)."]
                 };
-            
+
                 var URL = {
                     get: function (type) {
-                        return _url[type];                 
+                        return _url[type];
                     }
                 };
-                
+
                 window.iframeToolURL = URL;
             })();
         </script>
@@ -119,7 +119,6 @@ class IframeTool extends AbstractTool
         ])->load();
 
         XeFrontend::css([
-            asset($this->getAssetsPath() . '/style.css')
         ])->load();
     }
 
@@ -150,7 +149,7 @@ class IframeTool extends AbstractTool
         if (!$source || !in_array(parse_url($source, PHP_URL_HOST), $this->getWhiteList())) {
             return '';
         }
-        
+
         $attr = 'src="'.$data['src'].'" ';
 
         if(array_get($data, 'width')) {

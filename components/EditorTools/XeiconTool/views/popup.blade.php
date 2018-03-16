@@ -2597,11 +2597,9 @@
 
                     var _$this = $(this);
                     var className = _$this.find('.xi-x').get(0).className.replace(' xi-x', '');
-                    var icon = "<span style='font-family:xeicon;cursor:pointer'>&#x" + window.getComputedStyle($('.' + className)[0], ':before').getPropertyValue("content").replace(/'|"/g, '').charCodeAt(0).toString(16) + ";</span><span style='display:none' data-empty> </span>";
+                    var icon = "<span style='font-family:xeicon;cursor:pointer'>&#x" + window.getComputedStyle($('.' + className)[0], ':before').getPropertyValue("content").replace(/'|"/g, '').charCodeAt(0).toString(16) + ";</span>";
 
-                    appendToolContent(icon, function(targets) {
-                        targets.siblings('span[data-empty]').remove();
-                    });
+                    appendToolContent(icon);
                 });
             },
             preventReloading: function() {
@@ -2612,8 +2610,4 @@
             },
         };
     })();
-
-    $(function() {
-        XEIcon.init();
-    });
 </script>

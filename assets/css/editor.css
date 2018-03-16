@@ -1,0 +1,207 @@
+@charset 'utf-8';
+
+/* 파일 첨부 영역 */
+.file-view ul,
+.file-attach-list p {
+    margin: 0;
+    padding: 0;
+}
+
+.file-view ul {
+    list-style: none;
+}
+
+.file-attach-group {
+    font-size: 13px;
+    margin-top: 20px;
+    background-color: #f4f4f4;
+}
+.file-attach-group .file-attach {
+    font-size: 14px;
+    display: table;
+    width: 100%;
+    height: 120px;
+    text-align: center;
+    border: 1px solid transparent;
+}
+.file-attach-group .file-attach.drag {
+    border-color: #2c8beb;
+    background-color: #fff;
+}
+.file-attach-group .file-attach .attach-info-text {
+    display: table-cell;
+    vertical-align: middle;
+}
+.file-attach-group .file-attach .attach-info-text a {
+    color: #2c8beb;
+}
+.file-attach-group .attach-progress {
+    display: none;
+    overflow: hidden;
+    height: 4px;
+    background-color: #ddd;
+}
+.file-attach-group .attach-progress .attach-progress-bar {
+    float: left;
+    width: 0;
+    height: 100%;
+    -webkit-transition: width .6s ease;
+         -o-transition: width .6s ease;
+            transition: width .6s ease;
+    text-align: center;
+    color: #fff;
+    background-color: #2c8beb;
+}
+.file-attach-group .file-view {
+    padding: 25px 10px 10px 10px;
+    border-top: 1px solid #ddd;
+}
+.file-attach-group .file-view strong {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 15px;
+    color: #2c8beb;
+}
+.file-attach-group .file-view .thumbnail-list li {
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    margin: 0 6px 6px 0;
+    text-align: center;
+}
+.file-attach-group .file-view .thumbnail-list li img {
+    width: 100%;
+    height: 100%;
+}
+.file-attach-group .file-view .thumbnail-list li button {
+    cursor: pointer;
+    color: #fff;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+.file-attach-group .file-view .thumbnail-list li::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    text-align: center;
+    background-color: rgba(0, 0, 0, .3);
+}
+.file-attach-group .file-view .thumbnail-list li .btn-insert {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    left: 50%;
+    width: 48px;
+    height: 48px;
+    margin: -24px 0 0 -24px;
+    cursor: pointer;
+    border-color: transparent;
+    border-radius: 50%;
+    outline: none;
+    background-color: rgba(255, 255, 255, .6);
+}
+.file-attach-group .file-view .thumbnail-list li .btn-insert .xi-arrow-up {
+    font-size: 20px;
+}
+.file-attach-group .file-view .thumbnail-list li .btn-insert:hover {
+    background-color: #248aef;
+}
+.file-attach-group .file-view .thumbnail-list li .btn-delete {
+    position: absolute;
+    z-index: 5;
+    top: 4px;
+    right: 0;
+}
+.file-attach-group .file-view .file-attach-list {
+    margin-top: 20px;
+}
+.file-attach-group .file-view .file-attach-list li {
+    overflow: hidden;
+    min-height: 30px;
+    padding: 0 10px;
+    color: #101010;
+}
+.file-attach-group .file-view .file-attach-list li p {
+    margin: 6px;
+}
+.file-attach-group .file-view .file-attach-list li .xe-pull-right button {
+    height: 30px;
+    cursor: pointer;
+    color: #999;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+.file-attach-group .file-view .file-attach-list li .xe-pull-right button:hover {
+    color: #2c8beb;
+}
+.file-attach-group .file-view .file-attach-list li:hover {
+    background-color: #fff;
+}
+
+/* @FIXME 임시 */
+/* ckeditor hashtag */
+.suggestions {
+    position: absolute;
+    z-index: 1;
+    overflow-y: auto;
+    max-height: 366px;
+    margin: 0;
+    padding: 8px 0;
+    list-style-type: none;
+    border: 1px solid #51586b ;
+    border-radius: 0 0 2px 2px;
+    background-color: #fff;
+}
+
+.suggestions li {
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.suggestions li:hover,
+.suggestions li.active {
+    cursor: pointer;
+    color: #000;
+    background-color: #2389ee ;
+}
+
+
+.__xe_hashtag {
+    margin: 0 1px;
+    padding: 0 1px;
+    color: #2577ef;
+    border: 1px solid #d3d9e3;
+    border-radius: 2px;
+    background: #ebeef0;
+}
+.__xe_mention {
+    margin: 0 1px;
+    padding: 0 1px;
+    color: #2577ef;
+    border: 1px solid #d3d9e3;
+    border-radius: 2px;
+    background: #ebeef0;
+}
+.__xe_file {
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #eaedee;
+}
+.__xe_file.loading img {
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+.__xe_file.__xe_error {
+    color: #fff;
+    background: #ef5350;
+}
+.__xe_file + .__xe_file {
+    margin-left: 5px;
+}

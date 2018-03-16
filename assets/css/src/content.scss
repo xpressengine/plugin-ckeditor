@@ -1,0 +1,59 @@
+$font-family-sans-serif: "NanumBarunGothic", "Nanum Gothic", "Apple SD Gothic Neo", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$font-family-serif: "NanumMyeongjo", Georgia, "Times New Roman", Times, serif !default;
+$font-family-monospace: Menlo, Monaco, Consolas, "Courier New", monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+$font-family-heading: "NanumSquare", "NanumMyeongjo", Georgia, "Times New Roman", "Times", serif !default;
+$font-size-base: 14px !default;
+
+.xe-content,
+.xe_content, // @FIXME
+.cke_editable {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: #6a6e79;
+
+  a {
+    color: #0782C1;
+    text-decoration: none;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: $font-family-heading;
+  }
+
+  blockquote {
+    font-style: italic;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    padding: 2px 0;
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0;
+
+    &.cke_contents_ltr {
+      padding-left: 20px;
+      padding-right: 8px;
+      border-left-width: 5px;
+    }
+    &.cke_contents_rtl {
+      padding-left: 8px;
+      padding-right: 20px;
+      border-right-width: 5px;
+    }
+  }
+
+  hr {
+    box-sizing: content-box;
+    border: 0px;
+    border-top: 1px solid #ccc;
+  }
+}
+
+.cke_editable {
+  margin: 16px 0;
+}

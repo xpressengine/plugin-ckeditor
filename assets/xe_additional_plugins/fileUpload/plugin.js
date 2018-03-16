@@ -1,6 +1,6 @@
 "use strict";
 
-(function(XE) {
+(function(XE, $) {
 
     var DOCUMENT_DRAGDROP_INSTANCE;
     var editors = [];
@@ -306,4 +306,4 @@
             } );
         }
     });
-}(XE));
+}(window.XE, window.jQuery));
