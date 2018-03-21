@@ -28,40 +28,12 @@ class IframeTool extends AbstractTool
     {
         // implement code
 
-        Route::fixed(
-            Plugin::getId(),
-            function () {
-                Route::get(
-                    'iframe_tool/popup/create',
-                    [
-                        'as' => 'ckeditor::iframe_tool.popup',
-                        'uses' => function (Request $request) {
-
-                            $title = 'iframe Tool';
-
-                            // set browser title
-                            XeFrontend::title($title);
-
-                            XeFrontend::css([
-                                asset(Plugin::asset('/components/EditorTools/IframeTool/assets/style.css')),
-                                '/assets/vendor/bootstrap/css/bootstrap.min.css'
-                            ])->load();
-
-                            XeFrontend::js([
-                                '/assets/vendor/bootstrap/js/bootstrap.min.js'
-                            ])->load();
-
-                            //header, footer 제거
-                            \XeTheme::selectBlankTheme();
-
-                            // output
-                            return XePresenter::make('ckeditor::components.EditorTools.IframeTool.views.popup');
-
-                        }
-                    ]
-                );
-            }
-        );
+        Route::fixed(Plugin::getId(), function () {
+            Route::get('iframe_tool/popup/create', [
+                'as' => 'ckeditor::iframe_tool.popup',
+                'uses' => 'ComponentController@popup'
+            ]);
+        }, ['namespace' => 'Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\IframeTool']);
 
         Route::settings(Plugin::getId(), function () {
             Route::get('setting', [

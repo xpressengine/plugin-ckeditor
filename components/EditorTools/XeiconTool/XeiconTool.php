@@ -20,60 +20,17 @@ class XeiconTool extends AbstractTool
 
     public static function route()
     {
-        Route::fixed(
-            Plugin::getId(),
-            function () {
-                Route::get(
-                    'xeicon_tool/popup/create',
-                    [
-                        'as' => 'ckeditor::xeicon_tool.popup',
-                        'uses' => function (Request $request) {
+        Route::fixed(Plugin::getId(), function () {
+            Route::get('xeicon_tool/popup/create', [
+                'as' => 'ckeditor::xeicon_tool.popup',
+                'uses' => 'ComponentController@popup'
+            ]);
 
-                            $title = 'XEIcon Tool';
-
-                            // set browser title
-                            XeFrontend::title($title);
-
-                            XeFrontend::css([
-                                asset(Plugin::asset('/components/EditorTools/XeiconTool/assets/style.css')),
-                                asset('/assets/vendor/XEIcon/xeicon.min.css')
-                            ])->load();
-
-                            //header, footer 제거
-                            \XeTheme::selectBlankTheme();
-
-                            // output
-                            return XePresenter::make('ckeditor::components.EditorTools.XeiconTool.views.popup');
-
-                        }
-                    ]
-                );
-
-                Route::get(
-                    '/popup/edit',
-                    [
-                        'as' => 'ckeditor::xeicon_tool.popup-edit',
-                        'uses' => function (Request $request) {
-
-                            $title = 'XEIcon Tool';
-
-                            // set browser title
-                            XeFrontend::title($title);
-
-                            // load css file
-                            XeFrontend::css(Plugin::asset('/components/EditorTools/XeiconTool/assets/style.css'))->load();
-
-                            //header, footer 제거
-                            \XeTheme::selectBlankTheme();
-
-                            // output
-                            return XePresenter::make('ckeditor::components.EditorTools.XeiconTool.views.popup-edit');
-
-                        }
-                    ]
-                );
-            }
-        );
+            Route::get('/popup/edit', [
+                'as' => 'ckeditor::xeicon_tool.popup-edit',
+                'uses' => 'ComponentController@edit'
+            ]);
+        }, ['namespace' => 'Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\XeiconTool']);
     }
 
     /**
