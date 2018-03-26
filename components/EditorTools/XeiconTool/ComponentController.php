@@ -34,7 +34,7 @@ class ComponentController extends Controller
 
         XeFrontend::css([
             asset(Plugin::asset('/components/EditorTools/XeiconTool/assets/style.css')),
-            asset('/assets/vendor/XEIcon/xeicon.min.css')
+            asset('https://cdn.jsdelivr.net/npm/xeicon@2.3/xeicon.min.css')
         ])->load();
 
         //header, footer 제거
