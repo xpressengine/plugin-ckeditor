@@ -202,7 +202,7 @@
          */
         this.insertLoadingElement = function(filename) {
             var elem = new CKEDITOR.dom.element( 'span' );
-            elem.appendHtml('<img src="/assets/vendor/jQuery-File-Upload/img/small_loading.gif" alt="loading" />' + filename);
+            elem.appendHtml('<img src="/assets/vendor/jquery-file-upload/img/small_loading.gif" alt="loading" />' + filename);
             elem.setAttributes({
                 contenteditable : 'false'
             });
