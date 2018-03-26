@@ -70,9 +70,9 @@ class CkEditor extends AbstractEditor
             self::$loaded = true;
 
             $this->frontend->js([
-                'assets/vendor/jquery-file-upload/js/vendor/jquery.ui.widget.js',
-                'assets/vendor/jquery-file-upload/js/jquery.iframe-transport.js',
-                'assets/vendor/jquery-file-upload/js/jquery.fileupload.js',
+                'assets/vendor/jQuery-File-Upload/js/vendor/jquery.ui.widget.js',
+                'assets/vendor/jQuery-File-Upload/js/jquery.iframe-transport.js',
+                'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
                 plugin::asset('assets/ckeditor/ckeditor.js'),
                 plugin::asset('assets/ckeditor/styles.js'),
                 plugin::asset('assets/js/xe.ckeditor.define.js')
