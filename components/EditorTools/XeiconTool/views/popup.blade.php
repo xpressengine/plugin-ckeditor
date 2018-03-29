@@ -2553,11 +2553,14 @@
 </div>
 
 <script type="text/javascript">
-    var XEIcon = (function() {
+    var XEIcon = (function($) {
         return {
-            init: function() {
+            init: function(targetEditor, appendToolContent) {
                 this.cache();
                 this.bindEvent();
+
+                this.targetEditor = targetEditor
+                this.appendToolContent = appendToolContent
 
                 return this;
             },
@@ -2571,9 +2574,9 @@
 
             },
             bindEvent: function() {
-                var _this = this;
+                var that = this;
 
-                $(window).on('load', _this.preventReloading);
+                $(window).on('load', that.preventReloading);
 
                 this.$searchInput.on('keyup', function(e) {
                     var value = e.target.value;
@@ -2581,13 +2584,13 @@
                     if(value) {
                         var $showIcons = $('.xi-x[class*=' + value + ']').parents('li');
 
-                        _this.$searchArea.removeClass('hidden').find('.search-title h1').text("'" + value + "' icons");
-                        _this.$iconArea.addClass('hidden');
-                        _this.$searchIconWrap.html($showIcons.clone());
+                        that.$searchArea.removeClass('hidden').find('.search-title h1').text("'" + value + "' icons");
+                        that.$iconArea.addClass('hidden');
+                        that.$searchIconWrap.html($showIcons.clone());
 
                     } else {
-                        _this.$searchArea.addClass('hidden');
-                        _this.$iconArea.removeClass('hidden');
+                        that.$searchArea.addClass('hidden');
+                        that.$iconArea.removeClass('hidden');
 
                     }
                 });
@@ -2599,15 +2602,19 @@
                     var className = _$this.find('.xi-x').get(0).className.replace(' xi-x', '');
                     var icon = "<span style='font-family:xeicon;cursor:pointer'>&#x" + window.getComputedStyle($('.' + className)[0], ':before').getPropertyValue("content").replace(/'|"/g, '').charCodeAt(0).toString(16) + ";</span>";
 
-                    appendToolContent(icon);
+                    that.appendToolContent(icon);
                 });
             },
             preventReloading: function() {
-                if(!self.appendToolContent) {
+                if(!this.appendToolContent) {
                     alert('팝업을 재실행 하세요.');
                     self.close();
                 }
             },
         };
-    })();
+    })(window.jQuery);
+
+    window.jQuery(function() {
+        window.opener.XEeditor.$emit('editorTools.xeicon.popup', window.XEIcon)
+    })
 </script>

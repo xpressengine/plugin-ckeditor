@@ -2553,11 +2553,13 @@
 </div>
 
 <script type="text/javascript">
-    var XEIcon = (function() {
+    var XEIcon = (function($) {
         return {
-            init: function() {
+            init: function($target) {
                 this.cache();
                 this.bindEvent();
+
+                this.$target = $target
 
                 return this;
             },
@@ -2594,22 +2596,24 @@
 
                 this.$xeGlyphiconsList.on('click', 'a', function(e) {
                     e.preventDefault();
-
                     var _$this = $(this);
                     var className = _$this.find('.xi-x').get(0).className.replace(' xi-x', '')
                     var icon = "&#x" + window.getComputedStyle($('.' + className)[0], ':before').getPropertyValue("content").replace(/'|"/g, '').charCodeAt(0).toString(16) + ";";
 
-                    $target.html(icon);
+                    _this.$target.html(icon);
 
                     self.close();
                 });
             },
             preventReloading: function() {
-                if(!self.$target) {
+                if(!this.$target) {
                     alert('팝업을 재실행 하세요.');
                     self.close();
                 }
             },
         };
-    })();
+    })(window.jQuery);
+    window.jQuery(function() {
+        window.opener.XEeditor.$emit('editorTools.xeicon.popup_edit', window.XEIcon)
+    })
 </script>

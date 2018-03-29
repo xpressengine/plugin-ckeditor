@@ -1,7 +1,7 @@
 /**
  * @description ckeditor library 로드가 선행되어야함
- * */
-XEeditor.define({
+ **/
+window.XEeditor.define({
   editorSettings: {
     name: 'XEckeditor',
     configs: {
@@ -67,15 +67,15 @@ XEeditor.define({
   },
   interfaces: {
     initialize: function (selector, options, customOptions) {
-      var editor, self = this
-      var customOptions = customOptions || {},
-        height = options.height,
-        fontFamily = options.fontFamily,
-        fontSize = options.fontSize,
-        perms = options.perms || {},
-        stylesheet = options.stylesheet
+      var editor
+      var that = this
+      var height = options.height
+      var fontFamily = options.fontFamily
+      var fontSize = options.fontSize
+      var perms = options.perms || {}
+      var stylesheet = options.stylesheet
 
-      $.extend(customOptions, options)
+      window.jQuery.extend(customOptions || {}, options)
 
       if (!perms.html) {
         customOptions.removeButtons = (!customOptions.removeButtons) ? customOptions.removeButtons + ',Source' : 'Source'
@@ -136,10 +136,10 @@ XEeditor.define({
       editor.addCommand('alignLeft', {
         exec: function (editor) {
           var selection = editor.getSelection()
-          if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
-            var selectedContent = selection.getSelectedElement().$.outerHTML
+          if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().window.jQuery.tagName === 'IMG') {
+            var selectedContent = selection.getSelectedElement().window.jQuery.outerHTML
             var id = window.jQuery(selectedContent).data('id')
-            var $target = window.jQuery(editor.document.$.querySelectorAll('[data-id="' + id + '"]'))
+            var $target = window.jQuery(editor.document.window.jQuery.querySelectorAll('[data-id="' + id + '"]'))
 
             $target.css({
               float: 'left',
@@ -158,10 +158,10 @@ XEeditor.define({
       editor.addCommand('alignRight', {
         exec: function (editor) {
           var selection = editor.getSelection()
-          if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().$.tagName === 'IMG') {
-            var selectedContent = selection.getSelectedElement().$.outerHTML
+          if (selection.getType() == CKEDITOR.SELECTION_ELEMENT && selection.getSelectedElement().window.jQuery.tagName === 'IMG') {
+            var selectedContent = selection.getSelectedElement().window.jQuery.outerHTML
             var id = window.jQuery(selectedContent).data('id')
-            var $target = window.jQuery(editor.document.$.querySelectorAll('[data-id="' + id + '"]'))
+            var $target = window.jQuery(editor.document.window.jQuery.querySelectorAll('[data-id="' + id + '"]'))
 
             $target.css({
               float: 'right',
@@ -174,11 +174,12 @@ XEeditor.define({
       this.on('instanceReady', function () {
         window.jQuery('.' + editor.id).parents('form').on('submit', function () {
           var $this = window.jQuery(this)
-          var $contents = window.jQuery(self.getContents())
+          var $contents = window.jQuery(that.getContents())
+          var idSet = {}
+          var valueSet = {}
 
           $this.find('input[type=hidden].paramMentions, input[type=hidden].paramHashTags').remove()
 
-          var idSet = {}, valueSet = {}
           $contents.find('.' + options.names.mention.class).each(function () {
             var id = window.jQuery(this).attr(options.names.mention.identifier)
 
@@ -233,7 +234,7 @@ XEeditor.define({
     },
     addTools: function (toolsMap, toolInfoList) {
       var editor = this.props.editor
-      var self = this
+      var that = this
 
       for (var i = 0, max = toolInfoList.length; i < max; i += 1) {
         var component = toolsMap[toolInfoList[i].id]
@@ -254,10 +255,10 @@ XEeditor.define({
                   component.events.iconClick(editor, function (content, cb) {
                     var dom = XEeditor.attachDomId(content, component.id)
 
-                    self.addContents(dom)
+                    that.addContents(dom)
 
                     if (cb) {
-                      cb(window.jQuery(editor.document.$.querySelectorAll('[xe-tool-id="' + component.id + '"]')))
+                      cb(window.jQuery(editor.document.window.jQuery.querySelectorAll('[xe-tool-id="' + component.id + '"]')))
                     }
                   })
                 }
@@ -265,10 +266,10 @@ XEeditor.define({
             }(component)))
           }
 
-          CKEDITOR.instances[self.selector].on('instanceReady', function (e) {
+          CKEDITOR.instances[that.selector].on('instanceReady', function (e) {
             var component = e.listenerData.component
             var domSelector = XEeditor.getDomSelector(component.id)
-            var editorIframe = CKEDITOR.instances[self.selector].document.$
+            var editorIframe = CKEDITOR.instances[that.selector].document.$
 
             // double click시 호출
             if (component.events && component.events.hasOwnProperty('elementDoubleClick')) {
@@ -307,22 +308,21 @@ XEeditor.define({
     },
     renderFileUploader: function (customOptions) {
       var editorWrapClass = '.' + this.props.editor.id
-      var uploadUrl = this.props.options.fileUpload.upload_url,
-        downloadUrl = this.props.options.fileUpload.download_url,
-        destroyUrl = this.props.options.fileUpload.destroy_url,
-        sourceUrl = this.props.options.fileUpload.source_url,
-        attachMaxSize = customOptions.attachMaxSize,
-        fileMaxSize = customOptions.fileMaxSize,
-        extensions = customOptions.extensions,
-        uploadPermission = customOptions.perms.upload,
-        files = customOptions.files || []
+      var uploadUrl = this.props.options.fileUpload.upload_url
+      var downloadUrl = this.props.options.fileUpload.download_url
+      var destroyUrl = this.props.options.fileUpload.destroy_url
+      var sourceUrl = this.props.options.fileUpload.source_url
+      var attachMaxSize = customOptions.attachMaxSize
+      var fileMaxSize = customOptions.fileMaxSize
+      var extensions = customOptions.extensions
+      var uploadPermission = customOptions.perms.upload
+      var files = customOptions.files || []
+      var fileCount = 0
+      var fileTotalSize = 0
 
-      var fileCount = 0,
-        fileTotalSize = 0
+      var that = this
 
-      var self = this
-
-      self.on('instanceReady', function () {
+      that.on('instanceReady', function () {
         var $editorWrap = window.jQuery(editorWrapClass)
         var uploadHtml = [
           '<!--에디터 파일 첨부 영역  -->',
@@ -370,12 +370,12 @@ XEeditor.define({
         $editorWrap.after("<div class='wrap-ckeditor-fileupload xe-hidden'><input type='file' name='file' multiple /></div><div class='ckeditor-fileupload-area'></div>")
           .nextAll('.ckeditor-fileupload-area:first').html(uploadHtml)
 
-        var $fileUploadArea = $editorWrap.nextAll('.ckeditor-fileupload-area:first'),
-          $dropZone = $fileUploadArea.find('.dropZone:not(.fileuploadStatus)')
+        var $fileUploadArea = $editorWrap.nextAll('.ckeditor-fileupload-area:first')
+        var $dropZone = $fileUploadArea.find('.dropZone:not(.fileuploadStatus)')
 
-        var $thumbnaiList = $fileUploadArea.find('.thumbnail-list'),
-          $fileAttachList = $fileUploadArea.find('.file-attach-list'),
-          $videoList = $fileUploadArea.find('.video-list')
+        var $thumbnaiList = $fileUploadArea.find('.thumbnail-list')
+        var $fileAttachList = $fileUploadArea.find('.file-attach-list')
+        var $videoList = $fileUploadArea.find('.video-list')
 
         // 이미지 본문 삽입
         $thumbnaiList.on('click', '.btnAddImage', function () {
@@ -389,7 +389,7 @@ XEeditor.define({
             "' />"
           ].join('')
 
-          self.addContents(imageHtml)
+          that.addContents(imageHtml)
         })
 
         // 파일 본문 삽입
@@ -405,7 +405,7 @@ XEeditor.define({
               "' >" + $this.data('name') + '</a>'
             ].join('')
 
-            self.addContents(fileHtml)
+            that.addContents(fileHtml)
           }).on('click', '.btnAddVideo', function () {
             var $this = window.jQuery(this)
             var className = customOptions.names.file.video ? customOptions.names.file.video.class : '__xe_video'
@@ -439,7 +439,7 @@ XEeditor.define({
               '</div><p></p>'
             ].join('')
 
-            self.addContents(videoHtml)
+            that.addContents(videoHtml)
           }).on('click', '.btnAddAudio', function () {
             var $this = window.jQuery(this)
             var className = customOptions.names.file.audio ? customOptions.names.file.audio.class : '__xe_audio'
@@ -452,7 +452,7 @@ XEeditor.define({
               "' ><source src='" + $this.data('src') + "' /></audio><p></p>"
             ].join('')
 
-            self.addContents(videoHtml)
+            that.addContents(videoHtml)
           })
 
         // 첨부파일 삭제
@@ -470,7 +470,7 @@ XEeditor.define({
               dataType: 'json',
               success: function (res) {
                 if (res.deleted) {
-                  var $target = window.jQuery(self.props.editor.editable().$).contents().find('[xe-file-id=' + id + ']')
+                  var $target = window.jQuery(that.props.editor.editable().$).contents().find('[xe-file-id=' + id + ']')
 
                   if ($target.attr('data-wrapper-class')) {
                     $target.closest('.' + $target.attr('data-wrapper-class')).remove()
@@ -489,9 +489,9 @@ XEeditor.define({
 
                   $this.closest('li').remove()
 
-                  $contentsWrap.append(window.jQuery(self.getContents()))
+                  $contentsWrap.append(window.jQuery(that.getContents()))
 
-                  self.setContents($contentsWrap.html())
+                  that.setContents($contentsWrap.html())
 
                   if (fileCount === 0) {
                     $fileUploadArea.find('.file-view').addClass('xe-hidden')
@@ -562,10 +562,9 @@ XEeditor.define({
             }
           },
           add: function (e, data) {
-            var valid = true,
-              extValid = false
+            var valid = true
+            var extValid = false
             var files = data.files
-
             var uploadFileName = files[0].name
             var fSize = files[0].size
 
@@ -640,11 +639,11 @@ XEeditor.define({
             data.formData = {}
           },
           done: function (e, data) {
-            var file = data.result.file,
-              fileName = file.clientname,
-              fileSize = file.size,
-              mime = file.mime,
-              id = file.id
+            var file = data.result.file
+            var fileName = file.clientname
+            var fileSize = file.size
+            var mime = file.mime
+            var id = file.id
 
             // fileCount++;
             var fileCount = parseInt($fileUploadArea.find('.fileCount').text(), 10) + 1
@@ -717,12 +716,11 @@ XEeditor.define({
         // 업로드된 파일이 있다면 화면에 그리기
         if (files.length > 0) {
           for (var i = 0, max = files.length; i < max; i += 1) {
-            var file = files[i],
-              fileName = file.clientname,
-              fileSize = file.size,
-              mime = file.mime,
-              id = file.id
-
+            var file = files[i]
+            var fileName = file.clientname
+            var fileSize = file.size
+            var mime = file.mime
+            var id = file.id
             var fileCount = parseInt($fileUploadArea.find('.fileCount').text(), 10) + 1
             var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) + fileSize
             // fileTotalSize = fileTotalSize + fileSize;
@@ -745,6 +743,7 @@ XEeditor.define({
             } else {
               var btn = ''
 
+              // @FIXME 어따쓰는거냐
               if (window.XE.util.isVideo(mime)) {
                 var path = '/storage/app/' + file.path + '/' + file.filename
                 btn = '<button type="button" class="btnAddVideo" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + path + '">비디오 삽입</button>&nbsp;'
@@ -780,8 +779,8 @@ XEeditor.define({
       })
     },
     reset: function () {
-      var editorWrapClass = '.' + this.props.editor.id,
-        $editorWrap = window.jQuery(editorWrapClass)
+      var editorWrapClass = '.' + this.props.editor.id
+      var $editorWrap = window.jQuery(editorWrapClass)
 
       // upload된 파일 삭제
       if (this.props.options.uploadActive) {

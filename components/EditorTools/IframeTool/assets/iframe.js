@@ -2,34 +2,31 @@ window.XEeditor.tools.define({
   id: 'editortool/iframe_tool@iframe',
   events: {
     iconClick: function (targetEditor, cbAppendToolContent) {
-      var cWindow = window.open(iframeToolURL.get('popup'), 'createIframePopup', 'width=450,height=500,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no')
+      var cWindow = window.open(window.iframeToolURL.get('popup'), 'createIframePopup', 'width=450,height=500,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no')
       var timer = setInterval(checkChild, 500)
+
+      window.XEeditor.$once('editorTools.IframeTool.popup', function (eventName, obj) {
+        obj.init(targetEditor, cbAppendToolContent)
+      })
 
       function checkChild () {
         if (cWindow != null && cWindow.closed == false && cWindow.IframeTool && typeof cWindow.IframeTool.init === 'function') {
-          cWindow.targetEditor = targetEditor
-          cWindow.appendToolContent = cbAppendToolContent
-          cWindow.IframeTool.init()
           clearInterval(timer)
         }
       }
-      $(cWindow).on('load', function () {
-      })
     },
-    elementDoubleClick: function () {
-
-    },
+    elementDoubleClick: function () {},
     beforeSubmit: function (targetEditor) {
       // @FIXME CK전용으로만 동작함
       targetEditor.setMode('wysiwyg')
-      $(targetEditor.container.$).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
-        var $this = $(this)
+      window.jQuery(targetEditor.container.$).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
+        var $this = window.jQuery(this)
         var src = $this.attr('src')
         var width = $this.attr('width')
         var height = $this.attr('height')
         var scrolling = $this.attr('scrolling')
 
-        var $temp = $('<div />')
+        var $temp = window.jQuery('<div />')
         var data = {
           src: src,
           width: width,
@@ -45,10 +42,10 @@ window.XEeditor.tools.define({
       })
     },
     editorLoaded: function (targetEditor) {
-      $(targetEditor.document.$.body).find('div[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
-        var $this = $(this)
+      window.jQuery(targetEditor.document.$.body).find('div[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
+        var $this = window.jQuery(this)
         var data = JSON.parse($this.attr('xe-tool-data').replace(/'/g, '"'))
-        var $iframe = $('<iframe />')
+        var $iframe = window.jQuery('<iframe />')
 
         $iframe.attr('src', data.src)
 

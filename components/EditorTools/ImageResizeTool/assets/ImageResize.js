@@ -1,4 +1,4 @@
-window.ImageResize = (function ($) {
+window.ImageResize = (function ($, XE) {
   var _this
   var _result
   var _size = {
@@ -17,11 +17,15 @@ window.ImageResize = (function ($) {
   var _file
 
   return {
-    init: function () {
+    init: function (obj) {
       _this = this
 
       this.cache()
       this.bindEvents()
+
+      this.targetEditor = obj.targetEditor
+      this.appendToolContent = obj.appendToolContent
+      this.uploadInfo = obj.uploadInfo
 
       return this
     },
@@ -58,16 +62,16 @@ window.ImageResize = (function ($) {
       var imageHtml = [
         '<img ',
         "src='" + _thumbImageUrl + "' ",
-        "class='" + window.targetEditor.config.names.file.image.class + "' ",
+        "class='" + _this.targetEditor.config.names.file.image.class + "' ",
         "xe-file-id='" + _id + "' ",
-        window.targetEditor.config.names.file.image.identifier + "='" + _id,
+        _this.targetEditor.config.names.file.image.identifier + "='" + _id,
         "' />"
       ].join('')
 
-      window.appendToolContent(imageHtml)
+      _this.appendToolContent(imageHtml)
     },
     preventReloading: function () {
-      if (!self.appendToolContent) {
+      if (!this.appendToolContent) {
         alert('팝업을 재실행 하세요.')
         // window.close()
       }
@@ -80,17 +84,12 @@ window.ImageResize = (function ($) {
        -fileMaxSize: fileMaxSize,
        -extensions: extensions,
        -$uploadArea: $uploadArea
-       * */
-       console.log($('body').data('targetEditor'))
-       console.log(self.uploadInfo)
-       console.log(uploadInfo)
-      var uploadInfo = window.uploadInfo
-       console.log(uploadInfo)
+       **/
+      var uploadInfo = _this.uploadInfo
       var extensions = uploadInfo.extensions
       var currentFileSize = blob.size
       var attachFileSize = parseFloat(uploadInfo.$uploadArea.find('.currentFilesSize').text()) * 1024 * 1024 + currentFileSize
       var attachMaxSize = uploadInfo.attachMaxSize * 1024 * 1024
-      // var uploadFileName = _this.$imageFile[0].files[0].name;
       var uploadFileName = _file.name
       var extValid = false
 
@@ -109,11 +108,11 @@ window.ImageResize = (function ($) {
       if (!extValid) {
         alert('확장자 ' + uploadFileName.split('.').pop() + '는 업로드가 불가합니다.')
       } else if (currentFileSize > uploadInfo.fileMaxSize * 1024 * 1024) {
-        alert('파일 업로드 파일 크기 제한 [' + Utils.formatSizeUnits(uploadInfo.fileMaxSize * 1024 * 1024) + ']')
+        alert('파일 업로드 파일 크기 제한 [' + XE.util.formatSizeUnits(uploadInfo.fileMaxSize * 1024 * 1024) + ']')
 
         return false
       } else if (attachFileSize > attachMaxSize * 1024 * 1024) {
-        alert('파일 업로드는 최대 ' + Utils.formatSizeUnits(uploadInfo.attachMaxSize * 1024 * 1024) + '까지만 가능합니다.')
+        alert('파일 업로드는 최대 ' + XE.util.formatSizeUnits(uploadInfo.attachMaxSize * 1024 * 1024) + '까지만 가능합니다.')
 
         return false
       }
@@ -142,7 +141,7 @@ window.ImageResize = (function ($) {
         })
 
         XE.ajax({
-          url: window.uploadInfo.uploadUrl,
+          url: _this.uploadInfo.uploadUrl,
           type: 'POST',
           processData: false,
           contentType: false,
@@ -153,33 +152,33 @@ window.ImageResize = (function ($) {
               fileSize = file.size,
               id = file.id
 
-            if (opener.$('.file-view').hasClass('xe-hidden')) {
-              opener.$('.file-view').removeClass('xe-hidden')
+            if (opener.jQuery('.file-view').hasClass('xe-hidden')) {
+              opener.jQuery('.file-view').removeClass('xe-hidden')
             }
 
-            var fileCount = parseInt(opener.$('.fileCount').text(), 10) + 1
+            var fileCount = parseInt(opener.jQuery('.fileCount').text(), 10) + 1
 
             // file size
-            var fileTotalSize = Utils.sizeFormatToBytes(opener.$('.currentFilesSize').text()) + fileSize
+            var fileTotalSize = XE.util.sizeFormatToBytes(opener.jQuery('.currentFilesSize').text()) + fileSize
             var thumbImageUrl = (data.thumbnails) ? data.thumbnails[2].url : ''
             var tmplImage = [
               '<li>',
               '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
               '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>', // 본문에 넣기
               '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
-              '   <input type="hidden" name="' + window.targetEditor.config.names.file.input + '[]" value="' + id + '" />',
+              '   <input type="hidden" name="' + _this.targetEditor.config.names.file.input + '[]" value="' + id + '" />',
               '</li>'
             ].join('\n')
 
-            opener.$('.thumbnail-list').append(tmplImage)
+            opener.jQuery('.thumbnail-list').append(tmplImage)
 
-            opener.$('.file-view').removeClass('xe-hidden')
+            opener.jQuery('.file-view').removeClass('xe-hidden')
 
             // 첨부파일 갯수 표시
-            opener.$('.fileCount').text(fileCount)
+            opener.jQuery('.fileCount').text(fileCount)
 
             // 첨부파일 용량 표시
-            opener.$('.currentFilesSize').text(Utils.formatSizeUnits(fileTotalSize))
+            opener.jQuery('.currentFilesSize').text(XE.util.formatSizeUnits(fileTotalSize))
 
             _thumbImageUrl = thumbImageUrl
             _id = id
@@ -269,7 +268,6 @@ window.ImageResize = (function ($) {
     setCropMode: function () {
       if (_cropMode) {
         _cropMode = false
-        //                    $('img').cropper('destroy');
         _$cropper.cropper('destroy')
 
         var canvas = $('<canvas id="targetCanvas" />')[0]
@@ -365,8 +363,6 @@ window.ImageResize = (function ($) {
       }
     },
     setResizeMode: function () {
-      var $this = $(this)
-
       if (_resizeMode) {
         _resizeMode = false
 
@@ -500,7 +496,7 @@ window.ImageResize = (function ($) {
      *     true, false
      * </pre>
      * @description 버튼 상태 변경
-     * */
+     **/
     setButtonDisabledStatus: function (obj) {
       for (var command in obj) {
         // var command = obj[prop].command;
@@ -538,9 +534,11 @@ window.ImageResize = (function ($) {
       }
     },
     getEmptyTemplate: function () {
-      return [
-        ''
-      ]
+      return ['']
     }
   }
-})(window.jQuery)
+})(window.jQuery, window.XE)
+
+window.jQuery(function ($) {
+  window.opener.XEeditor.$emit('editorTools.imageResizeTool.popup', window.ImageResize)
+})

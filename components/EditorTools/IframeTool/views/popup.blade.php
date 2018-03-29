@@ -60,15 +60,19 @@
 </div>
 
 <script type="text/javascript">
-    var IframeTool = (function() {
+    // @FIXME
+    var IframeTool = (function($) {
         var _this;
 
         return {
-            init: function() {
+            init: function(targetEditor, appendToolContent) {
                 _this = this;
 
                 this.cache();
                 this.bindEvents();
+
+                this.targetEditor = targetEditor
+                this.appendToolContent = appendToolContent
 
                 return this;
             },
@@ -211,7 +215,7 @@
                 var info = _this.validate();
 
                 if(info.isValid) {
-                    appendToolContent(_this.getIframeTemplate(info));
+                    _this.appendToolContent(_this.getIframeTemplate(info));
                     self.close();
                 }
             },
@@ -219,10 +223,14 @@
                 var info = _this.validate();
 
                 if(info.isValid) {
-                    appendToolContent(_this.getIframeTemplate(info));
+                    _this.appendToolContent(_this.getIframeTemplate(info));
                     self.close();
                 }
             }
         }
-    })()
+    })(window.jQuery)
+
+    window.jQuery(function($) {
+      window.opener.XEeditor.$emit('editorTools.IframeTool.popup', window.IframeTool)
+  })
 </script>
