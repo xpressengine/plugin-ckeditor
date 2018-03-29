@@ -50,7 +50,6 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
         return implode('', [
             $object->contentCompile($content),
-//            '<script>$(function(){mermaid.initialize({startOnLoad:true})});</script>',
             '<script>$(function () { hljs.initHighlightingOnLoad(); })</script>',
         ]);
     }
@@ -61,9 +60,6 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             self::$loaded = true;
 
             $path = str_replace(base_path(), '', realpath(__DIR__ . '/../../assets/compiler'));
-            // requirejs 를 load 하기 전에 붙여야 한다.
-//            XeFrontend::js(asset($path . '/mermaid.min.js'))->appendTo('head')->load();
-//            XeFrontend::js([asset($path . '/contentsCompiler.js'), asset($path . '/prism.js')])->load();
             XeFrontend::js([
                 asset($path . '/contentsCompiler.js'),
                 asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
@@ -71,9 +67,6 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
             XeFrontend::css([
                 asset($path . '/hashTag.css'),
                 asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'),
-//                asset($path . '/prism.css'),
-//                asset($path . '/mermaid.css'),
-//                asset($path . '/mermaid.forest.css'),
             ])->load();
         }
     }
@@ -138,9 +131,11 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
         return false;
     }
 
+    /**
+     * @deprecated
+     **/
     private function diagram($code)
     {
-//        return "<div class='mermaid'>$code</div>";
     }
 
     private function codes($language, $line, $code)
