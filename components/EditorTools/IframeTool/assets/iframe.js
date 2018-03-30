@@ -1,85 +1,82 @@
-window.XEeditor.tools.define({
-  id: 'editortool/iframe_tool@iframe',
-  events: {
-    iconClick: function (targetEditor, cbAppendToolContent) {
-      var cWindow = window.open(window.iframeToolURL.get('popup'), 'createIframePopup', 'width=450,height=500,directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no')
-      var timer = setInterval(checkChild, 500)
+// @ES5
+// @FIXME window.iframeToolURL
+(function ($, XE, XEeditor) {
+  var windowName = 'editortoolIframe'
+  var windowFeatures = {
+    width: 450,
+    height: 500
+  }
 
-      window.XEeditor.$once('editorTools.IframeTool.popup', function (eventName, obj) {
-        obj.init(targetEditor, cbAppendToolContent)
-      })
+  XEeditor.tools.define({
+    id: 'editortool/iframe_tool@iframe',
+    events: {
+      iconClick: function (editor, cbAppendToolContent) {
+        var targetEditor = editor.props.editor
+        XE.util.openWindow(window.iframeToolURL.get('popup'), windowName, windowFeatures)
 
-      function checkChild () {
-        if (cWindow != null && cWindow.closed == false && cWindow.IframeTool && typeof cWindow.IframeTool.init === 'function') {
-          clearInterval(timer)
-        }
+        XEeditor.$once('editorTools.IframeTool.popup', function (eventName, obj) {
+          obj.init(targetEditor, cbAppendToolContent)
+        })
+      },
+      elementDoubleClick: function () {},
+      beforeSubmit: function (editor) {
+        // @FIXME 위지윅 모드가 아닐 때 동작하지 않음
+        var contentDom = editor.getContentDom()
+        if(!contentDom) return
+
+        // HTMLPurifier에서 제거되지 않도록 임의의 element로 대체
+        $(contentDom).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
+          var $this = $(this)
+          var $temp = $('<div />')
+          var toolData = {
+            src: $this.attr('src'),
+            width: $this.attr('width'),
+            height: $this.attr('height'),
+            scrolling: $this.attr('scrolling')
+          }
+
+          $temp.attr({
+            'xe-tool-data': JSON.stringify(toolData).replace(/"/g, "'"),
+            'xe-tool-id': 'editortool/iframe_tool@iframe'
+          })
+
+          $this.wrap($temp).remove()
+        })
+      },
+      editorLoaded: function (editor) {
+        // @FIXME 위지윅 모드가 아닐 때 동작하지 않음
+        var contentDom = editor.getContentDom()
+        if(!contentDom) return
+
+        // iframe 미리보기
+        $(contentDom).find('div[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
+          var $this = $(this)
+          var toolData = JSON.parse($this.attr('xe-tool-data').replace(/'/g, '"'))
+          var $iframe = $('<iframe />')
+
+          $iframe.attr({
+            src: toolData.src,
+            width: toolData.width || null,
+            height: toolData.height || null,
+            scrolling: toolData.scrolling || null
+          })
+
+          $this.html($iframe)
+        })
       }
     },
-    elementDoubleClick: function () {},
-    beforeSubmit: function (targetEditor) {
-      // @FIXME CK전용으로만 동작함
-      targetEditor.setMode('wysiwyg')
-      window.jQuery(targetEditor.container.$).find('iframe[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
-        var $this = window.jQuery(this)
-        var src = $this.attr('src')
-        var width = $this.attr('width')
-        var height = $this.attr('height')
-        var scrolling = $this.attr('scrolling')
-
-        var $temp = window.jQuery('<div />')
-        var data = {
-          src: src,
-          width: width,
-          height: height,
-          scrolling: scrolling
-        }
-
-        $temp.attr('xe-tool-data', JSON.stringify(data).replace(/"/g, "'"))
-        $temp.attr('xe-tool-id', 'editortool/iframe_tool@iframe')
-
-        $this.after($temp[0])
-        $this.remove()
-      })
+    css: function () {
+      return []
     },
-    editorLoaded: function (targetEditor) {
-      window.jQuery(targetEditor.document.$.body).find('div[xe-tool-id="editortool/iframe_tool@iframe"]').each(function () {
-        var $this = window.jQuery(this)
-        var data = JSON.parse($this.attr('xe-tool-data').replace(/'/g, '"'))
-        var $iframe = window.jQuery('<iframe />')
-
-        $iframe.attr('src', data.src)
-
-        if (data.width) {
-          $iframe.attr('width', data.width)
-        }
-
-        if (data.height) {
-          $iframe.attr('height', data.height)
-        }
-
-        if (data.scrolling) {
-          $iframe.attr('scrolling', data.scrolling)
-        }
-
-        $iframe.attr('xe-tool-id', 'editortool/iframe_tool@iframe')
-        $iframe.attr('xe-tool-data', JSON.stringify(data).replace(/"/g, "'"))
-
-        $this.after($iframe)
-        $this.remove()
-      })
+    props: {
+      name: 'XEIframe',
+      options: {
+        label: 'XEIframe',
+        command: 'openXEIframeEditor'
+      },
+      addEvent: {
+        doubleClick: false
+      }
     }
-  },
-  css: function () {
-    return []
-  },
-  props: {
-    name: 'XEIframe',
-    options: {
-      label: 'XEIframe',
-      command: 'openXEIframeEditor'
-    },
-    addEvent: {
-      doubleClick: false
-    }
-  }
-})
+  })
+})(window.jQuery, window.XE, window.XEeditor)
