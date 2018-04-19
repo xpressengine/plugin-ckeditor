@@ -1,7 +1,7 @@
 /**
  * @description ckeditor library 로드가 선행되어야함
  **/
-(function ($, XE, XEeditor) {
+(function ($, XE, XEeditor, CKEDITOR) {
   window.XEeditor.define({
     /* 에디터 설정 */
     editorSettings: {
@@ -340,7 +340,7 @@
             '    <div class="file-attach dropZone">',
             '        <div class="attach-info-text">',
             '            <p>' + XE.Lang.trans('ckeditor::dropzoneLimit', {
-              fileMaxSize: window.XE.util.formatSizeUnits(fileMaxSize * 1024 * 1024),
+              fileMaxSize: window.XE.Utils.formatSizeUnits(fileMaxSize * 1024 * 1024),
               extensions: extensions.join(', '),
               sAtag: '<a href="#" class="openSelectFile">',
               eAtag: '</a>'
@@ -360,13 +360,13 @@
             '    <div class="attach-progress">',
             '        <div class="attach-progress-bar" style="width:0%"></div>',
             '    </div>',
-            // <span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + window.XE.util.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
+            // <span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + window.XE.Utils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
             '   <!--// 파일 업로드 시  -->',
             '    <div class="file-view xe-hidden">',
             '        <strong>' + XE.Lang.trans('ckeditor::attachementDescription', {
               fileCount: '<span class="fileCount">0</span>',
               currentFilesSize: '<span class="currentFilesSize">0MB</span>',
-              attachMaxSize: window.XE.util.formatSizeUnits(attachMaxSize * 1024 * 1024)
+              attachMaxSize: window.XE.Utils.formatSizeUnits(attachMaxSize * 1024 * 1024)
             }) + '</strong>',
             '        <ul class="thumbnail-list"></ul>',
             '        <ul class="file-attach-list"></ul>',
@@ -493,8 +493,8 @@
                     // $fileUploadArea.find(".fileCount").text(--fileCount);
 
                     // 첨부파일 용량 표시
-                    var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) - fileSize
-                    $fileUploadArea.find('.currentFilesSize').text(window.XE.util.formatSizeUnits(fileTotalSize))
+                    var fileTotalSize = window.XE.Utils.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) - fileSize
+                    $fileUploadArea.find('.currentFilesSize').text(window.XE.Utils.formatSizeUnits(fileTotalSize))
 
                     $this.closest('li').remove()
 
@@ -618,7 +618,7 @@
               }
 
               // [3]전체 파일 사이즈
-              var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text())
+              var fileTotalSize = window.XE.Utils.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text())
               if (attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
               // XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
                 XE.toast('warning', XE.Lang.trans('ckeditor::msgAttachMaxSize', {attachMaxSize: attachMaxSize}))
@@ -656,10 +656,10 @@
 
               // fileCount++;
               var fileCount = parseInt($fileUploadArea.find('.fileCount').text(), 10) + 1
-              var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) + fileSize
+              var fileTotalSize = window.XE.Utils.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) + fileSize
               // fileTotalSize = fileTotalSize + fileSize;
 
-              if (window.XE.util.isImage(mime)) {
+              if (window.XE.Utils.isImage(mime)) {
                 var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
                 var media = data.result.media || {}
                 var mediaUrl = media.url || thumbImageUrl
@@ -676,15 +676,15 @@
               } else {
                 var btn = ''
 
-                if (window.XE.util.isVideo(mime)) {
+                if (window.XE.Utils.isVideo(mime)) {
                   btn = '<button type="button" class="btnAddVideo" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + data.result.media.url + '">비디오 삽입</button>&nbsp;'
-                } else if (window.XE.util.isAudio(mime)) {
+                } else if (window.XE.Utils.isAudio(mime)) {
                   btn = '<button type="button" class="btnAddAudio" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + data.result.media.url + '">오디오 삽입</button>&nbsp;'
                 }
 
                 var tmplFile = [
                   '<li>',
-                  '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.util.formatSizeUnits(fileSize) + ')</p>',
+                  '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.Utils.formatSizeUnits(fileSize) + ')</p>',
                   '   <div class="xe-pull-right">',
                   btn,
                   '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans('ckeditor::addContentToBody') + '</button>', // 본문에 넣기
@@ -703,7 +703,7 @@
               $fileUploadArea.find('.fileCount').text(fileCount)
 
               // 첨부파일 용량 표시
-              $fileUploadArea.find('.currentFilesSize').text(window.XE.util.formatSizeUnits(fileTotalSize))
+              $fileUploadArea.find('.currentFilesSize').text(window.XE.Utils.formatSizeUnits(fileTotalSize))
             },
             fail: function (e, data) {
               $fileUploadArea
@@ -731,10 +731,10 @@
               var mime = file.mime
               var id = file.id
               var fileCount = parseInt($fileUploadArea.find('.fileCount').text(), 10) + 1
-              var fileTotalSize = window.XE.util.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) + fileSize
+              var fileTotalSize = window.XE.Utils.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text()) + fileSize
               // fileTotalSize = fileTotalSize + fileSize;
 
-              if (window.XE.util.isImage(mime)) {
+              if (window.XE.Utils.isImage(mime)) {
                 var thumbnails = file.thumbnails || []
                 var media = file.url || null
                 var thumbImageUrl = thumbnails.length > 0 ? thumbnails[thumbnails.length - 1].url : ''
@@ -753,17 +753,17 @@
                 var btn = ''
 
                 // @FIXME 어따쓰는거냐
-                if (window.XE.util.isVideo(mime)) {
+                if (window.XE.Utils.isVideo(mime)) {
                   var path = '/storage/app/' + file.path + '/' + file.filename
                   btn = '<button type="button" class="btnAddVideo" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + path + '">비디오 삽입</button>&nbsp;'
-                } else if (window.XE.util.isAudio(mime)) {
+                } else if (window.XE.Utils.isAudio(mime)) {
                   var path = '/storage/app/' + file.path + '/' + file.filename
                   btn = '<button type="button" class="btnAddAudio" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '" data-src="' + path + '">오디오 삽입</button>&nbsp;'
                 }
 
                 var tmplFile = [
                   '<li>',
-                  '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.util.formatSizeUnits(fileSize) + ')</p>',
+                  '   <p class="xe-pull-left">' + fileName + ' (' + window.XE.Utils.formatSizeUnits(fileSize) + ')</p>',
                   '   <div class="xe-pull-right">',
                   btn,
                   '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans('ckeditor::addContentToBody') + '</button>', // 본문에 넣기
@@ -780,7 +780,7 @@
               $fileUploadArea.find('.fileCount').text(fileCount)
 
               // 첨부파일 용량 표시
-              $fileUploadArea.find('.currentFilesSize').text(window.XE.util.formatSizeUnits(fileTotalSize))
+              $fileUploadArea.find('.currentFilesSize').text(window.XE.Utils.formatSizeUnits(fileTotalSize))
             }
 
             $fileUploadArea.find('.file-view').removeClass('xe-hidden')
@@ -808,4 +808,4 @@
   $(function () {
     CKEDITOR.dtd.$removeEmpty['i'] = false
   })
-})(window.jQuery, window.XE, window.XEeditor)
+})(window.jQuery, window.XE, window.XEeditor, window.CKEDITOR)

@@ -108,11 +108,11 @@ window.ImageResize = (function ($, XE) {
       if (!extValid) {
         alert('확장자 ' + uploadFileName.split('.').pop() + '는 업로드가 불가합니다.')
       } else if (currentFileSize > uploadInfo.fileMaxSize * 1024 * 1024) {
-        alert('파일 업로드 파일 크기 제한 [' + XE.util.formatSizeUnits(uploadInfo.fileMaxSize * 1024 * 1024) + ']')
+        alert('파일 업로드 파일 크기 제한 [' + XE.Utils.formatSizeUnits(uploadInfo.fileMaxSize * 1024 * 1024) + ']')
 
         return false
       } else if (attachFileSize > attachMaxSize * 1024 * 1024) {
-        alert('파일 업로드는 최대 ' + XE.util.formatSizeUnits(uploadInfo.attachMaxSize * 1024 * 1024) + '까지만 가능합니다.')
+        alert('파일 업로드는 최대 ' + XE.Utils.formatSizeUnits(uploadInfo.attachMaxSize * 1024 * 1024) + '까지만 가능합니다.')
 
         return false
       }
@@ -159,7 +159,7 @@ window.ImageResize = (function ($, XE) {
             var fileCount = parseInt(opener.jQuery('.fileCount').text(), 10) + 1
 
             // file size
-            var fileTotalSize = XE.util.sizeFormatToBytes(opener.jQuery('.currentFilesSize').text()) + fileSize
+            var fileTotalSize = XE.Utils.sizeFormatToBytes(opener.jQuery('.currentFilesSize').text()) + fileSize
             var thumbImageUrl = (data.thumbnails) ? data.thumbnails[2].url : ''
             var tmplImage = [
               '<li>',
@@ -178,7 +178,7 @@ window.ImageResize = (function ($, XE) {
             opener.jQuery('.fileCount').text(fileCount)
 
             // 첨부파일 용량 표시
-            opener.jQuery('.currentFilesSize').text(XE.util.formatSizeUnits(fileTotalSize))
+            opener.jQuery('.currentFilesSize').text(XE.Utils.formatSizeUnits(fileTotalSize))
 
             _thumbImageUrl = thumbImageUrl
             _id = id
