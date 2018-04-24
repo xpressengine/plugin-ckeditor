@@ -524,13 +524,13 @@
               var fileId = $this.data('id')
               var selected = $this.hasClass('selected')
 
+              $fileUploadArea.find('.thumbnail-list li').find('.btnCover').removeClass('selected')
+
               if (!selected) {
-                $fileUploadArea.find('.thumbnail-list li').find('.btnCover').removeClass('selected')
                 $this.addClass('selected')
-                $('.paramCoverId').val(fileId)
+                $('[name=' + that.props.options.names.cover.input + ']').val(fileId)
               } else {
-                $fileUploadArea.find('.thumbnail-list li').find('.btnCover').removeClass('selected')
-                $('.paramCoverId').val('')
+                $('[name=' + that.props.options.names.cover.input + ']').val(fileId)
               }
             })
           }
