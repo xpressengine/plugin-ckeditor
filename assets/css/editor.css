@@ -91,6 +91,7 @@
     text-align: center;
     background-color: rgba(0, 0, 0, .3);
 }
+
 .file-attach-group .file-view .thumbnail-list li .btn-insert {
     position: absolute;
     z-index: 5;
@@ -103,20 +104,57 @@
     border-color: transparent;
     border-radius: 50%;
     outline: none;
-    background-color: rgba(255, 255, 255, .6);
+    background-color: rgba(255, 255, 255, .3);
 }
 .file-attach-group .file-view .thumbnail-list li .btn-insert .xi-arrow-up {
     font-size: 20px;
 }
-.file-attach-group .file-view .thumbnail-list li .btn-insert:hover {
+.file-attach-group .file-view .thumbnail-list li .btn-insert:hover,
+.file-attach-group .file-view .thumbnail-list li .btn-insert:focus {
     background-color: #248aef;
 }
 .file-attach-group .file-view .thumbnail-list li .btn-delete {
     position: absolute;
     z-index: 5;
     top: 4px;
-    right: 0;
+    right: 4px;
+    padding: 0;
+    width: 18px;
+    line-height: 18px;
 }
+.file-attach-group .file-view .thumbnail-list li .btn-delete i {
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: middle;
+}
+
+.file-attach-group .file-view .thumbnail-list li .btn-delete:hover,
+.file-attach-group .file-view .thumbnail-list li .btn-delete:focus {
+  border-radius: 50%;
+  background-color: rgba(255, 59, 48, .6);
+}
+
+.file-attach-group .file-view .thumbnail-list li .btn-cover {
+    position: absolute;
+    z-index: 5;
+    top: 4px;
+    left: 4px;
+    padding: 0;
+    width: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+}
+.file-attach-group .file-view .thumbnail-list li .btn-cover i {
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: middle;
+}
+.file-attach-group .file-view .thumbnail-list li .btn-cover.selected,
+.file-attach-group .file-view .thumbnail-list li .btn-cover:hover,
+.file-attach-group .file-view .thumbnail-list li .btn-cover:focus {
+  background-color: rgba(255, 204, 0, .6);
+}
+
 .file-attach-group .file-view .file-attach-list {
     margin-top: 20px;
 }
