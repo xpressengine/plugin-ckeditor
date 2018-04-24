@@ -326,6 +326,8 @@
         var extensions = customOptions.extensions
         var uploadPermission = customOptions.perms.upload
         var files = customOptions.files || []
+        var useSetCover = true
+        var coverId = null
         var fileCount = 0
         var fileTotalSize = 0
 
@@ -513,6 +515,26 @@
             }
           })
 
+          // 커버 이미지 선택
+          if (useSetCover) {
+            $fileUploadArea.on('click', '.btnCover', function () {
+              if (!that.props.options.names.cover) return
+
+              var $this = $(this)
+              var fileId = $this.data('id')
+              var selected = $this.hasClass('selected')
+
+              if (!selected) {
+                $fileUploadArea.find('.thumbnail-list li').find('.btnCover').removeClass('selected')
+                $this.addClass('selected')
+                $('.paramCoverId').val(fileId)
+              } else {
+                $fileUploadArea.find('.thumbnail-list li').find('.btnCover').removeClass('selected')
+                $('.paramCoverId').val('')
+              }
+            })
+          }
+
           // 파일첨부 클릭되었을때
           $dropZone.find('.openSelectFile').on('click', function (e) {
             e.preventDefault()
@@ -663,14 +685,21 @@
                 var thumbImageUrl = (data.result.thumbnails) ? data.result.thumbnails[2].url : ''
                 var media = data.result.media || {}
                 var mediaUrl = media.url || thumbImageUrl
-                var tmplImage = [
-                  '<li>',
-                  '   <img src="' + mediaUrl + '" alt="' + fileName + '">',
-                  '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>', // 본문에 넣기
-                  '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
-                  '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
-                  '</li>'
-                ].join('\n')
+                var tmplImage = []
+                tmplImage.push('<li>')
+                tmplImage.push('<img src="' + mediaUrl + '" alt="' + fileName + '">')
+                // 본문 삽입
+                tmplImage.push('<button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+                // 커버로 지정
+                if (useSetCover) {
+                  var selected = (coverId && coverId === file.id)
+                  tmplImage.push('<button type="button" class="btn-cover btnCover ' + (selected ? 'selected' : '') + '" data-id="' + file.id + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::setCover') + '</span></button>')
+                }
+                // 첨부 삭제
+                tmplImage.push('<button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+                tmplImage.push('<input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />')
+                tmplImage.push('</li>')
+                tmplImage = tmplImage.join('\n')
 
                 $thumbnaiList.append(tmplImage)
               } else {
@@ -688,7 +717,7 @@
                   '   <div class="xe-pull-right">',
                   btn,
                   '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans('ckeditor::addContentToBody') + '</button>', // 본문에 넣기
-                  '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
+                  '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
                   '       <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                   '   </div>',
                   '</li>'
@@ -739,14 +768,21 @@
                 var media = file.url || null
                 var thumbImageUrl = thumbnails.length > 0 ? thumbnails[thumbnails.length - 1].url : ''
                 var mediaUrl = file.url || thumbImageUrl
-                var tmplImage = [
-                  '<li>',
-                  '   <img src="' + mediaUrl + '" alt="' + fileName + '">',
-                  '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>', // 본문에 넣기
-                  '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
-                  '   <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
-                  '</li>'
-                ].join('\n')
+                var tmplImage = []
+                tmplImage.push('<li>')
+                tmplImage.push('<img src="' + mediaUrl + '" alt="' + fileName + '">')
+                // 본문에 넣기
+                tmplImage.push('<button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+                // 커버로 지정
+                if (useSetCover) {
+                  var selected = (coverId && coverId === file.id)
+                  tmplImage.push('<button type="button" class="btn-cover btnCover ' + (selected ? 'selected' : '') + '" data-id="' + file.id + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::setCover') + '</span></button>')
+                }
+                // 삭제
+                tmplImage.push('<button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+                tmplImage.push('<input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />')
+                tmplImage.push('</li>')
+                tmplImage = tmplImage.join('\n')
 
                 $thumbnaiList.append(tmplImage)
               } else {
@@ -767,7 +803,7 @@
                   '   <div class="xe-pull-right">',
                   btn,
                   '       <button type="button" class="btnAddFile" data-type="file" data-id="' + file.id + '" data-name="' + fileName + '">' + XE.Lang.trans('ckeditor::addContentToBody') + '</button>', // 본문에 넣기
-                  '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
+                  '       <button type="button" class="btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
                   '       <input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + id + '" />',
                   '   </div>',
                   '</li>'
@@ -784,6 +820,13 @@
             }
 
             $fileUploadArea.find('.file-view').removeClass('xe-hidden')
+          }
+
+          // 커버 이미지
+          if (useSetCover && that.props.options.names.cover) {
+            if (!$editorWrap.find('.' + that.props.options.names.cover.class).length) {
+              $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '">')
+            }
           }
         })
       },
