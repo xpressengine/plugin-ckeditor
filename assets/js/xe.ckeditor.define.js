@@ -824,7 +824,7 @@
 
           // 커버 이미지
           if (useSetCover && that.props.options.names.cover) {
-            if (!$editorWrap.find('.' + that.props.options.names.cover.class).length) {
+            if (!$editorWrap.find('.paramCoverId').length) {
               $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '">')
             }
           }
