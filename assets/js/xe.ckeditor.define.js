@@ -326,12 +326,17 @@
         var extensions = customOptions.extensions
         var uploadPermission = customOptions.perms.upload
         var files = customOptions.files || []
-        var useSetCover = true
+        var useSetCover = false
         var coverId = null
         var fileCount = 0
         var fileTotalSize = 0
 
         var that = this
+
+        if (this.props.options.cover) {
+          useSetCover = this.props.options.cover.use
+          coverId = this.props.options.cover.coverId
+        }
 
         that.on('instanceReady', function () {
           var $editorWrap = window.jQuery(editorWrapClass)
