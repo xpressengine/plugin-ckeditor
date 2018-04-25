@@ -207,17 +207,17 @@
         }
 
         if (fontFamily || fontSize) {
-          var bodyStyle = ''
+          var contentStyle = ''
 
           if (fontFamily && fontFamily.length > 0) {
-            bodyStyle += 'font-family:' + fontFamily.join(',')
+            contentStyle += 'font-family:' + fontFamily.join(',')
           }
 
           if (fontSize) {
-            bodyStyle += 'font-size:' + fontSize
+            contentStyle += 'font-size:' + fontSize
           }
 
-          CKEDITOR.addCss('body{' + bodyStyle + '}')
+          if (contentStyle) CKEDITOR.addCss('.cke_editable{' + contentStyle + '}')
         }
 
         if (customOptions.uploadActive) {
