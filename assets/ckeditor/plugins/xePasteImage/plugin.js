@@ -15,7 +15,7 @@ CKEDITOR.plugins.add('xePasteImage', {
 				var fileSize = file.size;
 				var extValid = false;
 
-				var attachFileSize = Utils.sizeFormatToBytes($('#' + editor.name).parent().find('.file-view .currentFilesSize').text()) + fileSize;
+				var attachFileSize = window.XE.Utils.sizeFormatToBytes($('#' + editor.name).parent().find('.file-view .currentFilesSize').text()) + fileSize;
 				var attachMaxSize = editor.config.attachMaxSize * 1024 * 1024;
 				var fileMaxSize = editor.config.fileMaxSize * 1024 * 1024;
 
@@ -82,7 +82,7 @@ CKEDITOR.plugins.add('xePasteImage', {
 							var fileCount = parseInt($('.fileCount').text(), 10) + 1;
 
 							//file size
-							var fileTotalSize = Utils.sizeFormatToBytes($(".currentFilesSize").text()) + fileSize;
+							var fileTotalSize = window.XE.Utils.sizeFormatToBytes($(".currentFilesSize").text()) + fileSize;
 							var thumbImageUrl = (data.thumbnails) ? data.thumbnails[2].url : ''
 							var tmplImage = [
 								'<li>',
@@ -101,7 +101,7 @@ CKEDITOR.plugins.add('xePasteImage', {
 							$(".fileCount").text(fileCount);
 
 							//첨부파일 용량 표시
-							$(".currentFilesSize").text(Utils.formatSizeUnits(fileTotalSize));
+							$(".currentFilesSize").text(window.XE.Utils.formatSizeUnits(fileTotalSize));
 
 							$('[data-src="' + thumbImageUrl + '"]').trigger('click');
 						}
@@ -134,7 +134,7 @@ CKEDITOR.plugins.add('xePasteImage', {
 
 			if(editor.config.perms.upload) {
 				if(bName == 'chrome') {
-					if(Utils.isURL(imageSrc)) {
+					if(window.XE.Utils.isURL(imageSrc)) {
 						currentExt = imageSrc.split('.').pop().split('?').shift().split('#').shift();
 
 						if(['jpg', 'jpeg', 'png', 'gif'].indexOf(currentExt) == -1) {

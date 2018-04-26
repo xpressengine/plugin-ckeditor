@@ -147,7 +147,7 @@
                 var flag = true;
                 var parser = this.getParser(obj.url);
 
-                if(!Utils.isURL(obj.url)) {
+                if(!window.XE.Utils.isURL(obj.url)) {
                     alert('url 형식이 맞지 않습니다.');
                     flag = false;
 
