@@ -558,6 +558,7 @@
             url: uploadUrl,
             type: 'post',
             dataType: 'json',
+            headers: XE.Request.options.headers,
             sequentialUploads: true,
             autoUpload: false,
             dropZone: $editorWrap.nextAll('.ckeditor-fileupload-area:first').find('.dropZone'),
