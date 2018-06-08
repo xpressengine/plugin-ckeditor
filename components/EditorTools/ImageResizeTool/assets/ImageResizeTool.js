@@ -23,7 +23,7 @@
 
           XE.Utils.openWindow(window.imageResizeURL.get('popup'), windowName, windowFeatures)
 
-          XEeditor.$once('editorTools.imageResizeTool.popup', function (eventName, obj) {
+          XEeditor.$$once('editorTools.imageResizeTool.popup', function (eventName, obj) {
             obj.init({
               targetEditor: targetEditor,
               appendToolContent: cbAppendToolContent,
