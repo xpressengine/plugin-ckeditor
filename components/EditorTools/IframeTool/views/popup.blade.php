@@ -231,6 +231,6 @@
     })(window.jQuery)
 
     window.jQuery(function($) {
-      window.opener.XEeditor.$emit('editorTools.IframeTool.popup', window.IframeTool)
+      window.opener.XEeditor.$$emit('editorTools.IframeTool.popup', window.IframeTool)
   })
 </script>

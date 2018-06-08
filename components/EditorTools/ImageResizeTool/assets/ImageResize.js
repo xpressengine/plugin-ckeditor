@@ -540,5 +540,5 @@ window.ImageResize = (function ($, XE) {
 })(window.jQuery, window.XE)
 
 window.jQuery(function ($) {
-  window.opener.XEeditor.$emit('editorTools.imageResizeTool.popup', window.ImageResize)
+  window.opener.XEeditor.$$emit('editorTools.imageResizeTool.popup', window.ImageResize)
 })

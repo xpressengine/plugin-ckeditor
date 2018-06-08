@@ -2615,6 +2615,6 @@
     })(window.jQuery);
 
     window.jQuery(function() {
-        window.opener.XEeditor.$emit('editorTools.xeicon.popup', window.XEIcon)
+        window.opener.XEeditor.$$emit('editorTools.xeicon.popup', window.XEIcon)
     })
 </script>

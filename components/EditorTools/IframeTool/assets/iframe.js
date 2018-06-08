@@ -14,7 +14,7 @@
         var targetEditor = editor.props.editor
         XE.Utils.openWindow(window.iframeToolURL.get('popup'), windowName, windowFeatures)
 
-        XEeditor.$once('editorTools.IframeTool.popup', function (eventName, obj) {
+        XEeditor.$$once('editorTools.IframeTool.popup', function (eventName, obj) {
           obj.init(targetEditor, cbAppendToolContent)
         })
       },

@@ -2614,6 +2614,6 @@
         };
     })(window.jQuery);
     window.jQuery(function() {
-        window.opener.XEeditor.$emit('editorTools.xeicon.popup_edit', window.XEIcon)
+        window.opener.XEeditor.$$emit('editorTools.xeicon.popup_edit', window.XEIcon)
     })
 </script>

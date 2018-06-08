@@ -14,7 +14,7 @@
         var targetEditor = editor.props.editor
         XE.Utils.openWindow(window.xeiconToolURL.get('popup'), windowName, windowFeatures)
 
-        XEeditor.$once('editorTools.xeicon.popup', function (eventName, obj) {
+        XEeditor.$$once('editorTools.xeicon.popup', function (eventName, obj) {
           obj.init(targetEditor, cbAppendToolContent)
         })
       },
@@ -23,7 +23,7 @@
 
         XE.Utils.openWindow(window.xeiconToolURL.get('edit_popup'), windowName, windowFeatures)
 
-        XEeditor.$once('editorTools.xeicon.popup_edit', function (eventName, obj) {
+        XEeditor.$$once('editorTools.xeicon.popup_edit', function (eventName, obj) {
           obj.init(_$this)
         })
       },
