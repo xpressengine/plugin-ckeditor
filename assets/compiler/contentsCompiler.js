@@ -4,6 +4,12 @@ window.jQuery(function ($) {
   var resizeImage = function (imageObject, maxWidth, maxHeight) {
     var $image = $(imageObject)
     var $tempImage = $('<img>')
+    var imageWidth = parseInt($image.css('width'), 10) || parseInt($image.attr('width'), 10) || null
+
+    // 지정된 이미지 폭이 maxWidth 보다 작을 경우 처리 안 함
+    if (imageWidth && imageWidth <= maxWidth) {
+      return
+    }
 
     $tempImage.on('load', function () {
       // 처음 resize 할 때 이미지 크기 기록
