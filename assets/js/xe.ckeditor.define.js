@@ -125,6 +125,14 @@
           e.editor.updateElement()
         })
 
+        if (CKEDITOR.env.iOS) {
+          editor.on('afterCommandExec', function (e) {
+            if (e.data.name === 'enter') {
+              $('.cke_editable', editor.container.$).blur().focus()
+            }
+          })
+        }
+
         // @FIXME ?
         this.addProps({
           editor: editor,
