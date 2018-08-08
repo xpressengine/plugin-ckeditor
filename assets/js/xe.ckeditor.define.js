@@ -183,6 +183,8 @@
         })
 
         this.on('instanceReady', function () {
+          editor.ui.space('contents').addClass('xe-content')
+
           window.jQuery('.' + editor.id).parents('form').on('submit', function () {
             var $this = window.jQuery(this)
             var $contents = window.jQuery(that.getContents())
