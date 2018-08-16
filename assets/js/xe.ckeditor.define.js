@@ -643,7 +643,7 @@
               }
 
               // [2]파일 사이즈
-              if (fSize > fileMaxSize * 1024 * 1024) {
+              if (fileMaxSize && fSize > fileMaxSize * 1024 * 1024) {
               // XE.toast("xe-warning", "파일 용량은 " + fileMaxSize + "MB를 초과할 수 없습니다. [" + uploadFileName + "]");
                 XE.toast(
                   'xe-warning',
@@ -657,7 +657,7 @@
 
               // [3]전체 파일 사이즈
               var fileTotalSize = window.XE.Utils.sizeFormatToBytes($fileUploadArea.find('.currentFilesSize').text())
-              if (attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
+              if (attachMaxSize && attachMaxSize * 1024 * 1024 < (fileTotalSize + fSize)) {
               // XE.toast("xe-warning", "전체 업로드 용량은 " + attachMaxSize + "MB를 초과할 수 없습니다.");
                 XE.toast('warning', XE.Lang.trans('ckeditor::msgAttachMaxSize', {attachMaxSize: attachMaxSize}))
                 valid = false
