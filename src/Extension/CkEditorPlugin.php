@@ -61,7 +61,6 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
             $path = str_replace(base_path(), '', realpath(__DIR__ . '/../../assets/compiler'));
             XeFrontend::js([
-                asset($path . '/contentsCompiler.js'),
                 asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
             ])->load();
             XeFrontend::css([

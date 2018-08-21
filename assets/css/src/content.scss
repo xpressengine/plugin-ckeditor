@@ -52,6 +52,11 @@ $font-size-base: 14px !default;
     border: 0px;
     border-top: 1px solid #ccc;
   }
+
+  img {
+    max-width: 100%;
+    height: auto !important;
+  }
 }
 
 .cke_editable {
