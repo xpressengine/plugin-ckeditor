@@ -17,6 +17,19 @@ return [
         'ko' => '첨부파일이 삭제되지 않았습니다.',
         'en' => 'Attached files are not deleted.'
     ],
+    'dropzoneAttach' => [
+        'ko' => '여기에 파일을 끌어 놓거나 :sAtag파일 첨부:eAtag를 클릭하세요.',
+        'en' => 'Drag and drop files here or :sAtagclick:eAtag',
+    ],
+    'dropzoneLimitSize' => [
+        'ko' => '파일 크기 제한 : :fileMaxSize',
+        'en' => 'Limited file size : :fileMaxSize',
+    ],
+    'dropzoneLimitExtension' => [
+        'ko' => '허용 확장자 : :extensions',
+        'en' => 'Allowed Extensions : :extensions',
+    ],
+    // @deprecated dropzoneLimit 3.0.0-rc.4
     'dropzoneLimit' => [
         'ko' => '여기에 파일을 끌어 놓거나 :sAtag파일 첨부:eAtag 를 클릭하세요. 파일 크기 제한 : :fileMaxSize (허용 확장자 : :extensions)',
         'en' => 'Drag and drop files here or click on the :sAtagattachedfile.:eAtag Limited file size : :fileMaxSize (Allowed Extensions : :extensions)',

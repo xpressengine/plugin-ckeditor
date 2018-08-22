@@ -350,18 +350,34 @@
 
         that.on('instanceReady', function () {
           var $editorWrap = window.jQuery(editorWrapClass)
+          var dropzoneMessage = []
+          dropzoneMessage.push(
+            XE.Lang.trans('ckeditor::dropzoneAttach', {
+              sAtag: '<a href="#" class="openSelectFile">',
+              eAtag: '</a>'
+            })
+          )
+          dropzoneMessage.push('<br>' + XE.Lang.trans('ckeditor::dropzoneLimitSize', {
+            fileMaxSize: window.XE.Utils.formatSizeUnits(fileMaxSize * 1024 * 1024)
+          }))
+
+          if (extensions.length && extensions[0] !== '*') {
+            dropzoneMessage.push(
+              XE.Lang.trans('ckeditor::dropzoneLimitExtension', {
+                extensions: extensions.join(', ')
+              })
+            )
+          }
+
           var uploadHtml = [
             '<!--에디터 파일 첨부 영역  -->',
             '<div class="file-attach-group">',
             '    <!--기본 파일첨부 -->',
             '    <div class="file-attach dropZone">',
             '        <div class="attach-info-text">',
-            '            <p>' + XE.Lang.trans('ckeditor::dropzoneLimit', {
-              fileMaxSize: window.XE.Utils.formatSizeUnits(fileMaxSize * 1024 * 1024),
-              extensions: extensions.join(', '),
-              sAtag: '<a href="#" class="openSelectFile">',
-              eAtag: '</a>'
-            }) + '</p>', // 여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
+            '            <p>',
+            dropzoneMessage.join(' '),
+            '            </p>', // 여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
             '        </div>',
             '    </div>',
             '    <!--//기본 파일첨부 -->',
@@ -380,10 +396,10 @@
             // <span class="fileCount">0</span>개 파일 첨부됨. (<span class="currentFilesSize">0MB</span>/' + window.XE.Utils.formatSizeUnits(attachMaxSize * 1024 * 1024) + ')
             '   <!--// 파일 업로드 시  -->',
             '    <div class="file-view xe-hidden">',
-            '        <strong>' + XE.Lang.trans('ckeditor::attachementDescription', {
+            '        <strong>' + XE.Lang.transChoice('ckeditor::attachementDescription', attachMaxSize, {
               fileCount: '<span class="fileCount">0</span>',
               currentFilesSize: '<span class="currentFilesSize">0MB</span>',
-              attachMaxSize: window.XE.Utils.formatSizeUnits(attachMaxSize * 1024 * 1024)
+              attachMaxSize: (attachMaxSize) ? window.XE.Utils.formatSizeUnits(attachMaxSize * 1024 * 1024) : ''
             }) + '</strong>',
             '        <ul class="thumbnail-list"></ul>',
             '        <ul class="file-attach-list"></ul>',
