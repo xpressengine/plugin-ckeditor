@@ -2,7 +2,7 @@
  * @description ckeditor library 로드가 선행되어야함
  **/
 (function ($, XE, CKEDITOR) {
-  XE.app('Editor').then(function (Editor) {
+  Promise.all([XE.app('Editor'), XE.app('Lang')]).then(([Editor, Lang]) => {
     Editor.define({
       /* 에디터 설정 */
       editorSettings: {
@@ -10,7 +10,7 @@
         configs: {
           skin: 'xe-minimalist',
           customConfig: '',
-          language: CKEDITOR.lang.languages.hasOwnProperty(XE.Lang.getCurrentLocale()) ? XE.Lang.getCurrentLocale() : 'en',
+          language: CKEDITOR.lang.languages.hasOwnProperty(Lang.getCurrentLocale()) ? Lang.getCurrentLocale() : 'en',
           contentsCss: [CKEDITOR.basePath + 'content.css'],
           on: {
             focus: function () {
