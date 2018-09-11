@@ -184,7 +184,7 @@
           })
 
           this.on('instanceReady', function () {
-            editor.ui.space('contents').addClass('xe-content')
+            editor.ui.space('contents').addClass('xe-content').addClass('xe-content-editable')
 
             window.jQuery('.' + editor.id).parents('form').on('submit', function () {
               var $this = window.jQuery(this)
