@@ -2,7 +2,7 @@
  * @description ckeditor library 로드가 선행되어야함
  **/
 (function ($, XE, CKEDITOR) {
-  XE.app('Editor').then((Editor) => {
+  XE.app('Editor').then(function (Editor) {
     Editor.define({
       /* 에디터 설정 */
       editorSettings: {
