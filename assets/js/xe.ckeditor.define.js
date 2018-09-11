@@ -2,7 +2,9 @@
  * @description ckeditor library 로드가 선행되어야함
  **/
 (function ($, XE, CKEDITOR) {
-  Promise.all([XE.app('Editor'), XE.app('Lang')]).then(function ([Editor, Lang]) {
+  Promise.all([XE.app('Editor'), XE.app('Lang')]).then(function (apps) {
+    var Editor = apps[0]
+    var Lang = apps[1]
     Editor.define({
       /* 에디터 설정 */
       editorSettings: {
