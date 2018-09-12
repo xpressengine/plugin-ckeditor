@@ -121,6 +121,10 @@ class CkEditor extends AbstractEditor
      */
     protected function compileBody($content)
     {
+        $this->frontend->css([
+            plugin::asset('assets/css/content.css')
+        ])->load();
+
         return sprintf('<div class="__xe_contents_compiler">%s</div>', $this->compilePlugins($content));
     }
 
