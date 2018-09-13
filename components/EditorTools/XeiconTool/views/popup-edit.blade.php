@@ -2575,7 +2575,7 @@
             bindEvent: function() {
                 var _this = this;
 
-                $(window).on('load', _this.preventReloading);
+                $(window).on('load', _this.preventReloading.bind(this));
 
                 this.$searchInput.on('keyup', function(e) {
                     var value = e.target.value;

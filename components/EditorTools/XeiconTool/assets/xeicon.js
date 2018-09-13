@@ -27,7 +27,7 @@
       events: {
         iconClick: function (editor, cbAppendToolContent) {
           var targetEditor = editor.props.editor
-          $$.openWindow(window.xeiconToolURL.get('popup'), windowName, windowFeatures)
+          window.open(window.xeiconToolURL.get('popup'), windowName, 'width=980,height=600')
 
           Editor.$$once('editorTools.xeicon.popup', function (eventName, obj) {
             obj.init(targetEditor, cbAppendToolContent)
@@ -36,7 +36,7 @@
         elementDoubleClick: function () {
           var _$this = $(this)
 
-          $$.openWindow(window.xeiconToolURL.get('edit_popup'), windowName, windowFeatures)
+          window.open(window.xeiconToolURL.get('edit_popup'), windowName, 'width=980,height=600')
 
           Editor.$$once('editorTools.xeicon.popup_edit', function (eventName, obj) {
             obj.init(_$this)

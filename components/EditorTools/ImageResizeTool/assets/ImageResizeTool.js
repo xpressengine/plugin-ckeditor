@@ -32,7 +32,8 @@
             var fileMaxSize = targetEditor.config.fileMaxSize
             var extensions = targetEditor.config.extensions
 
-            XE.Utils.openWindow(window.imageResizeURL.get('popup'), windowName, windowFeatures)
+            // XE.Utils.openWindow(window.imageResizeURL.get('popup'), windowName, windowFeatures)
+            window.open(window.imageResizeURL.get('popup'), windowName, 'width=850,height=970')
 
             Editor.$$once('editorTools.imageResizeTool.popup', function (eventName, obj) {
               obj.init({

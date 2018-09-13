@@ -26,7 +26,8 @@
       events: {
         iconClick: function (editor, cbAppendToolContent) {
           var targetEditor = editor.props.editor
-          XE.Utils.openWindow(window.iframeToolURL.get('popup'), windowName, windowFeatures)
+          // XE.Utils.openWindow(window.iframeToolURL.get('popup'), windowName, windowFeatures)
+          window.open(window.iframeToolURL.get('popup'), windowName, 'width=450,height=500')
 
           Editor.$$once('editorTools.IframeTool.popup', function (eventName, obj) {
             obj.init(targetEditor, cbAppendToolContent)

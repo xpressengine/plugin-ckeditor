@@ -41,7 +41,7 @@ window.ImageResize = (function ($, XE) {
       this.$btnToggleCrop = $('#btnToggleCrop')
     },
     bindEvents: function () {
-      $(window).on('load', this.preventReloading)
+      $(window).on('load', this.preventReloading.bind(this))
 
       this.$imageFile.on('change', this.changeFile)
       this.$btnSelectImage.on('click', function () {
@@ -73,7 +73,7 @@ window.ImageResize = (function ($, XE) {
     preventReloading: function () {
       if (!this.appendToolContent) {
         alert('팝업을 재실행 하세요.')
-        // window.close()
+        window.close()
       }
     },
     isValidUpload: function (blob) {
@@ -111,7 +111,7 @@ window.ImageResize = (function ($, XE) {
         alert('파일 업로드 파일 크기 제한 [' + XE.Utils.formatSizeUnits(uploadInfo.fileMaxSize * 1024 * 1024) + ']')
 
         return false
-      } else if (attachFileSize > attachMaxSize * 1024 * 1024) {
+      } else if (uploadInfo.attachMaxSize && attachFileSize > attachMaxSize * 1024 * 1024) {
         alert('파일 업로드는 최대 ' + XE.Utils.formatSizeUnits(uploadInfo.attachMaxSize * 1024 * 1024) + '까지만 가능합니다.')
 
         return false
