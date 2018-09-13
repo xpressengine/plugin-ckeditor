@@ -125,6 +125,7 @@ class CkEditor extends AbstractEditor
             plugin::asset('assets/css/content.css')
         ])->load();
 
+        // @deprecated `.__xe_contents_compiler` https://github.com/xpressengine/xpressengine/issues/867
         return sprintf('<div class="__xe_contents_compiler">%s</div>', $this->compilePlugins($content));
     }
 

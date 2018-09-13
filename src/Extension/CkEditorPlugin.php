@@ -50,7 +50,7 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
 
         return implode('', [
             $object->contentCompile($content),
-            '<script>$(function () { hljs.initHighlightingOnLoad(); })</script>',
+            '<script>$(function () { hljs.initHighlightingOnLoad(); })</script>', // @fixme
         ]);
     }
 
@@ -59,13 +59,13 @@ class CkEditorPlugin extends AbstractComponent implements CkEditorPluginInterfac
         if (self::$loaded === false) {
             self::$loaded = true;
 
-            $path = str_replace(base_path(), '', realpath(__DIR__ . '/../../assets/compiler'));
+            $path = str_replace(base_path(), '', realpath(__DIR__ . '/../../assets'));
             XeFrontend::js([
-                asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
+                asset($path . '/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
             ])->load();
             XeFrontend::css([
-                asset($path . '/hashTag.css'),
-                asset($path . '/../ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'),
+                asset($path . '/compiler/hashTag.css'),
+                asset($path . '/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'),
             ])->load();
         }
     }

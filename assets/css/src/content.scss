@@ -3,8 +3,9 @@ $font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mon
 $font-family-base: $font-family-sans-serif !default;
 $font-size-base: 14px !default;
 
+xe-content,
 .xe-content,
-.xe_content, // @FIXME
+.xe_content, // @deprecated `.xe_content` https://github.com/xpressengine/xpressengine/issues/867
 .cke_editable {
   font-family: $font-family-base;
   font-size: $font-size-base;
