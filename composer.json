@@ -45,6 +45,11 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\ImageResizeTool\\ImageResizeTool",
           "name": "이미지 편집 툴",
           "description": "이미지 리사이즈, 편집 에디터툴"
+        },
+        "editortool/code_tool@code": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\CodeTool\\CodeTool",
+          "name": "Code Highlight",
+          "description": "code 태그에 Code Highlight 기능을 적용"
         }
       }
     }
