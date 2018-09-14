@@ -261,10 +261,11 @@
               // icon추가
               editorOption.options.icon = toolInfoList[i].icon
 
-              editor.ui.add(editorOption.name, CKEDITOR.UI_BUTTON, editorOption.options)
+              if (editorOption.options.icon) {
+                editor.ui.add(editorOption.name, CKEDITOR.UI_BUTTON, editorOption.options)
+              }
 
-              if (editorOption.hasOwnProperty('options') &&
-                          editorOption.options.hasOwnProperty('command')) {
+              if (editorOption.options.icon && editorOption.hasOwnProperty('options') && editorOption.options.hasOwnProperty('command')) {
                 editor.addCommand(editorOption.options.command, (function (component) {
                   return {
                     exec: function (editor) {
