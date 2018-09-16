@@ -50,6 +50,11 @@
           "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\CodeTool\\CodeTool",
           "name": "Code Highlight",
           "description": "code 태그에 Code Highlight 기능을 적용"
+        },
+        "editortool/autolink_tool@autolink": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\AutolinkTool\\AutolinkTool",
+          "name": "Autolink",
+          "description": "URL 자동 링크"
         }
       }
     }
