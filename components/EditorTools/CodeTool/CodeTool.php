@@ -44,6 +44,7 @@ class CodeTool extends AbstractTool
                     var codeBlock = $(element).find(\'pre code\')
                     if(codeBlock.length) {
                         hljs.highlightBlock(codeBlock[0]);
+                        window.XE.$$emit(\'content.updated.codeHighlight\', codeBlock[0])
                     }
                 })
             </script>
