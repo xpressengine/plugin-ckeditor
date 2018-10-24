@@ -40,7 +40,7 @@ class CodeTool extends AbstractTool
     {
         XeFrontend::html('ckeditor.code_tool.highlight_block')->content('
             <script>
-                window.XE.$$on(\'content.render\', function (eventName, element) {
+                window.XE.$$on(\'content.render\', function (eventName, { element }) {
                     var codeBlock = $(element).find(\'pre code\')
                     if(codeBlock.length) {
                         hljs.highlightBlock(codeBlock[0]);
