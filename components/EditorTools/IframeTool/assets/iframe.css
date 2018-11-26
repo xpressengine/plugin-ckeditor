@@ -1,0 +1,10 @@
+.xe-embed-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  width: 100%;
+}
+.xe-embed-video iframe {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}

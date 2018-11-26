@@ -116,27 +116,49 @@ class IframeTool extends AbstractTool
         $data = $crawler->filter('*[xe-tool-data]')->eq(0)->attr('xe-tool-data');
         $data = str_replace("'", '"', $data);
         $data = json_decode($data, true);
-
         $source = array_get($data, 'src');
-        if (!$source || !in_array(parse_url($source, PHP_URL_HOST), $this->getWhiteList())) {
+        $host = parse_url($source, PHP_URL_HOST);
+
+        if (!$source || !in_array($host, $this->getWhiteList())) {
             return '';
         }
 
-        $attr = 'src="'.$data['src'].'" ';
+        XeFrontend::css([
+            asset($this->getAssetsPath() . '/iframe.css')
+        ])->load();
 
-        if(array_get($data, 'width')) {
-            $attr .= 'width="'.$data['width'].'" ';
+        $attr = array();
+        $result = array();
+        $embedVideo = false;
+        $attr[] = 'src="'.$data['src'].'"';
+
+        if (array_get($data, 'width')) {
+            $attr[] = 'width="'.$data['width'].'"';
         }
 
-        if(array_get($data, 'height')) {
-            $attr .= 'height="'.$data['height'].'" ';
+        if (array_get($data, 'height')) {
+            $attr[] = 'height="'.$data['height'].'"';
         }
 
-        if(array_get($data, 'scrolling')) {
-            $attr .= 'scrolling="'.$data['scrolling'].'" ';
+        if (array_get($data, 'scrolling')) {
+            $attr[] = 'scrolling="'.$data['scrolling'].'"';
         }
 
-        return '<iframe '.$attr.'></iframe>';
+        if (in_array($host, ['youtube.com', 'www.youtube.com', 'youtu.be'])) {
+            $embedVideo = true;
+        }
+
+        if ($embedVideo) {
+            $result[] = '<div class="xe-embed xe-embed-video">';
+        }
+
+        $result[] = '<iframe ' . implode($attr, ' ') . '></iframe>';
+
+        if ($embedVideo) {
+            $result[] = '</div>';
+        }
+
+        return implode($result);
     }
 
     private function getAssetsPath()
