@@ -552,7 +552,6 @@
 
             // 커버 이미지 선택
             if (useSetCover) {
-              console.debug('that.props.options.names', that.props.options.names, that.props.options)
               $fileUploadArea.on('click', '.btnCover', function () {
                 if (!that.props.options.names.cover) return
 
@@ -862,7 +861,9 @@
             // 커버 이미지
             if (useSetCover && that.props.options.names.cover) {
               if (!$editorWrap.find('.paramCoverId').length) {
-                $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '">')
+                var coverId = (that.props.options.cover.coverId) ? that.props.options.cover.coverId : ''
+                console.debug('coverId', coverId)
+                $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '" value="' + coverId + '">')
               }
             }
           })
