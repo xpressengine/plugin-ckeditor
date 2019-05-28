@@ -861,9 +861,8 @@
             // 커버 이미지
             if (useSetCover && that.props.options.names.cover) {
               if (!$editorWrap.find('.paramCoverId').length) {
-                var coverId = (that.props.options.cover.coverId) ? that.props.options.cover.coverId : ''
-                console.debug('coverId', coverId)
-                $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '" value="' + coverId + '">')
+                var _coverId = (that.props.options.cover.coverId) ? that.props.options.cover.coverId : ''
+                $editorWrap.append('<input type="hidden" class="paramCoverId" name="' + that.props.options.names.cover.input + '" value="' + _coverId + '">')
               }
             }
           })
