@@ -552,6 +552,7 @@
 
             // 커버 이미지 선택
             if (useSetCover) {
+              console.debug('that.props.options.names', that.props.options.names, that.props.options)
               $fileUploadArea.on('click', '.btnCover', function () {
                 if (!that.props.options.names.cover) return
 
@@ -565,7 +566,7 @@
                   $this.addClass('selected')
                   $('[name=' + that.props.options.names.cover.input + ']').val(fileId)
                 } else {
-                  $('[name=' + that.props.options.names.cover.input + ']').val(fileId)
+                  $('[name=' + that.props.options.names.cover.input + ']').val('')
                 }
               })
             }
