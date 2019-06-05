@@ -37,7 +37,7 @@ class ComponentController extends Controller
             asset('assets/vendor/bootstrap/css/bootstrap.min.css'),
             asset('assets/vendor/jqueryui/jquery-ui.min.css'),
             Plugin::asset('components/EditorTools/ImageResizeTool/assets/vendor/cropper/cropper.min.css'),
-        ])->appendTo('head')->load();
+        ])->load();
 
         XeFrontend::js([
             asset('assets/vendor/jqueryui/jquery-ui.min.js'),
