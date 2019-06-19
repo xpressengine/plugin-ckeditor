@@ -382,6 +382,7 @@
               '            <p>',
               dropzoneMessage.join(' '),
               '            </p>', // 여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
+              '<p><button type="button" class="__xe-media-library">미디어 라이브러리</button></p>',
               '        </div>',
               '    </div>',
               '    <!--//기본 파일첨부 -->',
@@ -422,6 +423,52 @@
             var $thumbnaiList = $fileUploadArea.find('.thumbnail-list')
             var $fileAttachList = $fileUploadArea.find('.file-attach-list')
             var $videoList = $fileUploadArea.find('.video-list')
+
+            // START:미디어 라이브러리 연동
+            Promise.all([XE.app('MediaManager'), XE.app('Lang')]).then(function (apps) {
+              var MediaLibrary = apps[0]
+              var Lang = apps[1]
+              MediaLibrary.$$on('modal.open', function (eventName) {
+                console.debug('ML:$on:modal.open', arguments)
+              })
+
+              MediaLibrary.$$on('media.import', function (eventName, mediaList) {
+                console.debug('ML:$on:media.import', mediaList)
+                mediaList.forEach((media) => {
+                  if (window.XE.Utils.isImage(media.file.mime)) {
+                    var thumbImageUrl = media.thumbnailUrl
+                    var mediaUrl = thumbImageUrl
+                    var tmplImage = []
+                    tmplImage.push('<li>')
+                    tmplImage.push('<img src="' + mediaUrl + '" alt="' + fileName + '">')
+                    // 본문 삽입
+                    tmplImage.push('<button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + media.file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+                    // 커버로 지정
+                    if (useSetCover) {
+                      var selected = (coverId && coverId === media.file.id)
+                      tmplImage.push('<button type="button" class="btn-cover btnCover ' + (selected ? 'selected' : '') + '" data-id="' + media.file.id + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::setCover') + '</span></button>')
+                    }
+                    // 첨부 삭제
+                    tmplImage.push('<button type="button" class="btn-delete btnDelFile" data-id="' + media.file.id + '" data-size="' + media.file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+                    tmplImage.push('<input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + media.file.id + '" />')
+                    tmplImage.push('</li>')
+                    tmplImage = tmplImage.join('\n')
+
+                    $thumbnaiList.append(tmplImage)
+                  }
+                })
+              })
+
+              $('.write_body').on('click', '.__xe-media-library', function () {
+                MediaLibrary.open({
+                  $thumbnaiList: $thumbnaiList
+                })
+                  .then((mediaLibrary) => {
+                    console.debug('open.then', mediaLibrary)
+                  })
+              })
+            })
+            // END:미디어 라이브러리 연동
 
             // 이미지 본문 삽입
             $thumbnaiList.on('click', '.btnAddImage', function () {
