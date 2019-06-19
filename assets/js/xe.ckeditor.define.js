@@ -459,7 +459,7 @@
                 })
               })
 
-              $('.write_body').on('click', '.__xe-media-library', function () {
+              $('.ckeditor-fileupload-area').on('click', '.__xe-media-library', function () {
                 MediaLibrary.open({
                   $thumbnaiList: $thumbnaiList
                 })
