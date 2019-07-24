@@ -244,9 +244,7 @@
           CKEDITOR.instances[this.props.selector].setData(text)
         },
         addContents: function (text) {
-        // CKEDITOR.instances[this.props.selector].insertHtml(text)
-          var el = CKEDITOR.dom.element.createFromHtml(text)
-          CKEDITOR.instances[this.props.selector].insertElement(el)
+          CKEDITOR.instances[this.props.selector].insertHtml(text)
         },
         addTools: function (toolsMap, toolInfoList) {
           var editor = this.props.editor
@@ -373,6 +371,12 @@
               )
             }
 
+            // mediaLibrary
+            var mediaLibraryHtml = ''
+            if (customOptions.perms.medialibrary === true) {
+              mediaLibraryHtml = '<p><button type="button" class="xe-btn xe-btn-normal __xe-media-library"><i class="xi-library-image-o"></i> 미디어 라이브러리</button></p>'
+            }
+
             var uploadHtml = [
               '<!--에디터 파일 첨부 영역  -->',
               '<div class="file-attach-group">',
@@ -382,7 +386,7 @@
               '            <p>',
               dropzoneMessage.join(' '),
               '            </p>', // 여기에 파일을 끌어 놓거나 파일 첨부를 클릭하세요. 파일 크기 제한 : 2.00MB (허용 확장자 : *.*)
-              '<p><button type="button" class="__xe-media-library">미디어 라이브러리</button></p>',
+              mediaLibraryHtml,
               '        </div>',
               '    </div>',
               '    <!--//기본 파일첨부 -->',
@@ -425,47 +429,40 @@
             var $videoList = $fileUploadArea.find('.video-list')
 
             // START:미디어 라이브러리 연동
-            Promise.all([XE.app('MediaManager'), XE.app('Lang')]).then(function (apps) {
-              var MediaLibrary = apps[0]
-              var Lang = apps[1]
-              MediaLibrary.$$on('modal.open', function (eventName) {
-                console.debug('ML:$on:modal.open', arguments)
-              })
-
-              MediaLibrary.$$on('media.import', function (eventName, mediaList) {
-                console.debug('ML:$on:media.import', mediaList)
+            XE.app('MediaLibrary').then(function (appMediaLibrary) {
+              appMediaLibrary.$$on('media.import', function (eventName, mediaList) {
                 mediaList.forEach((media) => {
                   if (window.XE.Utils.isImage(media.file.mime)) {
-                    var thumbImageUrl = media.thumbnailUrl
+                    var thumbImageUrl = media.file.url
                     var mediaUrl = thumbImageUrl
-                    var tmplImage = []
-                    tmplImage.push('<li>')
-                    tmplImage.push('<img src="' + mediaUrl + '" alt="' + fileName + '">')
-                    // 본문 삽입
-                    tmplImage.push('<button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + mediaUrl + '" data-id="' + media.file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::addContentToBody') + '</span></button>')
-                    // 커버로 지정
-                    if (useSetCover) {
-                      var selected = (coverId && coverId === media.file.id)
-                      tmplImage.push('<button type="button" class="btn-cover btnCover ' + (selected ? 'selected' : '') + '" data-id="' + media.file.id + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::setCover') + '</span></button>')
-                    }
-                    // 첨부 삭제
-                    tmplImage.push('<button type="button" class="btn-delete btnDelFile" data-id="' + media.file.id + '" data-size="' + media.file.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
-                    tmplImage.push('<input type="hidden" name="' + customOptions.names.file.input + '[]" value="' + media.file.id + '" />')
-                    tmplImage.push('</li>')
-                    tmplImage = tmplImage.join('\n')
+                    var imageHtml = [
+                      '<img',
+                      'src="' + mediaUrl + '"',
+                      'class="' + customOptions.names.file.image.class + '"',
+                      'xe-file-id="' + media.file.id + '"',
+                      customOptions.names.file.identifier + '="' + media.file.id + '"',
+                      '/>'
+                    ].join(' ')
 
-                    $thumbnaiList.append(tmplImage)
+                    that.addContents(imageHtml)
+                  } else {
+                    var fileHtml = [
+                      '<a href="' + media.file.url + '"',
+                      'class="' + customOptions.names.file.class + '"',
+                      'xe-file-id="' + media.file.id + '"',
+                      customOptions.names.file.identifier + '="' + media.file.id + '"',
+                      '>' + media.title + '</a>'
+                    ].join(' ')
+
+                    that.addContents(fileHtml)
                   }
                 })
               })
 
               $('.ckeditor-fileupload-area').on('click', '.__xe-media-library', function () {
-                MediaLibrary.open({
+                appMediaLibrary.open({
                   $thumbnaiList: $thumbnaiList
                 })
-                  .then((mediaLibrary) => {
-                    console.debug('open.then', mediaLibrary)
-                  })
               })
             })
             // END:미디어 라이브러리 연동
@@ -474,13 +471,13 @@
             $thumbnaiList.on('click', '.btnAddImage', function () {
               var $this = window.jQuery(this)
               var imageHtml = [
-                '<img ',
-                "src='" + $this.data('src') + "' ",
-                "class='" + customOptions.names.file.image.class + "' ",
-                "xe-file-id='" + $this.attr(customOptions.names.file.image.identifier) + "' ",
-                customOptions.names.file.image.identifier + "='" + $this.attr(customOptions.names.file.image.identifier),
-                "' />"
-              ].join('')
+                '<img',
+                'src="' + $this.data('src') + '"',
+                'class="' + customOptions.names.file.image.class + '"',
+                'xe-file-id="' + $this.attr(customOptions.names.file.image.identifier) + '"',
+                customOptions.names.file.image.identifier + '="' + $this.attr(customOptions.names.file.image.identifier) + '"',
+                '/>'
+              ].join(' ')
 
               that.addContents(imageHtml)
             })
