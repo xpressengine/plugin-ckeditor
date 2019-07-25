@@ -1,14 +1,15 @@
 <?php
 /**
- * CkEditorPluginInterface
+ * CkEditor
+ *
+ * PHP version 7
  *
  * @category    CkEditor
- * @package     CkEditor
- * @author    XE Developers <developers@xpressengine.com>
- * @copyright 2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license   LGPL-2.1
- * @license   http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
- * @link      https://xpressengine.io
+ * @package     Xpressengine\Plugins\CkEditor
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
  */
 
 namespace Xpressengine\Plugins\CkEditor;
@@ -19,7 +20,11 @@ namespace Xpressengine\Plugins\CkEditor;
  * CkEditor 모듈에 plugin 을 등록하려면 이 interface 를 사용하세요.
  *
  * @category    CkEditor
- * @package     CkEditor
+ * @package     Xpressengine\Plugins\CkEditor
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
  */
 interface CkEditorPluginInterface
 {

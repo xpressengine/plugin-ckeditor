@@ -1,4 +1,17 @@
 <?php
+/**
+ * AutolinkTool
+ *
+ * PHP version 7
+ *
+ * @category    CkEditor
+ * @package     Xpressengine\Plugins\CkEditor
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
+
 namespace Xpressengine\Plugins\CkEditor\Components\EditorTools\AutolinkTool;
 
 use App\Facades\XeFrontend;
@@ -9,6 +22,16 @@ use XePresenter;
 use Xpressengine\Plugins\CkEditor\Plugin;
 use Xpressengine\Http\Request;
 
+/**
+ * AutolinkTool
+ *
+ * @category    CkEditor
+ * @package     Xpressengine\Plugins\CkEditor
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
+ */
 class AutolinkTool extends AbstractTool
 {
     /**
