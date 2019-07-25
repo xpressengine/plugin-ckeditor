@@ -2,12 +2,13 @@
 /**
  * CkEditor
  *
+ * PHP version 7
+ *
  * @category    CkEditor
- * @package     CkEditor
+ * @package     Xpressengine\Plugins\CkEditor
  * @author      XE Developers <developers@xpressengine.com>
- * @copyright   2015 Copyright (C) NAVER Corp. <http://www.navercorp.com>
- * @license     LGPL-2.1
- * @license     http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
  * @link        https://xpressengine.io
  */
 
@@ -25,7 +26,11 @@ use Illuminate\Contracts\Auth\Access\Gate;
  * CkEditor
  *
  * @category    CkEditor
- * @package     CkEditor
+ * @package     Xpressengine\Plugins\CkEditor
+ * @author      XE Developers <developers@xpressengine.com>
+ * @copyright   2019 Copyright XEHub Corp. <https://www.xehub.io>
+ * @license     http://www.gnu.org/licenses/lgpl-3.0-standalone.html LGPL
+ * @link        https://xpressengine.io
  */
 class CkEditor extends AbstractEditor
 {
