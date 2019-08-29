@@ -92,6 +92,19 @@ class CkEditor extends AbstractEditor
 
             $keywords = array_keys($lang);
 
+            expose_route('media_library.index');
+            expose_route('media_library.drop');
+            expose_route('media_library.get_folder');
+            expose_route('media_library.store_folder');
+            expose_route('media_library.update_folder');
+            expose_route('media_library.move_folder');
+            expose_route('media_library.get_file');
+            expose_route('media_library.update_file');
+            expose_route('media_library.modify_file');
+            expose_route('media_library.move_file');
+            expose_route('media_library.upload');
+            expose_route('media_library.download_file');
+
             $this->frontend->translation(array_map(function ($keyword) {
                 return 'ckeditor::' . $keyword;
             }, $keywords));
