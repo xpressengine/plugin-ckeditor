@@ -431,7 +431,7 @@
             // START:미디어 라이브러리 연동
             XE.app('MediaLibrary').then(function (appMediaLibrary) {
               appMediaLibrary.$$on('media.import', function (eventName, mediaList) {
-                mediaList.forEach((media) => {
+                mediaList.forEach(function (media) {
                   if (window.XE.Utils.isImage(media.file.mime)) {
                     var thumbImageUrl = media.file.url
                     var mediaUrl = thumbImageUrl
