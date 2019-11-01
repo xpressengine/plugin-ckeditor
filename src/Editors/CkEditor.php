@@ -80,11 +80,13 @@ class CkEditor extends AbstractEditor
                 'assets/vendor/jQuery-File-Upload/js/jquery.fileupload.js',
                 plugin::asset('assets/ckeditor/ckeditor.js'),
                 plugin::asset('assets/ckeditor/styles.js'),
-                plugin::asset('assets/js/xe.ckeditor.define.js')
+                plugin::asset('assets/js/media_library.widget.js'),
+                plugin::asset('assets/js/xe.ckeditor.define.js'),
             ])->before('assets/core/editor/editor.bundle.js')->load();
 
             $this->frontend->css([
                 plugin::asset('assets/css/editor.css'),
+                plugin::asset('assets/css/media_library.widget.css'),
                 plugin::asset('assets/css/content.css')
             ])->load();
 
