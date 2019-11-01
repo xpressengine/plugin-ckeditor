@@ -1,6 +1,6 @@
 ﻿/**
- * @license Copyright (c) 2003-2018, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or https://ckeditor.com/license
  */
 
 /**
@@ -10,13 +10,13 @@
  * If you would like to build CKEditor online again
  * (for example to upgrade), visit one the following links:
  *
- * (1) http://ckeditor.com/builder
+ * (1) https://ckeditor.com/cke4/builder
  *     Visit online builder to build CKEditor from scratch.
  *
- * (2) http://ckeditor.com/builder/4703b685c3c692960d75a4cb7ba57228
+ * (2) https://ckeditor.com/cke4/builder/ce2b0e09d70d82d06539d5be60cea763
  *     Visit online builder to build CKEditor, starting with the same setup as before.
  *
- * (3) http://ckeditor.com/builder/download/4703b685c3c692960d75a4cb7ba57228
+ * (3) https://ckeditor.com/cke4/builder/download/ce2b0e09d70d82d06539d5be60cea763
  *     Straight download link to the latest version of CKEditor (Optimized) with the same setup as before.
  *
  * NOTE:
@@ -38,6 +38,7 @@ var CKBUILDER_CONFIG = {
 		'.jshintignore',
 		'.jshintrc',
 		'.mailmap',
+		'.npm',
 		'.travis.yml',
 		'bender-err.log',
 		'bender-out.log',
@@ -68,8 +69,9 @@ var CKBUILDER_CONFIG = {
 		'font' : 1,
 		'format' : 1,
 		'horizontalrule' : 1,
+		'html5video' : 1,
 		'htmlwriter' : 1,
-		'image' : 1,
+		'image2' : 1,
 		'indentlist' : 1,
 		'justify' : 1,
 		'link' : 1,
@@ -77,8 +79,6 @@ var CKBUILDER_CONFIG = {
 		'magicline' : 1,
 		'maximize' : 1,
 		'pagebreak' : 1,
-		'pastefromword' : 1,
-		'pastetext' : 1,
 		'removeformat' : 1,
 		'resize' : 1,
 		'scayt' : 1,
@@ -92,6 +92,7 @@ var CKBUILDER_CONFIG = {
 		'toolbar' : 1,
 		'undo' : 1,
 		'widget' : 1,
+		'wordcount' : 1,
 		'wysiwygarea' : 1
 	},
 	languages : {
