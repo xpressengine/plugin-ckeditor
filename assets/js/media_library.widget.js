@@ -111,8 +111,8 @@ window.$(function ($) {
         },
         title: payload.title || payload.clientname,
         imageUrl: XE._.get(payload, 'file.url', payload.url),
-        mediaId: (payload.fileId) ? XE._.get(payload, 'id', '') : '',
-        fileId: XE._.get(payload, 'fileId', payload.id || ''),
+        mediaId: (payload.file_id) ? XE._.get(payload, 'id', '') : '',
+        fileId: XE._.get(payload, 'file_id', payload.id || ''),
         size: payload.size
       }
     },
