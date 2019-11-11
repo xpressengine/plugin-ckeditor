@@ -10,12 +10,12 @@ window.$(function ($) {
       },
       allowedExtensions: ['*'],
       coverId: null,
-      useSetCover: false
-    },
-
-    _$el: {
-      dropZone: null,
-      fileListContainer: null
+      useSetCover: false,
+      $el: {
+        dropZone: null,
+        progressbarContainer: null,
+        fileListContainer: null
+      }
     },
 
     // The constructor
@@ -26,6 +26,7 @@ window.$(function ($) {
 
     _refresh: function () {
       this._initDropZone()
+      this._initProgressbar()
       this._initFileList()
       this._initMediaLibrary()
       this._renderFiles()
@@ -47,45 +48,70 @@ window.$(function ($) {
     _initMediaLibrary: function () {
       var that = this
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
-        console.debug('appMediaLibrary', appMediaLibrary)
-        appMediaLibrary._componentBoot({
-          renderMode: 'widget',
-          fileuploaderOptions: {}
-        }).then(function () {
-          appMediaLibrary.setupDropzone($('.wrap-ckeditor-fileupload input[name=file]'), {
-            dropZone: that.element,
-            dragover: function () {
-              that.element.addClass('drag')
-            },
-            dragleave: function () {
-              that.element.removeClass('drag')
-            },
-            drop: function () {
-              that.element.removeClass('drag')
-            }
-          })
+        console.debug('_initMediaLibrary', that.element)
+        appMediaLibrary.createUploader(that.element.find('input[name=file]'), {}, {
+          dropZone: that.element,
+          dragover: function () {
+            that.element.addClass('drag')
+          },
+          dragleave: function () {
+            that.element.removeClass('drag')
+          },
+          drop: function () {
+            that.element.removeClass('drag')
+          }
+        })
 
-          XE.MediaLibrary.$$on('media.uploaded', function (eventName, media) {
-            that._renderMedia(media)
-            console.debug('@', eventName, media)
-          })
+        XE.MediaLibrary.$$on('done.progress', function (eventName, payload) {
+          that._updateProgress($.extend({}, {
+            type: 'done',
+            percent: 100
+          }))
+        })
+
+        XE.MediaLibrary.$$on('update.progress', function (eventName, payload) {
+          that._updateProgress($.extend({}, payload.data, {
+            type: 'update',
+            percent: parseInt(payload.data.loaded / payload.data.total * 100, 10)
+          }))
+        })
+
+        XE.MediaLibrary.$$on('media.uploaded', function (eventName, media) {
+          that._renderMedia(media)
         })
       })
     },
 
+    _updateProgress: function (progress) {
+      this.options.$el.progressbarContainer.find('.xefu-progressbar__block').text(progress.percent)
+
+      if (progress.percent === 100) {
+        this.options.$el.progressbarContainer.show().addClass('xe-hidden')
+      } else {
+        this.options.$el.progressbarContainer.show().removeClass('xe-hidden')
+      }
+    },
+
     _initDropZone: function () {
-      if (!this._$el.dropZone) {
+      console.debug('this.options.$el.dropZone', this.options.$el.dropZone)
+      if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess.dropZone)
-        // .append('<div class="ckeditor-fileupload-area"><div class="wrap-ckeditor-fileupload"></div></div>')
-        this._$el.dropZone = $('<div class="file-attach"><label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + '" name="file" multiple /></label> 클릭하던지 끌어다놔라</div>')
-        this.element.append(this._$el.dropZone)
+        this.options.$el.dropZone = $('<div class="file-attach"><label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + '" name="file" multiple /></label> 클릭하던지 끌어다놔라</div>')
+        this.element.append(this.options.$el.dropZone)
+      }
+    },
+
+    _initProgressbar: function () {
+      if (!this.options.$el.progressbarContainer) {
+        this.options.$el.progressbarContainer = $('<div class="xefu-progress-container xe-hidden"><div class="xefu-progressbar"><div class="xefu-progressbar__block"></div></div></div>')
+        this.element.append(this.options.$el.progressbarContainer)
       }
     },
 
     _initFileList: function () {
-      if (!this._$el.fileListContainer) {
-        this._$el.fileListContainer = $('<div class="' + this.options.classess.fileListContainer + ' xe-hidden"><ul class="thumbnail-list"></ul></div>')
-        this.element.append(this._$el.fileListContainer)
+      if (!this.options.$el.fileListContainer) {
+        this.options.$el.fileListContainer = $('<div class="' + this.options.classess.fileListContainer + ' xe-hidden"><ul class="thumbnail-list"></ul></div>')
+        this.element.append(this.options.$el.fileListContainer)
       }
     },
 
@@ -94,7 +120,7 @@ window.$(function ($) {
       var filesList = this.options.files
 
       if (filesList.length) {
-        this._$el.fileListContainer.removeClass('xe-hidden')
+        this.options.$el.fileListContainer.removeClass('xe-hidden')
         XE._.forEach(filesList, function (file, idx) {
           that._renderMedia(file)
         })
@@ -103,7 +129,6 @@ window.$(function ($) {
 
     _normalizeFileData: function (payload) {
       var raw = payload
-      console.debug('raw', raw)
 
       return {
         raw: function () {
@@ -119,11 +144,10 @@ window.$(function ($) {
 
     _renderMedia: function (payload) {
       var that = this
-      var $container = this._$el.fileListContainer.find('.thumbnail-list')
-      this._$el.fileListContainer.removeClass('xe-hidden')
+      var $container = this.options.$el.fileListContainer.find('.thumbnail-list')
+      this.options.$el.fileListContainer.removeClass('xe-hidden')
 
       var media = this._normalizeFileData(payload)
-      console.debug('media', media)
 
       var html = []
       html.push('<li data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '">')
@@ -165,7 +189,7 @@ window.$(function ($) {
     },
 
     _insertImageContent: function (mediaId, fileId) {
-      var $image = this._$el.fileListContainer.find('.thumbnail-list').find('img[data-file-id=' + fileId + ']')
+      var $image = this.options.$el.fileListContainer.find('.thumbnail-list').find('img[data-file-id=' + fileId + ']')
       var mediaUrl = $image.attr('src')
       var imageHtml = [
         '<img',
@@ -211,8 +235,6 @@ window.$(function ($) {
       //   .css('background-color', 'transparent')
     },
 
-    // _setOptions is called with a hash of all options that are changing
-    // always refresh when changing options
     _setOptions: function () {
       console.debug('wid._setOptions')
       // _super and _superApply handle keeping the right this-context
@@ -220,7 +242,6 @@ window.$(function ($) {
       // this._refresh()
     },
 
-    // _setOption is called for each individual option that is changing
     _setOption: function (key, value) {
       console.debug('wid._setOption')
       // prevent invalid color values
