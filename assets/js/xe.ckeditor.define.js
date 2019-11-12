@@ -280,7 +280,7 @@
         },
         getContentDom: function () {
           this.props.editor.setMode('wysiwyg')
-          return CKEDITOR.instances[this.selector].document.$
+          return CKEDITOR.instances[this.selector].editable()
         },
         on: function (eventName, callback) {
           CKEDITOR.instances[this.props.selector].on(eventName, callback)

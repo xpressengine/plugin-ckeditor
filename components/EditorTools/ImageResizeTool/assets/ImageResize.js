@@ -63,7 +63,7 @@ window.ImageResize = (function ($, XE) {
         '<img ',
         "src='" + _thumbImageUrl + "' ",
         "class='" + _this.targetEditor.config.names.file.image.class + "' ",
-        "xe-file-id='" + _id + "' ",
+        "data-id='" + _id + "' ",
         _this.targetEditor.config.names.file.image.identifier + "='" + _id,
         "' />"
       ].join('')

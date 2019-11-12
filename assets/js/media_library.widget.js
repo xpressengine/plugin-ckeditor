@@ -14,13 +14,13 @@ window.$(function ($) {
       $el: {
         dropZone: null,
         progressbarContainer: null,
-        fileListContainer: null
+        fileListContainer: null,
+        btnMediaLibrary: null
       }
     },
 
     // The constructor
     _create: function () {
-      console.debug('wid._create', this.element, this.options, this._getCreateOptions())
       this._refresh()
     },
 
@@ -28,7 +28,8 @@ window.$(function ($) {
       this._initDropZone()
       this._initProgressbar()
       this._initFileList()
-      this._initMediaLibrary()
+      this._initUploader()
+      // this._initMediaLibrary()
       this._renderFiles()
 
       if (this.options.useSetCover) {
@@ -45,11 +46,10 @@ window.$(function ($) {
       }
     },
 
-    _initMediaLibrary: function () {
+    _initUploader: function () {
       var that = this
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
-        console.debug('_initMediaLibrary', that.element)
-        appMediaLibrary.createUploader(that.element.find('input[name=file]'), {}, {
+        appMediaLibrary.createUploader(that.element.find('input[name=file]'), { folder_id: '300be846-0b4d-47bf-a85e-5c5a1b5d699c' }, {
           dropZone: that.element,
           dragover: function () {
             that.element.addClass('drag')
@@ -76,8 +76,8 @@ window.$(function ($) {
           }))
         })
 
-        XE.MediaLibrary.$$on('media.uploaded', function (eventName, media) {
-          that._renderMedia(media)
+        XE.MediaLibrary.$$on('done.upload', function (eventName, media) {
+          that._renderMedia(media.file)
         })
       })
     },
@@ -93,18 +93,40 @@ window.$(function ($) {
     },
 
     _initDropZone: function () {
-      console.debug('this.options.$el.dropZone', this.options.$el.dropZone)
+      var that = this
+
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess.dropZone)
-        this.options.$el.dropZone = $('<div class="file-attach"><label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + '" name="file" multiple /></label> 클릭하던지 끌어다놔라</div>')
+        var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-library-image-o"></i> 미디어 라이브러리</button>'
+        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + '" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
         this.element.append(this.options.$el.dropZone)
       }
+
+      XE.app('MediaLibrary').then(function (appMediaLibrary) {
+        // 미디어 버튼
+        that.options.$el.dropZone.find('.__xefu-medialibrary').on('click', function () {
+          appMediaLibrary.open()
+        })
+
+        // 미디어 임포트 이벤트
+        appMediaLibrary.$$on('media.import', function (eventName, mediaList) {
+          $.each(mediaList, function () {
+            that._renderMedia(this)
+          })
+        })
+      })
     },
 
     _initProgressbar: function () {
       if (!this.options.$el.progressbarContainer) {
         this.options.$el.progressbarContainer = $('<div class="xefu-progress-container xe-hidden"><div class="xefu-progressbar"><div class="xefu-progressbar__block"></div></div></div>')
         this.element.append(this.options.$el.progressbarContainer)
+      }
+    },
+
+    _initMediaLibrary: function () {
+      if (!this.options.$el.btnMediaLibrary) {
+        this.options.$el.btnMediaLibrary = $('<button type="button" class="xe-btn xe-btn-sm"><i class="xi-library-image-o"></i>미디어 라이브러리</button>')
       }
     },
 
@@ -136,9 +158,11 @@ window.$(function ($) {
         },
         title: payload.title || payload.clientname,
         imageUrl: XE._.get(payload, 'file.url', payload.url),
+        downloadUrl: XE._.get(payload, 'file.download_url', ''),
         mediaId: (payload.file_id) ? XE._.get(payload, 'id', '') : '',
         fileId: XE._.get(payload, 'file_id', payload.id || ''),
-        size: payload.size
+        size: payload.size,
+        mime: XE._.get(payload, 'file.mime', XE._.get(payload, 'mime', ''))
       }
     },
 
@@ -148,64 +172,119 @@ window.$(function ($) {
       this.options.$el.fileListContainer.removeClass('xe-hidden')
 
       var media = this._normalizeFileData(payload)
-
       var html = []
-      html.push('<li data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '">')
-      html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '" data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '">')
+      html.push('<li class="file-item" data-media-id="' + media.mediaId + '" data-id="' + media.fileId + '" title="' + media.title + '">')
+
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '">')
+      } else {
+        html.push('<p class="filename">' + media.title + '</p>')
+      }
+
       // 본문 삽입
-      html.push('<button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + media.imageUrl + '" data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+      var insertIcon = 'xi-link'
+      if (window.XE.Utils.isImage(media.mime)) {
+        insertIcon = 'xi-image-o'
+      } else if (window.XE.Utils.isVideo(media.mime) || window.XE.Utils.isAudio(media.mime)) {
+        insertIcon = 'xi-play'
+      }
+      html.push('<button type="button" class="btn-insert __xefu-insert-document" data-type="image" data-src="' + media.imageUrl + '" ><i class="' + insertIcon + '"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+
       // 커버로 지정
-      if (this.options.useSetCover) {
+      if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
         var selected = (media.fileId === that.options.coverId) ? 'selected' : ''
 
-        html.push('<button type="button" class="btn-cover btnCover ' + selected + '" data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::setCover') + '</span></button>')
+        html.push('<button type="button" class="btn-cover btnCover ' + selected + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::setCover') + '</span></button>')
       }
 
       // 첨부 삭제
-      html.push('<button type="button" class="btn-delete btnDelFile" data-media-id="' + media.mediaId + '" data-file-id="' + media.fileId + '" data-size="' + media.size + '"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+      html.push('<button type="button" class="btn-delete btnDelFile"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
       html.push('<input type="hidden" name="' + this.options.names.file.input + '[]" value="' + media.fileId + '" />')
       html.push('</li>')
 
       var $item = $(html.join(''))
 
       // 이미지 본문 삽입
-      $item.find('.btnAddImage').on('click', function () {
-        that._insertImageContent(media.mediaId, media.fileId)
+      $item.find('.__xefu-insert-document').on('click', function () {
+        that._insertToDocument(media)
       })
 
       // 커버로 지정
       $item.find('.btnCover').on('click', function () {
-        var $this = $(this)
-        var fileId = $this.data('file-id')
-        that._setCover(fileId)
+        that._setCover(media.fileId)
       })
 
       // 삭제, 제거
       $item.find('.btnDelFile').on('click', function () {
-        that._removeImageContent(media.mediaId, media.fileId)
+        that._removeFromDocument({
+          fileId: media.fileId,
+          mediaId: media.mediaId || null
+        })
+        $item.remove()
       })
 
       $container.append($item)
     },
 
-    _insertImageContent: function (mediaId, fileId) {
-      var $image = this.options.$el.fileListContainer.find('.thumbnail-list').find('img[data-file-id=' + fileId + ']')
-      var mediaUrl = $image.attr('src')
-      var imageHtml = [
-        '<img',
-        'src="' + mediaUrl + '"',
-        (mediaId) ? 'xe-media-id="' + mediaId + '"' : '',
-        'xe-file-id="' + fileId + '"',
-        '/>'
-      ].join(' ')
+    _insertToDocument: function (media) {
+      var html = []
 
-      this.options.editorInstance.addContents(imageHtml)
+      if (window.XE.Utils.isImage(media.mime)) {
+        var mediaUrl
+        // Image
+        if (media.imageUrl) {
+          mediaUrl = media.imageUrl
+        } else {
+          var $image = this.options.$el.fileListContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
+          mediaUrl = $image.attr('src')
+        }
+
+        html.push('<img')
+        html.push('src="' + mediaUrl + '"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('/>')
+      } else if (window.XE.Utils.isVideo(media.mime)) {
+        // Video
+        html.push('<div class="ckeditor-html5-video" data-responsive="true" style="text-align:center;"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('>')
+        html.push('<video controls="controls" controlslist="nodownload" src="' + media.imageUrl + '" style="max-width: 100%; height: auto;"></video>')
+        html.push('</div>')
+      } else if (window.XE.Utils.isAudio(media.mime)) {
+        // Audio
+        html.push('<p>')
+        html.push('<audio controls="controls" controlslist="nodownload" src="' + media.imageUrl + '"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('></audio>')
+        html.push('</p>')
+      } else {
+        // download
+        html.push('<a href="' + media.downloadUrl + '"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('">')
+        html.push(media.title)
+        html.push('</a>')
+      }
+
+      this.options.editorInstance.addContents(html.join(' '))
     },
 
     _setCover: function (fileId) {
       if (!this.options.names.cover) return
 
-      var $item = $('.file-view').find('li[data-file-id=' + fileId + ']')
+      var $item = $('.file-view').find('li[data-id=' + fileId + ']')
       var $button = $item.find('btn-cover')
       var selected = !!$button.hasClass('.selected').length
 
@@ -219,9 +298,15 @@ window.$(function ($) {
       }
     },
 
-    _removeImageContent: function (mediaId, fileId) {
-      var dom = this.options.editorInstance.getContentDom()
-      $(dom).find('img[xe-file-id=' + fileId + ']').remove()
+    _removeFromDocument: function (payload) {
+      var $editable = $(this.options.editorInstance.getContentDom().$)
+      var $elTarget = $editable.find('[data-id="' + payload.fileId + '"],[xe-file-id="' + payload.fileId + '"]')
+
+      if ($elTarget.hasClass('cke_widget_element')) {
+        $elTarget.closest('.cke_widget_wrapper').remove()
+      } else {
+        $elTarget.remove()
+      }
     },
 
     _destroy: function () {

@@ -1,5 +1,9 @@
 @charset 'utf-8';
 
+.cke_wysiwyg_div.cke_editable {
+  padding: 14px 8px;
+}
+
 .wrap-ckeditor-fileupload {
   overflow: hidden;
   border: 1px solid #ddd;
@@ -41,6 +45,11 @@
   width: 100%;
   background-color: #f4f4f4;
 }
+
+.file-attach-group .file-attach button {
+  margin-right: 4px;
+}
+
 .file-attach-group .file-attach .attach-info-text {
   vertical-align: middle;
 }
@@ -75,12 +84,19 @@
   color: #2c8beb;
 }
 .file-attach-group .file-view .thumbnail-list li {
+  overflow: hidden;
   position: relative;
   display: inline-block;
-  width: 90px;
-  height: 90px;
-  margin: 6px;
+  width: 100px;
+  height: 100px;
+  margin: 5px;
   text-align: center;
+  vertical-align: middle;
+}
+.file-attach-group .file-view .thumbnail-list li .filename {
+  margin: 20px 0 0;
+  padding: 5px;
+  word-break: break-all;
 }
 .file-attach-group .file-view .thumbnail-list li img {
   width: 100%;
@@ -137,7 +153,7 @@
   outline: none;
   background-color: rgba(255, 255, 255, .3);
 }
-.file-attach-group .file-view .thumbnail-list li .btn-insert .xi-arrow-up {
+.file-attach-group .file-view .thumbnail-list li .btn-insert i {
   font-size: 20px;
   line-height: 48px;
 }
