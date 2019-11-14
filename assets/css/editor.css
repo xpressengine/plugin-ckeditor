@@ -90,7 +90,10 @@
   width: 100px;
   height: 100px;
   margin: 5px;
+  border: 3px solid transparent;
+  border-radius: 5px;
   text-align: center;
+  cursor: pointer;
   vertical-align: middle;
 }
 .file-attach-group .file-view .thumbnail-list li .filename {
@@ -109,6 +112,9 @@
   outline: none;
   background-color: transparent;
 }
+.file-attach-group .file-view .thumbnail-list li:hover .btn-cover {
+  background-color: rgba(36, 138, 239, 0.6);
+}
 .file-attach-group .file-view .thumbnail-list li::after {
   position: absolute;
   top: 0;
@@ -122,7 +128,7 @@
 
 .thumbnail-list li .btn-cover,
 .thumbnail-list li .btn-delete {
-  opacity: 0.6;
+  opacity: 0;
 }
 
 .thumbnail-list li .btn-insert {
@@ -137,6 +143,9 @@
 .thumbnail-list li:hover .btn-cover,
 .thumbnail-list li:hover .btn-delete {
   opacity: 1;
+}
+.thumbnail-list li:hover .btnCover {
+  background-color: #248aef;
 }
 
 .file-attach-group .file-view .thumbnail-list li .btn-insert {
@@ -184,21 +193,32 @@
 .file-attach-group .file-view .thumbnail-list li .btn-cover {
   position: absolute;
   z-index: 5;
-  top: 4px;
-  left: 4px;
-  padding: 0;
-  width: 18px;
+  top: 0px;
+  left: 0px;
+  padding: 2px 3px;
   line-height: 18px;
-  border-radius: 50%;
+  font-size: 13px;
+  border-radius: 0 0 6px 0;
 }
 .file-attach-group .file-view .thumbnail-list li .btn-cover i {
   font-size: 12px;
   line-height: 18px;
 }
-.file-attach-group .file-view .thumbnail-list li .btn-cover.selected,
-.file-attach-group .file-view .thumbnail-list li .btn-cover:hover,
-.file-attach-group .file-view .thumbnail-list li .btn-cover:focus {
-  background-color: rgba(255, 204, 0, .6);
+.thumbnail-list li .btn-cover {
+  background-color: rgba(36, 138, 239, 0.6);
+}
+.thumbnail-list li .btn-cover:hover,
+.thumbnail-list li .btn-cover:focus {
+  background-color: rgba(36, 138, 239, 0.6);
+}
+
+.file-attach-group .file-view .thumbnail-list .is-cover {
+  border-color: #248AEF;
+}
+
+.file-attach-group .file-view .thumbnail-list .is-cover .btn-cover {
+  opacity: 1;
+  background: #248AEF;
 }
 
 .file-attach-group .file-view .file-attach-list {

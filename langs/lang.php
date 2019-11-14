@@ -54,6 +54,10 @@ return [
         'ko' => '첨부삭제',
         'en' => 'Delete attachment',
     ],
+    'cover' => [
+        'ko' => '커버',
+        'en' => 'Cover',
+    ],
     'setCover' => [
         'ko' => '커버로 지정',
         'en' => 'Set Cover',

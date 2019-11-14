@@ -17,6 +17,10 @@ xe-content,
     text-decoration: none;
   }
 
+  code {
+    white-space: pre-wrap;
+  }
+
   blockquote {
     font-style: italic;
     font-family: Georgia, Times, "Times New Roman", serif;
@@ -51,4 +55,9 @@ xe-content,
 
 .cke_editable {
   margin: 16px 0;
+
+  .cke_widget_mask {
+    max-width: 100% !important;
+    height: 100% !important;
+  }
 }

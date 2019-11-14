@@ -78,6 +78,7 @@ window.$(function ($) {
 
         XE.MediaLibrary.$$on('done.upload', function (eventName, media) {
           that._renderMedia(media.file)
+          that._insertToDocument(that._normalizeFileData(media.file))
         })
       })
     },
@@ -98,7 +99,7 @@ window.$(function ($) {
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess.dropZone)
         var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-library-image-o"></i> 미디어 라이브러리</button>'
-        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + '" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
+        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
         this.element.append(this.options.$el.dropZone)
       }
 
@@ -110,8 +111,10 @@ window.$(function ($) {
 
         // 미디어 임포트 이벤트
         appMediaLibrary.$$on('media.import', function (eventName, mediaList) {
+
           $.each(mediaList, function () {
             that._renderMedia(this)
+            that._insertToDocument(that._normalizeFileData(this))
           })
         })
       })
@@ -170,10 +173,19 @@ window.$(function ($) {
       var that = this
       var $container = this.options.$el.fileListContainer.find('.thumbnail-list')
       this.options.$el.fileListContainer.removeClass('xe-hidden')
+      var isCover = false
 
       var media = this._normalizeFileData(payload)
+      if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
+        isCover = media.fileId === that.options.coverId
+      }
+
       var html = []
-      html.push('<li class="file-item" data-media-id="' + media.mediaId + '" data-id="' + media.fileId + '" title="' + media.title + '">')
+      var itemClass = ['file-item']
+      if (isCover) {
+        itemClass.push('is-cover')
+      }
+      html.push('<li class="' + itemClass.join(' ') + '" data-media-id="' + media.mediaId + '" data-id="' + media.fileId + '" title="' + media.title + '">')
 
       if (window.XE.Utils.isImage(media.mime)) {
         html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '">')
@@ -182,19 +194,17 @@ window.$(function ($) {
       }
 
       // 본문 삽입
-      var insertIcon = 'xi-link'
-      if (window.XE.Utils.isImage(media.mime)) {
-        insertIcon = 'xi-image-o'
-      } else if (window.XE.Utils.isVideo(media.mime) || window.XE.Utils.isAudio(media.mime)) {
-        insertIcon = 'xi-play'
-      }
-      html.push('<button type="button" class="btn-insert __xefu-insert-document" data-type="image" data-src="' + media.imageUrl + '" ><i class="' + insertIcon + '"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
+      // var insertIcon = 'xi-link'
+      // if (window.XE.Utils.isImage(media.mime)) {
+      //   insertIcon = 'xi-image-o'
+      // } else if (window.XE.Utils.isVideo(media.mime) || window.XE.Utils.isAudio(media.mime)) {
+      //   insertIcon = 'xi-play'
+      // }
+      // html.push('<button type="button" class="btn-insert __xefu-insert-document" data-type="image" data-src="' + media.imageUrl + '" ><i class="' + insertIcon + '"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
 
       // 커버로 지정
       if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
-        var selected = (media.fileId === that.options.coverId) ? 'selected' : ''
-
-        html.push('<button type="button" class="btn-cover btnCover ' + selected + '"><i class="xi-star-o"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::setCover') + '</span></button>')
+        html.push('<button type="button" class="btn-cover">' + XE.Lang.trans('ckeditor::cover') + '</button>')
       }
 
       // 첨부 삭제
@@ -205,12 +215,12 @@ window.$(function ($) {
       var $item = $(html.join(''))
 
       // 이미지 본문 삽입
-      $item.find('.__xefu-insert-document').on('click', function () {
-        that._insertToDocument(media)
-      })
+      // $item.find('.__xefu-insert-document').on('click', function () {
+      //   that._insertToDocument(media)
+      // })
 
       // 커버로 지정
-      $item.find('.btnCover').on('click', function () {
+      $item.on('click', function () {
         that._setCover(media.fileId)
       })
 
@@ -221,6 +231,12 @@ window.$(function ($) {
           mediaId: media.mediaId || null
         })
         $item.remove()
+
+        if (!that.options.names.cover) {
+          if ($('[name=' + that.options.names.cover.input + ']').val() == media.fileId) {
+            $('[name=' + that.options.names.cover.input + ']').val('')
+          }
+        }
       })
 
       $container.append($item)
@@ -285,17 +301,10 @@ window.$(function ($) {
       if (!this.options.names.cover) return
 
       var $item = $('.file-view').find('li[data-id=' + fileId + ']')
-      var $button = $item.find('btn-cover')
-      var selected = !!$button.hasClass('.selected').length
+      $('.file-view').find('.file-item').removeClass('is-cover')
 
-      $('.file-view').find('.btn-cover').removeClass('selected')
-
-      if (!selected) {
-        $item.find('.btn-cover').addClass('selected')
-        $('[name=' + this.options.names.cover.input + ']').val(fileId)
-      } else {
-        $('[name=' + this.options.names.cover.input + ']').val('')
-      }
+      $item.addClass('is-cover')
+      $('[name=' + this.options.names.cover.input + ']').val(fileId)
     },
 
     _removeFromDocument: function (payload) {
@@ -310,7 +319,7 @@ window.$(function ($) {
     },
 
     _destroy: function () {
-      console.debug('wid._destroy')
+      // console.debug('wid._destroy')
       // remove generated elements
       // this.changer.remove()
 
@@ -321,14 +330,14 @@ window.$(function ($) {
     },
 
     _setOptions: function () {
-      console.debug('wid._setOptions')
+      // console.debug('wid._setOptions')
       // _super and _superApply handle keeping the right this-context
       this._superApply(arguments)
       // this._refresh()
     },
 
     _setOption: function (key, value) {
-      console.debug('wid._setOption')
+      // console.debug('wid._setOption')
       // prevent invalid color values
       // if (/red|green|blue/.test(key) && (value < 0 || value > 255)) {
       //   return

@@ -202,6 +202,18 @@
           CKEDITOR.instances[this.props.selector].setData(text)
         },
         addContents: function (text) {
+          var editor = CKEDITOR.instances[this.props.selector]
+          var oldRanges = editor.getSelection().getRanges()
+
+          if (oldRanges.length) {
+            var oldRange = oldRanges[oldRanges.length - 1]
+            var newRange = editor.createRange()
+            newRange.setStart(oldRange.endContainer, oldRange.endOffset)
+            newRange.setEnd(oldRange.endContainer, oldRange.endOffset)
+
+            editor.getSelection().selectRanges([ newRange ])
+          }
+
           CKEDITOR.instances[this.props.selector].insertHtml(text)
         },
         addTools: function (toolsMap, toolInfoList) {
