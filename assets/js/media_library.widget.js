@@ -6,7 +6,8 @@ window.$(function ($) {
     options: {
       classess: {
         dropZone: 'dropZone',
-        fileListContainer: 'file-view'
+        fileThumbsContainer: 'file-view',
+        fileListContainer: 'file-view-list'
       },
       allowedExtensions: ['*'],
       coverId: null,
@@ -14,6 +15,7 @@ window.$(function ($) {
       $el: {
         dropZone: null,
         progressbarContainer: null,
+        fileThumbsContainer: null,
         fileListContainer: null,
         btnMediaLibrary: null
       }
@@ -106,7 +108,13 @@ window.$(function ($) {
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
         // 미디어 버튼
         that.options.$el.dropZone.find('.__xefu-medialibrary').on('click', function () {
-          appMediaLibrary.open()
+          appMediaLibrary.open({
+            importMode: $(this).data('import-mode') || 'embed',
+            user: {
+              id: XE.config.getters['user/id'],
+              rating: XE.config.getters['user/rating']
+            }
+          })
         })
 
         // 미디어 임포트 이벤트
@@ -134,9 +142,14 @@ window.$(function ($) {
     },
 
     _initFileList: function () {
+      if (!this.options.$el.fileThumbsContainer) {
+        this.options.$el.fileThumbsContainer = $('<div class="' + this.options.classess.fileThumbsContainer + ' xe-hidden"><ul class="thumbnail-list"></ul></div>')
+        this.element.append(this.options.$el.fileThumbsContainer)
+      }
+
       if (!this.options.$el.fileListContainer) {
-        this.options.$el.fileListContainer = $('<div class="' + this.options.classess.fileListContainer + ' xe-hidden"><ul class="thumbnail-list"></ul></div>')
-        this.element.append(this.options.$el.fileListContainer)
+        this.options.$el.fileListContainer = $('<ul class="file-attach-list"></ul>')
+        this.options.$el.fileThumbsContainer.find('.thumbnail-list').after(this.options.$el.fileListContainer)
       }
     },
 
@@ -145,7 +158,7 @@ window.$(function ($) {
       var filesList = this.options.files
 
       if (filesList.length) {
-        this.options.$el.fileListContainer.removeClass('xe-hidden')
+        this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
         XE._.forEach(filesList, function (file, idx) {
           that._renderMedia(file)
         })
@@ -171,8 +184,8 @@ window.$(function ($) {
 
     _renderMedia: function (payload) {
       var that = this
-      var $container = this.options.$el.fileListContainer.find('.thumbnail-list')
-      this.options.$el.fileListContainer.removeClass('xe-hidden')
+      var $container
+      this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
       var isCover = false
 
       var media = this._normalizeFileData(payload)
@@ -180,17 +193,27 @@ window.$(function ($) {
         isCover = media.fileId === that.options.coverId
       }
 
+      if (window.XE.Utils.isImage(media.mime)) {
+        $container = this.options.$el.fileThumbsContainer.find('.thumbnail-list')
+      } else {
+        $container = this.options.$el.fileListContainer
+      }
+
       var html = []
       var itemClass = ['file-item']
       if (isCover) {
         itemClass.push('is-cover')
       }
+      if (!window.XE.Utils.isImage(media.mime)) {
+        itemClass.push('xe-col-md-6')
+      }
+
       html.push('<li class="' + itemClass.join(' ') + '" data-media-id="' + media.mediaId + '" data-id="' + media.fileId + '" title="' + media.title + '">')
 
       if (window.XE.Utils.isImage(media.mime)) {
         html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '">')
       } else {
-        html.push('<p class="filename">' + media.title + '</p>')
+        html.push('<p class="filename xe-pull-left">' + media.title + '</p>')
       }
 
       // 본문 삽입
@@ -208,7 +231,11 @@ window.$(function ($) {
       }
 
       // 첨부 삭제
-      html.push('<button type="button" class="btn-delete btnDelFile"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
+      } else {
+        html.push('<div class="xe-pull-right"><button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button></div>')
+      }
       html.push('<input type="hidden" name="' + this.options.names.file.input + '[]" value="' + media.fileId + '" />')
       html.push('</li>')
 
@@ -251,7 +278,7 @@ window.$(function ($) {
         if (media.imageUrl) {
           mediaUrl = media.imageUrl
         } else {
-          var $image = this.options.$el.fileListContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
+          var $image = this.options.$el.fileThumbsContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
           mediaUrl = $image.attr('src')
         }
 

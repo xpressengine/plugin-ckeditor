@@ -23,24 +23,20 @@
             }
           },
           toolbarGroups: [
+            { name: 'styles', groups: [ 'styles' ] },
+            { name: 'basicstyles', groups: [ 'basicstyles' ] },
+            { name: 'colors', groups: [ 'colors' ] },
+            { name: 'paragraph', groups: [ 'align', 'list', 'blocks' ] },
             { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
             { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
             { name: 'links', groups: [ 'links' ] },
             { name: 'insert', groups: [ 'insert' ] },
-            { name: 'forms', groups: [ 'forms' ] },
-            { name: 'tools', groups: [ 'tools' ] },
-            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-            '/',
-            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-            '/',
-            { name: 'styles', groups: [ 'styles' ] },
-            { name: 'colors', groups: [ 'colors' ] },
-            { name: 'others', groups: [ 'others' ] }
+            { name: 'others', groups: [ 'others' ] },
+            { name: 'document', groups: [ 'mode' ] }
           ],
           allowedContent: true,
           removeFormatAttributes: '',
-          removeButtons: 'Cut,Copy,Paste,PasteText,PasteFromWord,Anchor',
+          removeButtons: 'FontSize,Styles,CopyFormatting,RemoveFormat,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,Indent,Outdent,BidiRtl,Language,BidiLtr,Flash,ShowBlocks,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
           removePlugins: 'stylescombo',
           extraPlugins: 'xePasteImage,html5video,wordcount',
           resize_dir: 'vertical',
@@ -92,14 +88,6 @@
 
           // 모바일 모드이면 옵션 변경
           if (CKEDITOR.env.mobile) {
-            customOptions.toolbar = [
-              { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
-              { name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight' ] },
-              { name: 'color', items: [ 'TextColor' ] },
-              { name: 'list', items: [ 'NumberedList', 'BulletedList' ] },
-              { name: 'links', items: [ 'Link' ] }
-            ]
-
             customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ',xeFixed' : 'xeFixed'
           }
 
@@ -141,6 +129,32 @@
             editor: editor,
             selector: selector,
             options: options
+          })
+
+          // medialibrary 본문 삽입
+          editor.ui.add('MedialibraryEmbed', CKEDITOR.UI_BUTTON, {
+            label: 'embed',
+            command: 'medialibraryEmbed',
+            toolbar: 'insert,0',
+            icon: 'Image'
+          })
+          editor.addCommand('medialibraryEmbed', {
+            exec: function (editor) {
+              $('.__xefu-medialibrary').data('import-mode', 'embed').click()
+            }
+          })
+
+          // medialibrary 첨부 파일
+          editor.ui.add('MedialibraryAttachment', CKEDITOR.UI_BUTTON, {
+            label: 'attach',
+            command: 'medialibraryAttachment',
+            toolbar: 'insert,0',
+            icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_file.png'
+          })
+          editor.addCommand('medialibraryAttachment', {
+            exec: function (editor) {
+              $('.__xefu-medialibrary').data('import-mode', 'download').click()
+            }
           })
 
           this.on('instanceReady', function () {

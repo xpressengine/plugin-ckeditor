@@ -1,5 +1,28 @@
 @charset 'utf-8';
 
+.cke_toolbox .cke_toolbar {
+  height: 31px;
+}
+
+.cke_toolbox .cke_button__source_label,
+.cke_toolbox .cke_button__sourcedialog_label {
+  display: none;
+}
+.cke_toolbox .cke_toolbar_start {
+  float: left;
+  background-color: silver;
+  background-color: rgba(0,0,0,.2);
+  margin: 5px 2px 0;
+  height: 18px;
+  width: 1px;
+  box-shadow: 1px 0 1px rgba(255,255,255,.5);
+}
+.cke_toolbox .cke_toolbar:first-child .cke_toolbar_start {
+  display: none;
+  background: none;
+  width: 0;
+}
+
 .cke_wysiwyg_div.cke_editable {
   padding: 14px 8px;
 }
