@@ -80,6 +80,6 @@ class AutolinkTool extends AbstractTool
 
     private function getAssetsPath()
     {
-        return str_replace(base_path(), '', realpath(__DIR__ . '/assets'));
+        return str_replace(base_path(), '', plugins_path() . '/ckeditor/components/EditorTools/AutolinkTool/assets');
     }
 }

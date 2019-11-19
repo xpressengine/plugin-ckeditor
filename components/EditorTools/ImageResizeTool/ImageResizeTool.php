@@ -56,10 +56,10 @@ class ImageResizeTool extends AbstractTool
                 var _url = {
                     popup: '".route('ckeditor::image_resize_tool.popup')."'
                 };
-                
+
                 window.imageResizeURL = {
                     get: function (type) {
-                        return _url[type];                 
+                        return _url[type];
                     }
                 };
             })();
@@ -82,6 +82,6 @@ class ImageResizeTool extends AbstractTool
 
     private function getAssetsPath()
     {
-        return str_replace(base_path(), '', realpath(__DIR__ . '/assets'));
+        return str_replace(base_path(), '', plugins_path() . '/ckeditor/components/EditorTools/ImageResizeTool/assets');
     }
 }
