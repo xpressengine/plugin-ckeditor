@@ -50,8 +50,9 @@ window.$(function ($) {
 
     _initUploader: function () {
       var that = this
+      console.debug('uploader', that.options)
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
-        appMediaLibrary.createUploader(that.element.find('input[name=file]'), { folder_id: '300be846-0b4d-47bf-a85e-5c5a1b5d699c' }, {
+        appMediaLibrary.createUploader(that.element.find('input[name=file]'), { instance_id: that.options.instanceId }, {
           dropZone: that.element,
           dragover: function () {
             that.element.addClass('drag')

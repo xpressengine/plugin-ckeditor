@@ -330,6 +330,7 @@
               names: customOptions.names,
               useSetCover: false,
               coverId: null,
+              instanceId: that.props.options.instanceId,
               fileCount: 0,
               fileTotalSize: 0
             }
