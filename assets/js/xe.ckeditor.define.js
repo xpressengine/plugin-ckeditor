@@ -140,7 +140,17 @@
           })
           editor.addCommand('medialibraryEmbed', {
             exec: function (editor) {
-              $('.__xefu-medialibrary').data('import-mode', 'embed').click()
+              XE.app('MediaLibrary').then(function (appMediaLibrary) {
+                // 미디어 버튼
+                appMediaLibrary.open({
+                  importMode: 'embed',
+                  listMode: 2,
+                  user: {
+                    id: XE.config.getters['user/id'],
+                    rating: XE.config.getters['user/rating']
+                  }
+                })
+              })
             }
           })
 
@@ -153,7 +163,18 @@
           })
           editor.addCommand('medialibraryAttachment', {
             exec: function (editor) {
-              $('.__xefu-medialibrary').data('import-mode', 'download').click()
+              XE.app('MediaLibrary').then(function (appMediaLibrary) {
+                // 미디어 버튼
+                appMediaLibrary.open({
+                  importMode: 'download',
+                  listMode: 2,
+                  user: {
+                    id: XE.config.getters['user/id'],
+                    rating: XE.config.getters['user/rating']
+                  }
+                })
+              })
+              // $('.__xefu-medialibrary').data('importMode', 'download').click()
             }
           })
 
@@ -318,7 +339,6 @@
 
           this.on('instanceReady', function () {
             $editorWrap = window.jQuery(editorWrapClass)
-            console.debug('$editorWrap', that.props, customOptions)
 
             $editorWrap.after('<div class="wrap-ckeditor-fileupload ckeditor-fileupload-area file-attach-group"></div>')
             var options = {
@@ -326,6 +346,7 @@
               fileMaximum: customOptions.fileMaxSize,
               allowedExtensions: customOptions.extensions,
               uploadPermission: customOptions.perms.upload,
+              downloadUrl: that.props.options.fileUpload.download_url,
               files: customOptions.files || [],
               names: customOptions.names,
               useSetCover: false,
@@ -344,10 +365,6 @@
 
             $('.ckeditor-fileupload-area').medialibraryUploader(options)
           })
-        },
-        renderFileItem: function (item) {
-          console.debug('wid.renderFileItem', item)
-          $('.thumbnail-list').append()
         },
         reset: function () {
           var editorWrapClass = '.' + this.props.editor.id

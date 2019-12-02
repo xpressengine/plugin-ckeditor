@@ -9,6 +9,7 @@ window.$(function ($) {
         fileThumbsContainer: 'file-view',
         fileListContainer: 'file-view-list'
       },
+      editorInstance: null,
       allowedExtensions: ['*'],
       coverId: null,
       useSetCover: false,
@@ -31,7 +32,6 @@ window.$(function ($) {
       this._initProgressbar()
       this._initFileList()
       this._initUploader()
-      // this._initMediaLibrary()
       this._renderFiles()
 
       if (this.options.useSetCover) {
@@ -79,9 +79,9 @@ window.$(function ($) {
           }))
         })
 
-        XE.MediaLibrary.$$on('done.upload', function (eventName, media) {
-          that._renderMedia(media.file)
-          that._insertToDocument(that._normalizeFileData(media.file))
+        XE.MediaLibrary.$$on('done.upload', function (eventName, media, options) {
+          that._renderMedia(media.file, media.form)
+          that._insertToDocument(that._normalizeFileData(media.file), media.form, options)
         })
       })
     },
@@ -98,6 +98,7 @@ window.$(function ($) {
 
     _initDropZone: function () {
       var that = this
+      var $form = this.element.closest('form')
 
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess.dropZone)
@@ -119,11 +120,10 @@ window.$(function ($) {
         })
 
         // 미디어 임포트 이벤트
-        appMediaLibrary.$$on('media.import', function (eventName, mediaList) {
-
+        appMediaLibrary.$$on('media.import', function (eventName, mediaList, options) {
           $.each(mediaList, function () {
-            that._renderMedia(this)
-            that._insertToDocument(that._normalizeFileData(this))
+            that._renderMedia(this, $form)
+            that._insertToDocument(that._normalizeFileData(this), $form, options)
           })
         })
       })
@@ -157,11 +157,12 @@ window.$(function ($) {
     _renderFiles: function () {
       var that = this
       var filesList = this.options.files
+      var $form = this.element.closest('form')
 
       if (filesList.length) {
         this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
         XE._.forEach(filesList, function (file, idx) {
-          that._renderMedia(file)
+          that._renderMedia(file, $form)
         })
       }
     },
@@ -175,7 +176,7 @@ window.$(function ($) {
         },
         title: payload.title || payload.clientname,
         imageUrl: XE._.get(payload, 'file.url', payload.url),
-        downloadUrl: XE._.get(payload, 'file.download_url', ''),
+        downloadUrl: this.options.downloadUrl + '/' + payload.id,
         mediaId: (payload.file_id) ? XE._.get(payload, 'id', '') : '',
         fileId: XE._.get(payload, 'file_id', payload.id || ''),
         size: payload.size,
@@ -183,7 +184,7 @@ window.$(function ($) {
       }
     },
 
-    _renderMedia: function (payload) {
+    _renderMedia: function (payload, $form) {
       var that = this
       var $container
       this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
@@ -195,9 +196,9 @@ window.$(function ($) {
       }
 
       if (window.XE.Utils.isImage(media.mime)) {
-        $container = this.options.$el.fileThumbsContainer.find('.thumbnail-list')
+        $container = $form.find(this.options.$el.fileThumbsContainer).find('.thumbnail-list')
       } else {
-        $container = this.options.$el.fileListContainer
+        $container = $form.find(this.options.$el.fileListContainer)
       }
 
       var html = []
@@ -242,18 +243,13 @@ window.$(function ($) {
 
       var $item = $(html.join(''))
 
-      // 이미지 본문 삽입
-      // $item.find('.__xefu-insert-document').on('click', function () {
-      //   that._insertToDocument(media)
-      // })
-
       // 커버로 지정
       $item.on('click', function () {
         that._setCover(media.fileId)
       })
 
       // 삭제, 제거
-      $item.find('.btnDelFile').on('click', function () {
+      $item.find('.btn-delete').on('click', function () {
         that._removeFromDocument({
           fileId: media.fileId,
           mediaId: media.mediaId || null
@@ -261,8 +257,8 @@ window.$(function ($) {
         $item.remove()
 
         if (!that.options.names.cover) {
-          if ($('[name=' + that.options.names.cover.input + ']').val() == media.fileId) {
-            $('[name=' + that.options.names.cover.input + ']').val('')
+          if (this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val() == media.fileId) {
+            this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val('')
           }
         }
       })
@@ -270,46 +266,51 @@ window.$(function ($) {
       $container.append($item)
     },
 
-    _insertToDocument: function (media) {
+    _insertToDocument: function (media, form, options = {}) {
       var html = []
+      var importMode = options.importMode || 'embed'
+      console.debug('_imsert doc', options)
 
-      if (window.XE.Utils.isImage(media.mime)) {
-        var mediaUrl
-        // Image
-        if (media.imageUrl) {
-          mediaUrl = media.imageUrl
-        } else {
-          var $image = this.options.$el.fileThumbsContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
-          mediaUrl = $image.attr('src')
-        }
+      if (importMode === 'embed') {
+        // embed
+        if (window.XE.Utils.isImage(media.mime)) {
+          var mediaUrl
+          // Image
+          if (media.imageUrl) {
+            mediaUrl = media.imageUrl
+          } else {
+            var $image = this.options.$el.fileThumbsContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
+            mediaUrl = $image.attr('src')
+          }
 
-        html.push('<img')
-        html.push('src="' + mediaUrl + '"')
-        if (media.mediaId) {
-          html.push('data-media-id="' + media.mediaId + '"')
+          html.push('<img')
+          html.push('src="' + mediaUrl + '"')
+          if (media.mediaId) {
+            html.push('data-media-id="' + media.mediaId + '"')
+          }
+          html.push('data-id="' + media.fileId + '"')
+          html.push('/><br>')
+        } else if (window.XE.Utils.isVideo(media.mime)) {
+          // Video
+          html.push('<div class="ckeditor-html5-video" data-responsive="true" style="text-align:center;"')
+          if (media.mediaId) {
+            html.push('data-media-id="' + media.mediaId + '"')
+          }
+          html.push('data-id="' + media.fileId + '"')
+          html.push('>')
+          html.push('<video controls="controls" controlslist="nodownload" src="' + media.imageUrl + '" style="max-width: 100%; height: auto;"></video>')
+          html.push('</div>')
+        } else if (window.XE.Utils.isAudio(media.mime)) {
+          // Audio
+          html.push('<p>')
+          html.push('<audio controls="controls" controlslist="nodownload" src="' + media.imageUrl + '"')
+          if (media.mediaId) {
+            html.push('data-media-id="' + media.mediaId + '"')
+          }
+          html.push('data-id="' + media.fileId + '"')
+          html.push('></audio>')
+          html.push('</p>')
         }
-        html.push('data-id="' + media.fileId + '"')
-        html.push('/>')
-      } else if (window.XE.Utils.isVideo(media.mime)) {
-        // Video
-        html.push('<div class="ckeditor-html5-video" data-responsive="true" style="text-align:center;"')
-        if (media.mediaId) {
-          html.push('data-media-id="' + media.mediaId + '"')
-        }
-        html.push('data-id="' + media.fileId + '"')
-        html.push('>')
-        html.push('<video controls="controls" controlslist="nodownload" src="' + media.imageUrl + '" style="max-width: 100%; height: auto;"></video>')
-        html.push('</div>')
-      } else if (window.XE.Utils.isAudio(media.mime)) {
-        // Audio
-        html.push('<p>')
-        html.push('<audio controls="controls" controlslist="nodownload" src="' + media.imageUrl + '"')
-        if (media.mediaId) {
-          html.push('data-media-id="' + media.mediaId + '"')
-        }
-        html.push('data-id="' + media.fileId + '"')
-        html.push('></audio>')
-        html.push('</p>')
       } else {
         // download
         html.push('<a href="' + media.downloadUrl + '"')
@@ -328,11 +329,11 @@ window.$(function ($) {
     _setCover: function (fileId) {
       if (!this.options.names.cover) return
 
-      var $item = $('.file-view').find('li[data-id=' + fileId + ']')
-      $('.file-view').find('.file-item').removeClass('is-cover')
+      var $item = this.options.$el.fileThumbsContainer.find('li[data-id=' + fileId + ']')
+      this.options.$el.fileThumbsContainer.find('.file-item').removeClass('is-cover')
 
       $item.addClass('is-cover')
-      $('[name=' + this.options.names.cover.input + ']').val(fileId)
+      this.element.find('[name=' + this.options.names.cover.input + ']').val(fileId)
     },
 
     _removeFromDocument: function (payload) {
