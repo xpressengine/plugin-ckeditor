@@ -102,7 +102,7 @@ window.$(function ($) {
 
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess.dropZone)
-        var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-library-image-o"></i> 미디어 라이브러리</button>'
+        var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-image-o"></i> 미디어 삽입</button>'
         this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
         this.element.append(this.options.$el.dropZone)
       }
@@ -168,27 +168,25 @@ window.$(function ($) {
     },
 
     _normalizeFileData: function (payload) {
-      var raw = payload
-
-      return {
-        raw: function () {
-          return raw
-        },
+      var data = {
         title: payload.title || payload.clientname,
         imageUrl: XE._.get(payload, 'file.url', payload.url),
-        downloadUrl: this.options.downloadUrl + '/' + payload.id,
         mediaId: (payload.file_id) ? XE._.get(payload, 'id', '') : '',
         fileId: XE._.get(payload, 'file_id', payload.id || ''),
         size: payload.size,
         mime: XE._.get(payload, 'file.mime', XE._.get(payload, 'mime', ''))
       }
+
+      data.downloadUrl = this.options.downloadUrl + '/' + data.fileId
+
+      return data
     },
 
     _renderMedia: function (payload, $form) {
       var that = this
       var $container
-      this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
       var isCover = false
+      this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
 
       var media = this._normalizeFileData(payload)
       if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
@@ -196,9 +194,17 @@ window.$(function ($) {
       }
 
       if (window.XE.Utils.isImage(media.mime)) {
+        if (!this.options.coverId) {
+          this.options.coverId = media.fileId
+          this._setCover(media.fileId)
+        }
         $container = $form.find(this.options.$el.fileThumbsContainer).find('.thumbnail-list')
       } else {
         $container = $form.find(this.options.$el.fileListContainer)
+      }
+
+      if ($container.find('[data-id=' + media.fileId + ']').length) {
+        return
       }
 
       var html = []
@@ -217,15 +223,6 @@ window.$(function ($) {
       } else {
         html.push('<p class="filename xe-pull-left">' + media.title + '</p>')
       }
-
-      // 본문 삽입
-      // var insertIcon = 'xi-link'
-      // if (window.XE.Utils.isImage(media.mime)) {
-      //   insertIcon = 'xi-image-o'
-      // } else if (window.XE.Utils.isVideo(media.mime) || window.XE.Utils.isAudio(media.mime)) {
-      //   insertIcon = 'xi-play'
-      // }
-      // html.push('<button type="button" class="btn-insert __xefu-insert-document" data-type="image" data-src="' + media.imageUrl + '" ><i class="' + insertIcon + '"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>')
 
       // 커버로 지정
       if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
@@ -269,7 +266,6 @@ window.$(function ($) {
     _insertToDocument: function (media, form, options = {}) {
       var html = []
       var importMode = options.importMode || 'embed'
-      console.debug('_imsert doc', options)
 
       if (importMode === 'embed') {
         // embed
@@ -334,6 +330,7 @@ window.$(function ($) {
 
       $item.addClass('is-cover')
       this.element.find('[name=' + this.options.names.cover.input + ']').val(fileId)
+      this.options.coverId = fileId
     },
 
     _removeFromDocument: function (payload) {

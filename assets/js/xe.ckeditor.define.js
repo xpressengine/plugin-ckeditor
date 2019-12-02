@@ -133,7 +133,7 @@
 
           // medialibrary 본문 삽입
           editor.ui.add('MedialibraryEmbed', CKEDITOR.UI_BUTTON, {
-            label: 'embed',
+            label: '미디어 삽입',
             command: 'medialibraryEmbed',
             toolbar: 'insert,0',
             icon: 'Image'
@@ -156,7 +156,7 @@
 
           // medialibrary 첨부 파일
           editor.ui.add('MedialibraryAttachment', CKEDITOR.UI_BUTTON, {
-            label: 'attach',
+            label: '파일 첨부',
             command: 'medialibraryAttachment',
             toolbar: 'insert,0',
             icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_file.png'
