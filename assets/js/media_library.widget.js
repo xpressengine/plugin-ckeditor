@@ -29,7 +29,7 @@ window.$(function ($) {
 
     _refresh: function () {
       this._initDropZone()
-      this._initProgressbar()
+      // this._initProgressbar()
       this._initFileList()
       this._initUploader()
       this._renderFiles()
@@ -65,19 +65,19 @@ window.$(function ($) {
           }
         })
 
-        XE.MediaLibrary.$$on('done.progress.editor', function (eventName, payload) {
-          that._updateProgress($.extend({}, {
-            type: 'done',
-            percent: 100
-          }))
-        })
+        // XE.MediaLibrary.$$on('done.progress.editor', function (eventName, payload) {
+        //   that._updateProgress($.extend({}, {
+        //     type: 'done',
+        //     percent: 100
+        //   }))
+        // })
 
-        XE.MediaLibrary.$$on('update.progress.editor', function (eventName, payload) {
-          that._updateProgress($.extend({}, payload.data, {
-            type: 'update',
-            percent: parseInt(payload.data.loaded / payload.data.total * 100, 10)
-          }))
-        })
+        // XE.MediaLibrary.$$on('update.progress.editor', function (eventName, payload) {
+        //   that._updateProgress($.extend({}, payload.data, {
+        //     type: 'update',
+        //     percent: parseInt(payload.data.loaded / payload.data.total * 100, 10)
+        //   }))
+        // })
 
         XE.MediaLibrary.$$on('done.upload.editor', function (eventName, media, options) {
           that._renderMedia(media.file, media.form)
@@ -102,16 +102,28 @@ window.$(function ($) {
 
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess)
-        var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-image-o"></i> 미디어 삽입</button>'
-        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
+        var medialibraryEmbed = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary-embed"><i class="xi-image-o"></i> 미디어 삽입</button>'
+        var medialibraryAttach = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary-attach"><i class="xi-image-o"></i> 파일 첨부</button>'
+        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryEmbed + medialibraryAttach + '<label class="xe-btn xe-btn-sm xe-hidden"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
         this.element.append(this.options.$el.dropZone)
       }
 
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
-        // 미디어 버튼
-        that.options.$el.dropZone.find('.__xefu-medialibrary').on('click', function () {
+        // 미디어 embed 버튼
+        that.options.$el.dropZone.find('.__xefu-medialibrary-embed').on('click', function () {
           appMediaLibrary.open({
-            importMode: $(this).data('import-mode') || 'embed',
+            importMode: 'embed',
+            user: {
+              id: XE.config.getters['user/id'],
+              rating: XE.config.getters['user/rating']
+            }
+          })
+        })
+
+        // 미디어 attach 버튼
+        that.options.$el.dropZone.find('.__xefu-medialibrary-attach').on('click', function () {
+          appMediaLibrary.open({
+            importMode: 'download',
             user: {
               id: XE.config.getters['user/id'],
               rating: XE.config.getters['user/rating']
@@ -222,6 +234,7 @@ window.$(function ($) {
       if (window.XE.Utils.isImage(media.mime)) {
         html.push('<img src="' + media.imageUrl + '" alt="' + media.title + '">')
       } else {
+        html.push('<div class="file-item-group">')
         html.push('<p class="filename xe-pull-left">' + media.title + '</p>')
       }
 
@@ -237,6 +250,11 @@ window.$(function ($) {
         html.push('<div class="xe-pull-right"><button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button></div>')
       }
       html.push('<input type="hidden" name="' + this.options.names.file.input + '[]" value="' + media.fileId + '" />')
+
+      if (!window.XE.Utils.isImage(media.mime)) {
+        html.push('</div>')
+      }
+
       html.push('</li>')
 
       var $item = $(html.join(''))
