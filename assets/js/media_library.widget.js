@@ -65,21 +65,21 @@ window.$(function ($) {
           }
         })
 
-        XE.MediaLibrary.$$on('done.progress', function (eventName, payload) {
+        XE.MediaLibrary.$$on('done.progress.editor', function (eventName, payload) {
           that._updateProgress($.extend({}, {
             type: 'done',
             percent: 100
           }))
         })
 
-        XE.MediaLibrary.$$on('update.progress', function (eventName, payload) {
+        XE.MediaLibrary.$$on('update.progress.editor', function (eventName, payload) {
           that._updateProgress($.extend({}, payload.data, {
             type: 'update',
             percent: parseInt(payload.data.loaded / payload.data.total * 100, 10)
           }))
         })
 
-        XE.MediaLibrary.$$on('done.upload', function (eventName, media, options) {
+        XE.MediaLibrary.$$on('done.upload.editor', function (eventName, media, options) {
           that._renderMedia(media.file, media.form)
           that._insertToDocument(that._normalizeFileData(media.file), media.form, options)
         })
@@ -101,7 +101,7 @@ window.$(function ($) {
       var $form = this.element.closest('form')
 
       if (!this.options.$el.dropZone) {
-        this.element.addClass(this.options.classess.dropZone)
+        this.element.addClass(this.options.classess)
         var medialibraryButton = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary"><i class="xi-image-o"></i> 미디어 삽입</button>'
         this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryButton + '<label class="xe-btn xe-btn-sm"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
         this.element.append(this.options.$el.dropZone)
@@ -186,9 +186,10 @@ window.$(function ($) {
       var that = this
       var $container
       var isCover = false
+      var media = this._normalizeFileData(payload)
+
       this.options.$el.fileThumbsContainer.removeClass('xe-hidden')
 
-      var media = this._normalizeFileData(payload)
       if (this.options.useSetCover && window.XE.Utils.isImage(media.mime)) {
         isCover = media.fileId === that.options.coverId
       }
