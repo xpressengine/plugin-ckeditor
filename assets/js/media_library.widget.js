@@ -113,6 +113,7 @@ window.$(function ($) {
         that.options.$el.dropZone.find('.__xefu-medialibrary-embed').on('click', function () {
           appMediaLibrary.open({
             importMode: 'embed',
+            listMode: 2,
             user: {
               id: XE.config.getters['user/id'],
               rating: XE.config.getters['user/rating']
@@ -124,6 +125,7 @@ window.$(function ($) {
         that.options.$el.dropZone.find('.__xefu-medialibrary-attach').on('click', function () {
           appMediaLibrary.open({
             importMode: 'download',
+            listMode: 2,
             user: {
               id: XE.config.getters['user/id'],
               rating: XE.config.getters['user/rating']
