@@ -283,7 +283,10 @@ window.$(function ($) {
       $container.append($item)
     },
 
-    _insertToDocument: function (media, form, options = {}) {
+    _insertToDocument: function (media, form, options) {
+      if (typeof options === 'undefined') {
+        options = {}
+      }
       var html = []
       var importMode = options.importMode || 'embed'
 

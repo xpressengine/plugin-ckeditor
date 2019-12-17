@@ -13,7 +13,7 @@
           skin: 'xe-minimalist',
           customConfig: '',
           language: CKEDITOR.lang.languages.hasOwnProperty(Lang.getCurrentLocale()) ? Lang.getCurrentLocale() : 'en',
-          contentsCss: [CKEDITOR.basePath + 'content.css'],
+          contentsCss: [],
           on: {
             focus: function () {
               window.jQuery(this.container.$).addClass('active')
@@ -180,6 +180,8 @@
 
           this.on('instanceReady', function () {
             editor.ui.space('contents').addClass('xe-content').addClass('xe-content-editable')
+
+            $('body').append(CKEDITOR.tools.buildStyleHtml(customOptions.contentsCss))
 
             window.jQuery('.' + editor.id).parents('form').on('submit', function () {
               var $this = window.jQuery(this)
