@@ -85,9 +85,9 @@
     dummy.remove()
   }
 
-  window.XE.$$on('content.render', function (eventName, { element }) {
-    if (!/(https?):\/\//i.test($(element).text())) return
-    extractTargets(element)
-    window.XE.$$emit('content.updated.autoLink', element)
+  window.XE.$$on('content.render', function (eventName, args) {
+    if (!/(https?):\/\//i.test($(args.element).text())) return
+    extractTargets(args.element)
+    window.XE.$$emit('content.updated.autoLink', args.element)
   })
 })(window.jQuery, window.XE)
