@@ -45,7 +45,10 @@ class CkEditor extends AbstractEditor
     {
         $this->initAssets();
 
-        $this->arguments['content'] = str_replace(['&lt;', '&gt;'], ['&amp;lt;', '&amp;gt;'], $this->arguments['content']);
+        if (isset($this->arguments['content']) === true) {
+            $this->arguments['content'] = str_replace(['&lt;', '&gt;'], ['&amp;lt;', '&amp;gt;'], $this->arguments['content']);
+        }
+
         return $this->renderPlugins(parent::render(), $this->scriptOnly);
     }
 

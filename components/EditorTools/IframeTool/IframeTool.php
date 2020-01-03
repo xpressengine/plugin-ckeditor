@@ -168,7 +168,7 @@ class IframeTool extends AbstractTool
             $result[] = '<div class="xe-embed xe-embed-video">';
         }
 
-        $result[] = '<iframe ' . implode($attr, ' ') . '></iframe>';
+        $result[] = '<iframe ' . implode(' ', $attr) . '></iframe>';
 
         if ($embedVideo) {
             $result[] = '</div>';
