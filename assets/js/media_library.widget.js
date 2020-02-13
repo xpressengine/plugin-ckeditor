@@ -116,6 +116,12 @@ window.$(function ($) {
             user: {
               id: XE.config.getters['user/id'],
               rating: XE.config.getters['user/rating']
+            },
+            selected: function (mediaList) {
+              $.each(mediaList, function () {
+                that._renderMedia(this, $form)
+                that._insertToDocument(that._normalizeFileData(this), $form, { importMode: 'embed' })
+              })
             }
           })
         })
@@ -128,15 +134,13 @@ window.$(function ($) {
             user: {
               id: XE.config.getters['user/id'],
               rating: XE.config.getters['user/rating']
+            },
+            selected: function (mediaList) {
+              $.each(mediaList, function () {
+                that._renderMedia(this, $form)
+                that._insertToDocument(that._normalizeFileData(this), $form, { importMode: 'download' })
+              })
             }
-          })
-        })
-
-        // 미디어 임포트 이벤트
-        appMediaLibrary.$$on('media.import', function (eventName, mediaList, options) {
-          $.each(mediaList, function () {
-            that._renderMedia(this, $form)
-            that._insertToDocument(that._normalizeFileData(this), $form, options)
           })
         })
       })
