@@ -76,6 +76,8 @@
           var perms = options.perms || {}
           var stylesheet = options.stylesheet
 
+          XE.DynamicLoadManager.jsLoad('/assets/core/xe-ui-component/js/xe-tooltip.js')
+
           $.extend(customOptions || {}, options)
 
           if (!perms.html) {
@@ -182,6 +184,8 @@
             editor.ui.space('contents').addClass('xe-content').addClass('xe-content-editable')
 
             $('body').append(CKEDITOR.tools.buildStyleHtml(customOptions.contentsCss))
+
+            $('.cke_button').xeTooltip({ container: 'body' })
 
             window.jQuery('.' + editor.id).parents('form').on('submit', function () {
               var $this = window.jQuery(this)
