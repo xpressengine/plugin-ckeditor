@@ -64,20 +64,6 @@ window.$(function ($) {
           }
         })
 
-        // XE.MediaLibrary.$$on('done.progress.editor', function (eventName, payload) {
-        //   that._updateProgress($.extend({}, {
-        //     type: 'done',
-        //     percent: 100
-        //   }))
-        // })
-
-        // XE.MediaLibrary.$$on('update.progress.editor', function (eventName, payload) {
-        //   that._updateProgress($.extend({}, payload.data, {
-        //     type: 'update',
-        //     percent: parseInt(payload.data.loaded / payload.data.total * 100, 10)
-        //   }))
-        // })
-
         XE.MediaLibrary.$$on('done.upload.editor', function (eventName, media, options) {
           that._renderMedia(media.file, media.form)
           that._insertToDocument(that._normalizeFileData(media.file), media.form, options)
@@ -98,47 +84,34 @@ window.$(function ($) {
     _initDropZone: function () {
       var that = this
       var $form = this.element.closest('form')
+      var user = {
+        id: XE.config.getters['user/id'],
+        rating: XE.config.getters['user/rating']
+      }
 
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess)
-        var medialibraryEmbed = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary-embed"><i class="xi-image-o"></i> 미디어 삽입</button>'
-        var medialibraryAttach = '<button type="button" class="xe-btn xe-btn-sm __xefu-medialibrary-attach"><i class="xi-image-o"></i> 파일 첨부</button>'
-        this.options.$el.dropZone = $('<div class="file-attach">' + medialibraryEmbed + medialibraryAttach + '<label class="xe-btn xe-btn-sm xe-hidden"><i class="xi-icon xi-file-add"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label> 여기에 파일을 끌어 놓거나 버튼을 누르세요.</div>')
+        var fileAttach = '<label class="xu-button xu-button--subtle"><i class="xi-icon xi-plus"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label>'
+        var medialibraryEmbed = '<button type="button" class="xu-button xu-button--subtle __xefu-medialibrary-import"><i class="xi-image-o"></i> 미디어 라이브러리</button>'
+
+        if (user.rating === 'guest') {
+          medialibraryEmbed = ''
+        }
+
+        this.options.$el.dropZone = $('<div class="file-attach"><p class="attach-info-text xe-hidden-xs">여기에 파일을 끌어 놓거나 미디어 라이브러리 또는 파일 첨부 버튼을 누르세요.</p>' + fileAttach + medialibraryEmbed + '</div>')
         this.element.append(this.options.$el.dropZone)
       }
 
       XE.app('MediaLibrary').then(function (appMediaLibrary) {
         // 미디어 embed 버튼
-        that.options.$el.dropZone.find('.__xefu-medialibrary-embed').on('click', function () {
+        that.options.$el.dropZone.find('.__xefu-medialibrary-import').on('click', function () {
           appMediaLibrary.open({
-            importMode: 'embed',
             listMode: 2,
-            user: {
-              id: XE.config.getters['user/id'],
-              rating: XE.config.getters['user/rating']
-            },
+            user: user,
             selected: function (mediaList) {
               $.each(mediaList, function () {
                 that._renderMedia(this, $form)
-                that._insertToDocument(that._normalizeFileData(this), $form, { importMode: 'embed' })
-              })
-            }
-          })
-        })
-
-        // 미디어 attach 버튼
-        that.options.$el.dropZone.find('.__xefu-medialibrary-attach').on('click', function () {
-          appMediaLibrary.open({
-            importMode: 'download',
-            listMode: 2,
-            user: {
-              id: XE.config.getters['user/id'],
-              rating: XE.config.getters['user/rating']
-            },
-            selected: function (mediaList) {
-              $.each(mediaList, function () {
-                that._renderMedia(this, $form)
-                that._insertToDocument(that._normalizeFileData(this), $form, { importMode: 'download' })
+                that._insertToDocument(that._normalizeFileData(this), $form)
               })
             }
           })
@@ -252,8 +225,14 @@ window.$(function ($) {
       if (window.XE.Utils.isImage(media.mime)) {
         html.push('<button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>')
       } else {
-        html.push('<div class="xe-pull-right"><button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button></div>')
+        html.push('<div class="xe-pull-right"><button type="button" class="btn-insert"><i class="xi-arrow-up"></i></button><button type="button" class="btn-delete"><i class="xi-close"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button></div>')
       }
+
+      // 본문 삽입
+      if (window.XE.Utils.isImage(media.mime)) {
+        html.push('<button type="button" class="btn-insert"><i class="xi-arrow-up"></i></button>')
+      }
+
       html.push('<input type="hidden" name="' + this.options.names.file.input + '[]" value="' + media.fileId + '" />')
 
       if (!window.XE.Utils.isImage(media.mime)) {
@@ -265,7 +244,7 @@ window.$(function ($) {
       var $item = $(html.join(''))
 
       // 커버로 지정
-      $item.on('click', function () {
+      $item.on('click', '.btn-cover', function () {
         that._setCover(media.fileId)
       })
 
@@ -284,6 +263,11 @@ window.$(function ($) {
         }
       })
 
+      // 본문 삽입
+      $item.find('.btn-insert').on('click', function () {
+        that._insertToDocument(media)
+      })
+
       $container.append($item)
     },
 
@@ -294,46 +278,44 @@ window.$(function ($) {
       var html = []
       var importMode = options.importMode || 'embed'
 
-      if (importMode === 'embed') {
-        // embed
-        if (window.XE.Utils.isImage(media.mime)) {
-          var mediaUrl
-          // Image
-          if (media.imageUrl) {
-            mediaUrl = media.imageUrl
-          } else {
-            var $image = this.options.$el.fileThumbsContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
-            mediaUrl = $image.attr('src')
-          }
-
-          html.push('<img')
-          html.push('src="' + mediaUrl + '"')
-          if (media.mediaId) {
-            html.push('data-media-id="' + media.mediaId + '"')
-          }
-          html.push('data-id="' + media.fileId + '"')
-          html.push('/><br>')
-        } else if (window.XE.Utils.isVideo(media.mime)) {
-          // Video
-          html.push('<div class="ckeditor-html5-video" data-responsive="true" style="text-align:center;"')
-          if (media.mediaId) {
-            html.push('data-media-id="' + media.mediaId + '"')
-          }
-          html.push('data-id="' + media.fileId + '"')
-          html.push('>')
-          html.push('<video controls="controls" controlslist="nodownload" src="' + media.imageUrl + '" style="max-width: 100%; height: auto;"></video>')
-          html.push('</div>')
-        } else if (window.XE.Utils.isAudio(media.mime)) {
-          // Audio
-          html.push('<p>')
-          html.push('<audio controls="controls" controlslist="nodownload" src="' + media.imageUrl + '"')
-          if (media.mediaId) {
-            html.push('data-media-id="' + media.mediaId + '"')
-          }
-          html.push('data-id="' + media.fileId + '"')
-          html.push('></audio>')
-          html.push('</p>')
+      // embed
+      if (window.XE.Utils.isImage(media.mime)) {
+        var mediaUrl
+        // Image
+        if (media.imageUrl) {
+          mediaUrl = media.imageUrl
+        } else {
+          var $image = this.options.$el.fileThumbsContainer.find('.thumbnail-list').find('li[data-id=' + media.fileId + '] img')
+          mediaUrl = $image.attr('src')
         }
+
+        html.push('<img')
+        html.push('src="' + mediaUrl + '"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('/><br>')
+      } else if (window.XE.Utils.isVideo(media.mime)) {
+        // Video
+        html.push('<div class="ckeditor-html5-video" data-responsive="true" style="text-align:center;"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('>')
+        html.push('<video controls="controls" controlslist="nodownload" src="' + media.imageUrl + '" style="max-width: 100%; height: auto;"></video>')
+        html.push('</div>')
+      } else if (window.XE.Utils.isAudio(media.mime)) {
+        // Audio
+        html.push('<p>')
+        html.push('<audio controls="controls" controlslist="nodownload" src="' + media.imageUrl + '"')
+        if (media.mediaId) {
+          html.push('data-media-id="' + media.mediaId + '"')
+        }
+        html.push('data-id="' + media.fileId + '"')
+        html.push('></audio>')
+        html.push('</p>')
       } else {
         // download
         html.push('<a href="' + media.downloadUrl + '"')
@@ -345,7 +327,6 @@ window.$(function ($) {
         html.push(media.title)
         html.push('</a>')
       }
-
       this.options.editorInstance.addContents(html.join(' '))
     },
 
