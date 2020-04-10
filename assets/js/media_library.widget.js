@@ -25,6 +25,7 @@ window.$(function ($) {
     // The constructor
     _create: function () {
       this._refresh()
+      this.editorInstance = this.options.editorInstance
     },
 
     _refresh: function () {
@@ -66,7 +67,7 @@ window.$(function ($) {
 
         XE.MediaLibrary.$$on('done.upload.editor', function (eventName, media, options) {
           that._renderMedia(media.file, media.form)
-          that._insertToDocument(that._normalizeFileData(media.file), media.form, options)
+          that._insertToDocument(that._normalizeFileData(media.file), media.form, that.options)
         })
       })
     },
@@ -278,6 +279,10 @@ window.$(function ($) {
       var html = []
       var importMode = options.importMode || 'embed'
 
+      if (form instanceof window.jQuery && !form.is($('#' + this.editorInstance.selector).closest('form'))) {
+        return
+      }
+
       // embed
       if (window.XE.Utils.isImage(media.mime)) {
         var mediaUrl
@@ -327,7 +332,7 @@ window.$(function ($) {
         html.push(media.title)
         html.push('</a>')
       }
-      this.options.editorInstance.addContents(html.join(' '))
+      this.editorInstance.addContents(html.join(' '))
     },
 
     _setCover: function (fileId) {
@@ -342,7 +347,7 @@ window.$(function ($) {
     },
 
     _removeFromDocument: function (payload) {
-      var $editable = $(this.options.editorInstance.getContentDom().$)
+      var $editable = $(this.editorInstance.getContentDom().$)
       var $elTarget = $editable.find('[data-id="' + payload.fileId + '"],[xe-file-id="' + payload.fileId + '"]')
 
       if ($elTarget.hasClass('cke_widget_element')) {
