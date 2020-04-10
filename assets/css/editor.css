@@ -67,15 +67,15 @@
   width: 100%;
 }
 
-.file-attach-group .file-attach .xu-button {
+.file-attach-group .file-attach .xe-btn {
   color: #000;
 }
 
-.file-attach-group .file-attach .xu-button--subtle:hover:not([disabled]) {
+.file-attach-group .file-attach .xe-btn-link:hover:not([disabled]) {
   color: #000;
 }
 
-.file-attach-group .file-attach .xu-button + .xu-button {
+.file-attach-group .file-attach .xe-btn + .xe-btn {
   margin-left: 12px;
 }
 

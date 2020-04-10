@@ -91,8 +91,8 @@ window.$(function ($) {
 
       if (!this.options.$el.dropZone) {
         this.element.addClass(this.options.classess)
-        var fileAttach = '<label class="xu-button xu-button--subtle"><i class="xi-icon xi-plus"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label>'
-        var medialibraryEmbed = '<button type="button" class="xu-button xu-button--subtle __xefu-medialibrary-import"><i class="xi-image-o"></i> 미디어 라이브러리</button>'
+        var fileAttach = '<label class="xe-btn xe-btn-link"><i class="xi-icon xi-plus"></i> 파일 첨부<input type="file" class="' + this.options.names.file.class + ' xe-hidden" name="file" multiple /></label>'
+        var medialibraryEmbed = '<button type="button" class="xe-btn xe-btn-link __xefu-medialibrary-import"><i class="xi-plus"></i> 미디어 라이브러리</button>'
 
         if (user.rating === 'guest') {
           medialibraryEmbed = ''
