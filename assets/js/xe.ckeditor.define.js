@@ -139,51 +139,51 @@
           })
 
           // medialibrary 본문 삽입
-          editor.ui.add('MedialibraryEmbed', CKEDITOR.UI_BUTTON, {
-            label: '미디어 삽입',
-            command: 'medialibraryEmbed',
-            toolbar: 'insert,0',
-            icon: 'Image'
-          })
-          editor.addCommand('medialibraryEmbed', {
-            exec: function (editor) {
-              XE.app('MediaLibrary').then(function (appMediaLibrary) {
-                // 미디어 버튼
-                appMediaLibrary.open({
-                  importMode: 'embed',
-                  listMode: 2,
-                  user: {
-                    id: XE.config.getters['user/id'],
-                    rating: XE.config.getters['user/rating']
-                  }
-                })
-              })
-            }
-          })
+          // editor.ui.add('MedialibraryEmbed', CKEDITOR.UI_BUTTON, {
+          //   label: '미디어 삽입',
+          //   command: 'medialibraryEmbed',
+          //   toolbar: 'insert,0',
+          //   icon: 'Image'
+          // })
+          // editor.addCommand('medialibraryEmbed', {
+          //   exec: function (editor) {
+          //     XE.app('MediaLibrary').then(function (appMediaLibrary) {
+          //       // 미디어 버튼
+          //       appMediaLibrary.open({
+          //         importMode: 'embed',
+          //         listMode: 2,
+          //         user: {
+          //           id: XE.config.getters['user/id'],
+          //           rating: XE.config.getters['user/rating']
+          //         }
+          //       })
+          //     })
+          //   }
+          // })
 
           // medialibrary 첨부 파일
-          editor.ui.add('MedialibraryAttachment', CKEDITOR.UI_BUTTON, {
-            label: '파일 첨부',
-            command: 'medialibraryAttachment',
-            toolbar: 'insert,0',
-            icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_file.png'
-          })
-          editor.addCommand('medialibraryAttachment', {
-            exec: function (editor) {
-              XE.app('MediaLibrary').then(function (appMediaLibrary) {
-                // 미디어 버튼
-                appMediaLibrary.open({
-                  importMode: 'download',
-                  listMode: 2,
-                  user: {
-                    id: XE.config.getters['user/id'],
-                    rating: XE.config.getters['user/rating']
-                  }
-                })
-              })
-              // $('.__xefu-medialibrary').data('importMode', 'download').click()
-            }
-          })
+          // editor.ui.add('MedialibraryAttachment', CKEDITOR.UI_BUTTON, {
+          //   label: '파일 첨부',
+          //   command: 'medialibraryAttachment',
+          //   toolbar: 'insert,0',
+          //   icon: CKEDITOR.basePath + '../ckeditor/skins/xe-minimalist/img_file.png'
+          // })
+          // editor.addCommand('medialibraryAttachment', {
+          //   exec: function (editor) {
+          //     XE.app('MediaLibrary').then(function (appMediaLibrary) {
+          //       // 미디어 버튼
+          //       appMediaLibrary.open({
+          //         importMode: 'download',
+          //         listMode: 2,
+          //         user: {
+          //           id: XE.config.getters['user/id'],
+          //           rating: XE.config.getters['user/rating']
+          //         }
+          //       })
+          //     })
+          //     // $('.__xefu-medialibrary').data('importMode', 'download').click()
+          //   }
+          // })
 
           this.on('instanceReady', function () {
             editor.ui.space('contents').addClass('xe-content').addClass('xe-content-editable')
