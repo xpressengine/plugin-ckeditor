@@ -88,9 +88,14 @@
             customOptions.removePlugins = (!customOptions.removePlugins) ? customOptions.removePlugins + ',toolbar' : 'toolbar'
           }
 
+          // 툴바를 접을 수 있는 버튼 추가
+          customOptions.toolbarCanCollapse = true
+
           // 모바일 모드이면 옵션 변경
           if (CKEDITOR.env.mobile) {
-            customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ',xeFixed' : 'xeFixed'
+            // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ',xeFixed' : 'xeFixed'
+            // 모바일에서는 툴바를 접힌 상태로 표시
+            customOptions.toolbarStartupExpanded = false
           }
 
           if (stylesheet) {
