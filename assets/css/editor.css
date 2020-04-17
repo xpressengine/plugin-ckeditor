@@ -8,7 +8,7 @@
 .cke_toolbox .cke_button__sourcedialog_label {
   display: none;
 }
-.cke_toolbox .cke_toolbar_start {
+/* .cke_toolbox .cke_toolbar_start {
   float: left;
   background-color: silver;
   background-color: rgba(0,0,0,.2);
@@ -16,7 +16,7 @@
   height: 18px;
   width: 1px;
   box-shadow: 1px 0 1px rgba(255,255,255,.5);
-}
+} */
 .cke_toolbox .cke_toolbar:first-child .cke_toolbar_start {
   display: none;
   background: none;
@@ -24,7 +24,7 @@
 }
 
 .cke_wysiwyg_div.cke_editable {
-  padding: 14px 8px;
+  padding: 20px;
 }
 
 .wrap-ckeditor-fileupload {

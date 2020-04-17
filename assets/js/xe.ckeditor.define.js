@@ -10,7 +10,7 @@
       editorSettings: {
         name: 'XEckeditor',
         configs: {
-          skin: 'xe-minimalist',
+          skin: 'xe-moono-lisa',
           customConfig: '',
           language: CKEDITOR.lang.languages.hasOwnProperty(Lang.getCurrentLocale()) ? Lang.getCurrentLocale() : 'en',
           contentsCss: [],
@@ -24,25 +24,28 @@
           },
           toolbarGroups: [
             { name: 'styles', groups: [ 'styles' ] },
-            { name: 'basicstyles', groups: [ 'basicstyles' ] },
-            { name: 'colors', groups: [ 'colors' ] },
-            { name: 'paragraph', groups: [ 'align', 'list', 'blocks' ] },
             { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
             { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+            { name: 'forms', groups: [ 'forms' ] },
+            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+            { name: 'colors', groups: [ 'colors' ] },
+            { name: 'paragraph', groups: [ 'align', 'list', 'indent', 'blocks', 'bidi', 'paragraph' ] },
             { name: 'links', groups: [ 'links' ] },
             { name: 'insert', groups: [ 'insert' ] },
             { name: 'others', groups: [ 'others' ] },
-            { name: 'document', groups: [ 'mode' ] }
+            { name: 'tools', groups: [ 'tools' ] },
+            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
           ],
           allowedContent: true,
           removeFormatAttributes: '',
-          removeButtons: 'FontSize,Styles,CopyFormatting,RemoveFormat,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,Indent,Outdent,BidiRtl,Language,BidiLtr,Flash,ShowBlocks,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
+          removeButtons: 'FontSize,Styles,CopyFormatting,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,BidiRtl,Language,BidiLtr,Flash,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
           removePlugins: 'stylescombo',
           extraPlugins: 'xePasteImage,html5video,wordcount',
           resize_dir: 'vertical',
           entities: false,
           htmlEncodeOutput: false,
-          codeSnippet_theme: 'monokai_sublime'
+          codeSnippet_theme: 'monokai_sublime',
+          colorButton_colors: '1ABC9C,2ECC71,2684FF,9B59B6,4E5F70,F1C40F,16A085,27AE60,345BD9,8E44AD,2C3E50,F39C12,E67E22,FF5630,F8F9FA,C0C0C0,767676,FFF,D35400,BF0711,ECECEC,9C9C9C,484848,000',
         },
         plugins: [
           {
@@ -88,12 +91,12 @@
             customOptions.removePlugins = (!customOptions.removePlugins) ? customOptions.removePlugins + ',toolbar' : 'toolbar'
           }
 
-          // 툴바를 접을 수 있는 버튼 추가
-          customOptions.toolbarCanCollapse = true
 
           // 모바일 모드이면 옵션 변경
           if (CKEDITOR.env.mobile) {
             // customOptions.extraPlugins = (customOptions.extraPlugins) ? customOptions.extraPlugins + ',xeFixed' : 'xeFixed'
+            // 툴바를 접을 수 있는 버튼 추가
+            customOptions.toolbarCanCollapse = true
             // 모바일에서는 툴바를 접힌 상태로 표시
             customOptions.toolbarStartupExpanded = false
           }
