@@ -379,13 +379,13 @@ xe-content table, tbody, tfoot, thead, tr, td, th,
 .xe-content table, tbody, tfoot, thead, tr, td, th,
 .xe_content table, tbody, tfoot, thead, tr, td, th {
 	border-collapse: collapse;
-	border: 1px solid #d7d7d7;
+	/*	border: 1px solid #d7d7d7;*/
 	text-align: left;
 	padding: 7px 0 9px 15px;
-	font-weight: 500;
+	/*	font-weight: 500;*/
 	font-size: 14px;
-	letter-spacing: -0.2px;
-	font-family: 'Roboto', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	/*	letter-spacing: -0.2px;*/
+	/*	font-family: 'Roboto', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";*/
 }
 
 xe-content th,
@@ -394,6 +394,13 @@ xe-content th,
 	background-color: #f8f9fa;
 	color: #141414;
 	letter-spacing: -0.2px;
+}
+
+.board_list .xe-content table, .board_list tbody, .board_list tfoot, .board_list thead, .board_list tr, .board_list td, .board_list th, .board_list .board_list .xe-content table, .board_list tbody, .board_list tfoot, .board_list thead, .board_list tr, .board_list td, .board_list th, .board_list .board_list .xe_content table, .board_list tbody, .board_list tfoot, .board_list thead, .board_list tr, .board_list td, .board_list th {
+	border: 0;
+	letter-spacing: 0;
+	font-weight: 400;
+	font-family: "Nanum Barun Gothic", "나눔고딕", NanumGothic, "돋움", Dotum, Helvetica Neue, Helvetica, sans-serif;
 }
 
 xe-content figure,
