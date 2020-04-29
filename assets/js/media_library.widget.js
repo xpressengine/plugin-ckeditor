@@ -295,6 +295,7 @@ window.$(function ($) {
         }
 
         html.push('<img')
+        html.push('class="__xe_image"')
         html.push('src="' + mediaUrl + '"')
         if (media.mediaId) {
           html.push('data-media-id="' + media.mediaId + '"')
