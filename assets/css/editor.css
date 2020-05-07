@@ -29,7 +29,7 @@
 
 .wrap-ckeditor-fileupload {
   overflow: hidden;
-  border: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 /* 파일 첨부 영역 */
@@ -45,7 +45,6 @@
 
 .file-attach-group {
   font-size: 13px;
-  margin-top: 20px;
 }
 .file-attach-group.drag {
   border-color: #007AFF;
@@ -339,4 +338,15 @@
 }
 .__xe_file + .__xe_file {
   margin-left: 5px;
+}
+
+
+@media (min-width: 768px) {
+    .file-attach-group {
+      font-size: 13px;
+      margin-top: 20px;
+  }
+  .wrap-ckeditor-fileupload {
+    border: 1px solid #ddd;
+}
 }
