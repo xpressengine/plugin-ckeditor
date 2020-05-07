@@ -74,7 +74,8 @@
 .file-attach-group .file-attach .xe-btn-link:hover:not([disabled]) {
   color: #000;
   text-decoration: none;
-  background-color: #EBECF0 !important;
+  border-radius: 3px;
+  background-color: #dde9fc !important;
 }
 
 .file-attach-group .file-attach .xe-btn + .xe-btn {
