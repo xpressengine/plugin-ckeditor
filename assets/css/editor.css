@@ -340,6 +340,11 @@
   margin-left: 5px;
 }
 
+@media (max-width: 500px) {
+  .file-attach-group .file-attach .xe-btn + .xe-btn {
+    margin-left: 0px;
+  }
+}
 
 @media (min-width: 768px) {
     .file-attach-group {

@@ -320,11 +320,15 @@ xe-content img,
 .xe_content img,
 .cke_editable img {
 	max-width: 100%;
-	height: auto !important
+	height: auto !important;
+}
+
+.ckeditor-html5-video {
+	max-width: 100% !important;
 }
 
 .cke_editable {
-	margin: 16px 0 16px 0
+	margin: 16px 0 16px 0;
 }
 
 .cke_editable .cke_widget_mask {
