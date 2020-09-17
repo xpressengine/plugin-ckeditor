@@ -38,7 +38,7 @@
           ],
           allowedContent: true,
           removeFormatAttributes: '',
-          removeButtons: 'FontSize,Styles,CopyFormatting,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,BidiRtl,Language,BidiLtr,Flash,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
+          removeButtons: 'Styles,CopyFormatting,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,BidiRtl,Language,BidiLtr,Flash,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
           removePlugins: 'stylescombo',
           extraPlugins: 'xePasteImage,html5video,wordcount',
           resize_dir: 'vertical',
