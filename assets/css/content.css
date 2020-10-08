@@ -410,8 +410,8 @@ xe-content th,
 xe-content figure,
 .xe-content figure,
 .xe_content figure {
-	margin: 0 0 0 0;
 	letter-spacing: -0.2px;
+  margin: 1em 40px;
 }
 
 @media (min-width:576px) {
