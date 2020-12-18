@@ -161,7 +161,7 @@ window.$(function ($) {
     _normalizeFileData: function (payload) {
       var data = {
         title: payload.title || payload.clientname,
-        imageUrl: XE._.get(payload, 'file.url', payload.url),
+        imageUrl: new URL(XE._.get(payload, 'file.url', payload.url)).pathname,
         mediaId: (payload.file_id) ? XE._.get(payload, 'id', '') : '',
         fileId: XE._.get(payload, 'file_id', payload.id || ''),
         size: payload.size,
