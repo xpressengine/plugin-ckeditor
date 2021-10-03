@@ -40,7 +40,7 @@
           removeFormatAttributes: '',
           removeButtons: 'Styles,CopyFormatting,Templates,Save,NewPage,Preview,Print,Undo,Cut,Copy,Paste,Redo,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,JustifyBlock,CreateDiv,BidiRtl,Language,BidiLtr,Flash,Maximize,About,Smiley,SpecialChar,PageBreak,Iframe,HiddenField,ImageButton,Button,Select,Textarea,TextField,Radio,Checkbox,Anchor,Unlink,Font,Image',
           removePlugins: 'stylescombo',
-          extraPlugins: 'xePasteImage,html5video,wordcount',
+          extraPlugins: 'xePasteImage,html5video,wordcount,emoji',
           resize_dir: 'vertical',
           entities: false,
           htmlEncodeOutput: false,
