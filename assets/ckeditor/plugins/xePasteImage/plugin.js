@@ -78,35 +78,11 @@ CKEDITOR.plugins.add('xePasteImage', {
               var fileSize = file.size
               var id = file.id
 
-              if ($('.file-view').hasClass('xe-hidden')) {
-                $('.file-view').removeClass('xe-hidden')
-              }
-
-              var fileCount = parseInt($('.fileCount').text(), 10) + 1
-
-              // file size
-              var fileTotalSize = window.XE.Utils.sizeFormatToBytes($('.currentFilesSize').text()) + fileSize
-              var thumbImageUrl = (data.thumbnails) ? data.thumbnails[2].url : ''
-              var tmplImage = [
-                '<li>',
-                '   <img src="' + thumbImageUrl + '" alt="' + fileName + '">',
-                '   <button type="button" class="btn-insert btnAddImage" data-type="image" data-src="' + thumbImageUrl + '" data-id="' + file.id + '"><i class="xi-arrow-up"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::addContentToBody') + '</span></button>', // 본문에 넣기
-                '   <button type="button" class="btn-delete btnDelFile" data-id="' + file.id + '" data-size="' + file.size + '"><i class="xi-close-thin"></i><span class="xe-sr-only">' + XE.Lang.trans('ckeditor::deleteAttachment') + '</span></button>', // 첨부삭제
-                '   <input type="hidden" name="' + editor.config.names.file.input + '[]" value="' + id + '" />',
-                '</li>'
-              ].join('\n')
-
-              $('.thumbnail-list').append(tmplImage)
-
-              $('.file-view').removeClass('xe-hidden')
-
-              // 첨부파일 갯수 표시
-              $('.fileCount').text(fileCount)
-
-              // 첨부파일 용량 표시
-              $('.currentFilesSize').text(window.XE.Utils.formatSizeUnits(fileTotalSize))
-
-              $('[data-src="' + thumbImageUrl + '"]').trigger('click')
+              $(editor.element.$).closest('form').find('.file-attach-group').trigger('done.upload.editor', {
+                file: data.media,
+                form: $(editor.element.$).closest('form'),
+                target: $(editor.element.$).closest('form').find('.file-attach-group')
+              });
             }
           })
         }
