@@ -65,7 +65,7 @@ window.$(function ($) {
           }
         })
 
-        $(that.element).$$on('done.upload.editor', function (eventName, media, options) {
+        $(that.element).on('done.upload.editor', function (eventName, media, options) {
           that._renderMedia(media.file, media.form)
           that._insertToDocument(that._normalizeFileData(media.file), media.form, that.options)
         })
