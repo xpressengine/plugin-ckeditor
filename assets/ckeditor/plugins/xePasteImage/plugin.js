@@ -77,8 +77,7 @@ CKEDITOR.plugins.add('xePasteImage', {
               var fileName = file.clientname
               var fileSize = file.size
               var id = file.id
-
-              $(editor.element.$).closest('form').find('.file-attach-group').trigger('done.upload.editor', {
+              $(editor.element.$).siblings('.file-attach-group').trigger('done.upload.editor', {
                 file: data.media,
                 form: $(editor.element.$).closest('form'),
                 target: $(editor.element.$).closest('form').find('.file-attach-group')
