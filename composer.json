@@ -2,7 +2,7 @@
   "name": "xpressengine-plugin/ckeditor",
   "description": "CkEditor 에디터를 제공합니다.",
   "keywords": ["xpressengine bundle", "XE CkEditor"],
-  "version": "1.0.10",
+  "version": "1.0.11",
   "support": {
     "email": "developers@xpressengine.com"
   },
