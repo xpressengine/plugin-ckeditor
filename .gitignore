@@ -2,3 +2,4 @@ node_modules
 vendor
 !**/assets/vendor
 composer.lock
+.DS_Store
