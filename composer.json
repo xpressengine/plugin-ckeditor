@@ -26,10 +26,20 @@
           "name": "CkEditor",
           "description": "XE 에서 사용할 기본 에디터"
         },
+        "editor/ckeditor@ckEditor5": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Editors\\CkEditor5",
+          "name": "CkEditor 5",
+          "description": "XE에서 사용할 CkEditor 5 (에디터툴 미지원)"
+        },
         "editor/ckeditor@ckEditor/plugin/ckeditor@default": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditorPlugin",
           "name": "CkEditor 플러그인",
           "description": "XE 에서 CkEditor 에 사용 할 플러그인."
+        },
+        "editor/ckeditor@ckEditor5/plugin/ckeditor@default": {
+          "class": "Xpressengine\\Plugins\\CkEditor\\Extension\\CkEditor5Plugin",
+          "name": "CkEditor 5 플러그인",
+          "description": "XE 에서 CkEditor 5 에 사용 할 플러그인."
         },
         "editortool/iframe_tool@iframe": {
           "class": "Xpressengine\\Plugins\\CkEditor\\Components\\EditorTools\\IframeTool\\IframeTool",

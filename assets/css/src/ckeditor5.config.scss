@@ -1,0 +1,613 @@
+@import url("//fonts.googleapis.com/earlyaccess/notosanskr.css");
+@import url("//fonts.googleapis.com/css?family=Roboto:400,300,100,500,700");
+
+:root {
+  --ck-color-image-caption-background: hsl(0, 0%, 97%);
+  --ck-color-image-caption-text: hsl(0, 0%, 20%);
+  --ck-color-table-caption-background: hsl(0, 0%, 97%);
+  --ck-color-table-caption-text: hsl(0, 0%, 20%);
+  --ck-image-style-spacing: 1.5em;
+  --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
+  --ck-todo-list-checkmark-size: 16px;
+}
+
+.ck.ck-toolbar {
+  > .ck-toolbar__items {
+    > :not(.ck-toolbar__line-break),
+    .ck.ck-toolbar__grouped-dropdown {
+      margin-top: 0.1em !important;
+      margin-bottom: 0.1em !important;
+    }
+    > :not(.ck-toolbar__line-break) {
+      margin-right: 0.1em !important;
+    }
+    .ck.ck-icon {
+      font-size: 0.6em;
+    }
+
+    .ck.ck-dropdown.ck-heading-dropdown .ck-dropdown__button .ck-button__label {
+      width: 6em;
+    }
+  }
+}
+
+
+.ck.ck-word-count {
+  text-align: right;
+  border: 1px solid var(--ck-color-base-border);
+  border-top-width: 0;
+  padding: 0 10px;
+
+  div {
+    display: inline;
+    padding-left: 10px;
+    font-size: 12px;
+  }
+}
+
+
+xe-content,
+.xe-content,
+.ck-editor__editable {
+  font-family: "Roboto", "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6a6e79;
+  letter-spacing: -0.2px;
+  word-break: break-all;
+
+  figcaption {
+    font-size: 13px;
+    margin: 8px 0 12px 0;
+    line-height: 20px;
+    letter-spacing: -0.2px;
+  }
+
+  h1 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 32px;
+    line-height: 40px;
+    letter-spacing: -0.4px;
+    margin: 0 0 40px 0;
+    font-weight: 500;
+  }
+
+  h2 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 26px;
+    line-height: 36px;
+    letter-spacing: -0.2px;
+    margin: 0 0 28px 0;
+    font-weight: 500;
+  }
+
+  h3 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: -0.2px;
+    margin: 0 0 16px 0;
+    font-weight: 500;
+  }
+  h4 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    margin: 0 0 16px 0;
+    font-weight: 500;
+  }
+  h5 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.2px;
+    margin: 0 0 16px 0;
+    font-weight: 500;
+  }
+
+  h6 {
+    color: #141414;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    margin: 0 0 8px 0;
+    font-weight: 500;
+  }
+  p {
+    color: #141414;
+    text-decoration: none;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    margin: 0 0 24px 0;
+    font-size: 16px;
+  }
+  p sub {
+    color: #767676;
+    text-decoration: none;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    margin: 12px 0 12px 0;
+  }
+  p sup {
+    color: #767676;
+    text-decoration: none;
+    line-height: 18px;
+    letter-spacing: -0.2px;
+    margin: 12px 0 12px 0;
+  }
+  strong {
+    color: inherit;
+    text-decoration: none;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    margin: 12px 0 12px 0;
+  }
+  ol {
+    padding: 0 0 0 30px;
+  }
+  // ol li {
+  //   list-style: decimal;
+  // }
+  // ol > li > ol > li {
+  //   list-style: lower-alpha;
+  // }
+  // ol > li > ol > li > ol > li {
+  //   list-style: lower-roman;
+  // }
+  // ol > li > ol > li > ol > li > ol > li {
+  //   list-style: decimal;
+  // }
+  // ol > li > ol > li > ol > li > ol > li > ol > li {
+  //   list-style: lower-alpha;
+  // }
+  // ol > li > ol > li > ol > li > ol > li > ol > li > ol > li {
+  //   list-style: lower-roman;
+  // }
+  // ul > li > ul > li > ul > li > ul > li {
+  //   list-style: disc;
+  // }
+  // ul > li > ul > li > ul > li > ul > li > ul > li {
+  //   list-style-type: circle;
+  // }
+  // ul > li > ul > li > ul > li > ul > li > ul > li > ul > li {
+  //   list-style: square;
+  // }
+  a {
+    color: #2684ff;
+    text-decoration: none;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+  }
+  a:hover {
+    color: #2684ff;
+    text-decoration: underline;
+    line-height: 26px;
+    letter-spacing: -0.2px;
+  }
+  pre {
+    line-height: 23px;
+    color: 767676;
+    letter-spacing: -0.2px;
+  }
+  div {
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    color: #767676;
+  }
+  div blockquote {
+    font-style: italic;
+    /* font-family: Georgia, Times, "Times New Roman", serif; */
+    padding: 10px 0 10px 15px;
+    border-left: 2px solid #d7d7d7;
+    margin: 0 0 0 0;
+    font-weight: 400;
+    color: #767676;
+  }
+  blockquote div {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+    font-style: normal;
+    color: #767676;
+  }
+  blockquote p {
+    font-size: 16px;
+    margin: 0;
+    font-style: normal;
+    color: #767676;
+    letter-spacing: -0.2px;
+  }
+  blockquote.cke_contents_ltr {
+    padding-left: 20px;
+    padding-right: 8px;
+    border-left-width: 5px;
+  }
+  blockquote.cke_contents_rtl {
+    padding-left: 8px;
+    padding-right: 20px;
+    border-right-width: 5px;
+  }
+  hr {
+    box-sizing: content-box;
+    border: 0px;
+    margin: 0px 0 24px 0;
+    border-top: 1px solid #e0e0e0;
+  }
+  img {
+    max-width: 100%;
+    height: auto !important;
+  }
+
+  .ckeditor-html5-video {
+    max-width: 100% !important;
+  }
+
+  .cke_widget_mask {
+    max-width: 100% !important;
+    height: 100% !important;
+  }
+  code {
+    white-space: pre-wrap;
+  }
+  li {
+    line-height: 26px;
+    letter-spacing: -0.2px;
+    color: #141414;
+    margin: 0 0 4px 0;
+    font-size: 16px;
+  }
+  table {
+    letter-spacing: -0.2px;
+    margin-bottom: 24px;
+  }
+
+  table caption {
+    text-align: left;
+    font-family: "Roboto", "Noto Sans KR", -apple-system, BlinkMacSystemFont,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+    font-size: 13px;
+    margin: 0 0 8px 0;
+    color: #141414;
+  }
+  table,
+  tbody,
+  tfoot,
+  thead,
+  tr,
+  td,
+  th {
+    border-collapse: collapse;
+    /*	border: 1px solid #d7d7d7;*/
+    text-align: left;
+    padding: 0.4em;
+    /*	font-weight: 500;*/
+    font-size: 14px;
+    /*	letter-spacing: -0.2px;*/
+    /*	font-family: 'Roboto', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";*/
+  }
+  th {
+    background-color: #f8f9fa;
+    color: #141414;
+    letter-spacing: -0.2px;
+  }
+  figure {
+    letter-spacing: -0.2px;
+    margin: 1em 40px;
+  }
+
+  @media (min-width: 576px) {
+    figcaption {
+      font-size: 13px;
+      margin: 8px 0 12px 0;
+      line-height: 20px;
+      letter-spacing: -0.2px;
+    }
+    h1 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 40px;
+      line-height: 50px;
+      letter-spacing: -0.4px;
+    }
+
+    h2 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 32px;
+      line-height: 38px;
+      letter-spacing: -0.4px;
+    }
+    h3 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 28px;
+      line-height: 34px;
+      letter-spacing: -0.2px;
+    }
+
+    h4 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 24px;
+      line-height: 30px;
+      letter-spacing: -0.2px;
+    }
+    h5 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 20px;
+      line-height: 26px;
+      letter-spacing: -0.2px;
+    }
+    h6 {
+      color: #141414;
+      text-decoration: none;
+      font-size: 16px;
+      line-height: 26px;
+      letter-spacing: -0.2px;
+    }
+    p {
+      color: #141414;
+      text-decoration: none;
+      font-size: 16px;
+      line-height: 26px;
+      letter-spacing: -0.2px;
+      margin: 0 0 24px;
+      letter-spacing: -0.2px;
+    }
+  }
+
+  /* ckeditor5-font/theme/fontsize.css */
+  .text-tiny {
+    font-size: 0.7em;
+  }
+  /* ckeditor5-font/theme/fontsize.css */
+  .text-small {
+    font-size: 0.85em;
+  }
+  /* ckeditor5-font/theme/fontsize.css */
+  .text-big {
+    font-size: 1.4em;
+  }
+  /* ckeditor5-font/theme/fontsize.css */
+  .text-huge {
+    font-size: 1.8em;
+  }
+  /* ckeditor5-image/theme/imageresize.css */
+  .image.image_resized {
+    max-width: 100%;
+    display: block;
+    box-sizing: border-box;
+  }
+  /* ckeditor5-image/theme/imageresize.css */
+  .image.image_resized img {
+    width: 100%;
+  }
+  /* ckeditor5-image/theme/imageresize.css */
+  .image.image_resized > figcaption {
+    display: block;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image {
+    display: table;
+    clear: both;
+    text-align: center;
+    margin: 0.9em auto;
+    min-width: 50px;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    min-width: 100%;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image-inline {
+    /*
+   * Normally, the .image-inline would have "display: inline-block" and "img { width: 100% }" (to follow the wrapper while resizing).;
+   * Unfortunately, together with "srcset", it gets automatically stretched up to the width of the editing root.
+   * This strange behavior does not happen with inline-flex.
+   */
+    display: inline-flex;
+    max-width: 100%;
+    align-items: flex-start;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image-inline picture {
+    display: flex;
+  }
+  /* ckeditor5-image/theme/image.css */
+  .image-inline picture,
+  .image-inline img {
+    flex-grow: 1;
+    flex-shrink: 1;
+    max-width: 100%;
+  }
+  /* ckeditor5-image/theme/imagecaption.css */
+  .image > figcaption {
+    display: table-caption;
+    caption-side: bottom;
+    word-break: break-word;
+    color: var(--ck-color-image-caption-text);
+    background-color: var(--ck-color-image-caption-background);
+    padding: 0.6em;
+    font-size: 0.75em;
+    outline-offset: -1px;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-block-align-left,
+  .image-style-block-align-right {
+    max-width: calc(100% - var(--ck-image-style-spacing));
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-left,
+  .image-style-align-right {
+    clear: none;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-side {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+    max-width: 50%;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-left {
+    float: left;
+    margin-right: var(--ck-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-center {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-align-right {
+    float: right;
+    margin-left: var(--ck-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-block-align-right {
+    margin-right: 0;
+    margin-left: auto;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-style-block-align-left {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  p + .image-style-align-left,
+  p + .image-style-align-right,
+  p + .image-style-side {
+    margin-top: 0;
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-inline.image-style-align-left,
+  .image-inline.image-style-align-right {
+    margin-top: var(--ck-inline-image-style-spacing);
+    margin-bottom: var(--ck-inline-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-inline.image-style-align-left {
+    margin-right: var(--ck-inline-image-style-spacing);
+  }
+  /* ckeditor5-image/theme/imagestyle.css */
+  .image-inline.image-style-align-right {
+    margin-left: var(--ck-inline-image-style-spacing);
+  }
+  /* ckeditor5-media-embed/theme/mediaembed.css */
+  .media {
+    clear: both;
+    margin: 0.9em 0;
+    display: block;
+    min-width: 15em;
+  }
+  /* ckeditor5-table/theme/tablecaption.css */
+  .table > figcaption {
+    display: table-caption;
+    caption-side: top;
+    word-break: break-word;
+    text-align: center;
+    color: var(--ck-color-table-caption-text);
+    background-color: var(--ck-color-table-caption-background);
+    padding: 0.6em;
+    font-size: 0.75em;
+    outline-offset: -1px;
+  }
+  /* ckeditor5-table/theme/tablecolumnresize.css */
+  .table .ck-table-resized {
+    table-layout: fixed;
+  }
+  /* ckeditor5-table/theme/tablecolumnresize.css */
+  .table table {
+    overflow: hidden;
+  }
+  /* ckeditor5-table/theme/tablecolumnresize.css */
+  .table td,
+  .table th {
+    position: relative;
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table {
+    margin: 0.9em auto;
+    display: table;
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px double hsl(0, 0%, 70%);
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table td,
+  .table table th {
+    min-width: 2em;
+    padding: 0.4em;
+    border: 1px solid hsl(0, 0%, 75%);
+  }
+  /* ckeditor5-table/theme/table.css */
+  .table table th {
+    font-weight: bold;
+    background: hsla(0, 0%, 0%, 5%);
+  }
+  /* ckeditor5-table/theme/table.css */
+  [dir="rtl"] .table th {
+    text-align: right;
+  }
+  /* ckeditor5-table/theme/table.css */
+  [dir="ltr"] .table th {
+    text-align: left;
+  }
+}
+
+.board_list .xe-content table,
+.board_list tbody,
+.board_list tfoot,
+.board_list thead,
+.board_list tr,
+.board_list td,
+.board_list th,
+.board_list .board_list .xe-content table,
+.board_list tbody,
+.board_list tfoot,
+.board_list thead,
+.board_list tr,
+.board_list td,
+.board_list th,
+.board_list .board_list .xe_content table,
+.board_list tbody,
+.board_list tfoot,
+.board_list thead,
+.board_list tr,
+.board_list td,
+.board_list th {
+  border: 0;
+  letter-spacing: 0;
+  font-weight: 400;
+  font-family: "Nanum Barun Gothic", "나눔고딕", NanumGothic, "돋움", Dotum,
+    Helvetica Neue, Helvetica, sans-serif;
+}
+
+xe-content table caption,
+.board legend,
+.xe-content table caption,
+.board legend {
+  visibility: visible;
+  width: auto;
+  height: auto;
+  font-size: initial;
+  line-height: normal;
+}
