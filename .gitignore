@@ -3,3 +3,4 @@ vendor
 !**/assets/vendor
 composer.lock
 .DS_Store
+package-lock.json
