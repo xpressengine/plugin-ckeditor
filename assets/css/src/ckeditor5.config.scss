@@ -43,6 +43,23 @@
     padding-left: 10px;
     font-size: 12px;
   }
+
+  .xf-ckeditor5__height_resize {
+    background: none;
+    border: none;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+
+    &.active {
+      background: #dbecff;
+      color: #2684ff;
+    }
+
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
 }
 
 

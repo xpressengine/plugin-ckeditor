@@ -75,6 +75,9 @@ import TodoList from "@ckeditor/ckeditor5-list/src/todolist";
 import Underline from "@ckeditor/ckeditor5-basic-styles/src/underline.js";
 import WordCount from "@ckeditor/ckeditor5-word-count/src/wordcount.js";
 // import EditorWatchdog from '@ckeditor/ckeditor5-watchdog/src/editorwatchdog.js';
+
+
+import FullScreen from './plugins/ckeditor5-fullscreen/FullScreen'
 import {
   Emoji,
   EmojiActivity,
@@ -89,8 +92,7 @@ import {
 
 import { isAndroid, isiOS } from "@ckeditor/ckeditor5-utils/src/env";
 
-class Editor extends ClassicEditor {
-}
+class Editor extends ClassicEditor {}
 
 // Plugins to include in the build.
 Editor.builtinPlugins = [
@@ -174,16 +176,17 @@ Editor.builtinPlugins = [
   EmojiPeople,
   EmojiPlaces,
   EmojiSymbols,
+  FullScreen
 ];
 
 Editor.utils = {
   isMobile: function (userAgent) {
     return isAndroid(userAgent) || isiOS(userAgent);
   },
-}
+};
 
 Editor.defaultConfig = {
-  placeholder: ' ',
+  placeholder: " ",
   htmlSupport: {
     allow: [
       {
@@ -224,6 +227,7 @@ Editor.defaultConfig = {
       "indent",
       "|",
       "blockQuote",
+      "code",
       "link",
       "horizontalLine",
       "|",
@@ -235,6 +239,11 @@ Editor.defaultConfig = {
       "|",
       "findAndReplace",
       "sourceEditing",
+      "|",
+      "undo",
+      "redo",
+      "|",
+      "fullScreen",
     ],
     shouldNotGroupWhenFull: true,
   },

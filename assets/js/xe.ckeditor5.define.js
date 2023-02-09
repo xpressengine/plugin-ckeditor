@@ -5,14 +5,17 @@
     var Editor = apps[0];
     var Lang = apps[1];
 
+    console.log(Lang);
     Editor.define({
       editorSettings: {
         name: "XEckeditor5",
         configs: {
           language: Lang.getCurrentLocale(),
           toolbar: {
-            shouldNotGroupWhenFull: !(CKEDITOR.utils.isMobile(window.navigator.userAgent))
-          }
+            shouldNotGroupWhenFull: !CKEDITOR.utils.isMobile(
+              window.navigator.userAgent
+            ),
+          },
         },
         on: {
           focus: function () {
@@ -31,6 +34,34 @@
           var fontSize = options.fontSize;
           var perms = options.perms || {};
 
+          XE.DynamicLoadManager.jsLoad(
+            "/assets/core/xe-ui-component/js/xe-tooltip.js"
+          );
+
+          $.extend(customOptions || {}, options);
+
+          customOptions.contentsCss = [];
+
+          if (!perms.html) {
+            customOptions.removePlugins = ["SourceEditing"];
+            customOptions.toolbar.items =
+              CKEDITOR.defaultConfig.toolbar.items.filter(function () {
+                return true;
+              });
+            var sourceToolIdx = customOptions.toolbar.items.findIndex(function (
+              t
+            ) {
+              return t === "SourceEditing";
+            });
+            if (sourceToolIdx > -1) {
+              customOptions.toolbar.items.splice(sourceToolIdx, 1);
+            }
+          }
+
+          if (!perms.tool) {
+            customOptions.toolbar.items = [];
+          }
+
           if (stylesheet) {
             if (typeof stylesheet === "string") {
               customOptions.contentsCss.push(stylesheet);
@@ -46,12 +77,6 @@
               }
             }
           }
-
-          $.extend(customOptions || {}, options);
-
-          XE.DynamicLoadManager.jsLoad(
-            "/assets/core/xe-ui-component/js/xe-tooltip.js"
-          );
 
           return new Promise(function (resolve, rejext) {
             CKEDITOR.create(
@@ -73,24 +98,49 @@
                 "xe-content-editable"
               );
 
-              var wordCountPlugin = editor.plugins.get( 'WordCount' );
-              $(editor.ui.view.editable.element).after(wordCountPlugin.wordCountContainer);
+              var wordCountPlugin = editor.plugins.get("WordCount");
+              var wordContainer = $(wordCountPlugin.wordCountContainer);
+              var unfold = $(
+                '<button class="xf-ckeditor5__height_resize" type="button"></button>'
+              );
+              unfold.text(XE.Lang.trans('ckeditor::unfold'))
+              var heightAutoStyle = $(
+                "<style> #"+selector+" + .ck-editor .ck-editor__editable_inline { height: auto; } .ck-source-editing-area { height: auto; } </style>"
+              );
+              unfold.on("click", function () {
+                if (window.document.body.contains(heightAutoStyle[0])) {
+                  unfold.removeClass('active')
+                  heightAutoStyle.remove();
+                } else {
+                  unfold.addClass('active')
+                  $(editor.ui.view.element.parentElement).append(heightAutoStyle);
+                }
+              });
+
+              wordContainer.prepend(unfold);
+
+              $(editor.ui.view.editable.element).after(wordContainer);
 
               if (options.height) {
                 $(editor.ui.view.element).after(
-                  "<style> .ck-editor__editable_inline { height: " +
+                  "<style> #"+selector+" + .ck-editor .ck-editor__editable_inline { min-height: " +
                     customOptions.height +
-                    "px; } .ck-source-editing-area { height: " +
+                    "px; height: " +
+                    customOptions.height +
+                    "px; } #"+selector+" + .ck-editor .ck-source-editing-area { min-height: " +
+                    customOptions.height +
+                    "px; height: " +
                     customOptions.height +
                     "px;  }</style>"
                 );
               }
 
-              // $('body').append(CKEDITOR.tools.buildStyleHtml(customOptions.contentsCss))
-
+              customOptions.contentsCss.forEach(function (css) {
+                XE.DynamicLoadManager.cssLoad(css);
+              });
 
               if (fontFamily || fontSize) {
-                var contentStyle = "<style>";
+                var contentStyle = "<style> #"+selector+" + .ck-editor .ck-editor__editable_inline {";
                 if (fontFamily && fontFamily.length > 0) {
                   contentStyle += "font-family:" + fontFamily.join(",");
                 }
@@ -98,9 +148,8 @@
                 if (fontSize) {
                   contentStyle += "font-size:" + fontSize;
                 }
-                contentStyle += "</style>";
+                contentStyle += "} </style>";
 
-                // if (contentStyle) CKEDITOR.addCss('.cke_editable{' + contentStyle + '}')
                 if (contentStyle !== "<style></style>") {
                   $(editor.ui.view.element).after(contentStyle);
                 }
@@ -183,8 +232,7 @@
           editor.model.insertContent(modelFragment);
         },
 
-        addTools: function (toolsMap, toolInfoList) {
-        },
+        addTools: function (toolsMap, toolInfoList) {},
 
         on: function (eventName, callback) {
           editors[this.props.selector].on(eventName, callback);
