@@ -348,7 +348,6 @@ window.$(function ($) {
     },
 
     _removeFromDocument: function (payload) {
-      console.log(this.editorInstance)
       var $editable = $(this.editorInstance.getContentDom())
       var $elTarget = $editable.find('[data-id="' + payload.fileId + '"],[xe-file-id="' + payload.fileId + '"]')
 
