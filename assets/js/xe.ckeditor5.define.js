@@ -78,6 +78,7 @@
           }
 
           return new Promise(function (resolve, rejext) {
+            console.log("S")
             CKEDITOR.create(
               document.querySelector("#" + selector),
               customOptions
@@ -104,7 +105,7 @@
               );
               unfold.text(XE.Lang.trans('ckeditor::unfold'))
               var heightAutoStyle = $(
-                "<style> #"+selector+" + .ck-editor .ck-editor__editable_inline { height: auto; } .ck-source-editing-area { height: auto; } </style>"
+                "<style> #"+selector+" + .ck-editor .ck-editor__editable_inline { height: auto; } #"+selector+" + .ck-editor .ck-source-editing-area { height: auto; } </style>"
               );
               unfold.on("click", function () {
                 if (window.document.body.contains(heightAutoStyle[0])) {
@@ -280,8 +281,5 @@
       },
     });
   });
-
-
-
 
 })(window.jQuery, window.XE, window.CKEditor);
