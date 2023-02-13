@@ -31,6 +31,9 @@
   }
 }
 
+.xe-content-editable .ck-source-editing-area textarea {
+  overflow: auto;
+}
 
 .ck.ck-word-count {
   text-align: right;
