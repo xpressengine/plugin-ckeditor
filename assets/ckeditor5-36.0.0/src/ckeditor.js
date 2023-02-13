@@ -92,6 +92,8 @@ import {
 
 import { isAndroid, isiOS } from "@ckeditor/ckeditor5-utils/src/env";
 
+import ImageUploadPlugin from "./plugins/XeImageUpload/imageUploadPlugin";
+
 class Editor extends ClassicEditor {}
 
 // Plugins to include in the build.
@@ -135,7 +137,7 @@ Editor.builtinPlugins = [
   ListProperties,
   // Markdown,
   MediaEmbed,
-  MediaEmbedToolbar,
+  // MediaEmbedToolbar,
   Mention,
   PageBreak,
   Paragraph,
@@ -176,7 +178,8 @@ Editor.builtinPlugins = [
   EmojiPeople,
   EmojiPlaces,
   EmojiSymbols,
-  FullScreen
+  FullScreen,
+  ImageUploadPlugin
 ];
 
 Editor.utils = {
@@ -276,6 +279,8 @@ Editor.defaultConfig = {
     previewsInData: true,
   },
 };
+
+
 
 // export default { Editor, EditorWatchdog };
 

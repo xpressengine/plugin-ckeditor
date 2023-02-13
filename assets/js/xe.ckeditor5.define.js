@@ -5,7 +5,6 @@
     var Editor = apps[0];
     var Lang = apps[1];
 
-    console.log(Lang);
     Editor.define({
       editorSettings: {
         name: "XEckeditor5",
@@ -281,4 +280,8 @@
       },
     });
   });
+
+
+
+
 })(window.jQuery, window.XE, window.CKEditor);
