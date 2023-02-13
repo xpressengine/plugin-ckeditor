@@ -1,17 +1,26 @@
-export default function ImageUploadPlugin( editor ) {
-  editor.editing.view.document.on( 'clipboardInput', (evt, data) => {
-    const dataTransfer = data.dataTransfer;
+import { Plugin } from '@ckeditor/ckeditor5-core';
 
-    if(dataTransfer.files.length) {
-      dataTransfer.files.forEach((file) => {
-        const adaptor = new XeUploadAdapter(editor, file);
-        adaptor.upload();
-      });
+export default class ImageUploadPlugin extends Plugin {
+	static get pluginName() {
+		return 'XeImageUpload';
+	}
 
-      data.content = null;
-    }
-    return;
-  })
+	init() {
+		const editor = this.editor;
+		editor.editing.view.document.on( 'clipboardInput', (evt, data) => {
+      const dataTransfer = data.dataTransfer;
+
+      if(dataTransfer.files.length) {
+        dataTransfer.files.forEach((file) => {
+          const adaptor = new XeUploadAdapter(editor, file);
+          adaptor.upload();
+        });
+
+        data.content = null;
+      }
+      return;
+    })
+	}
 }
 
 class XeUploadAdapter  {
