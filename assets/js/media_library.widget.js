@@ -339,12 +339,21 @@ window.$(function ($) {
     _setCover: function (fileId) {
       if (!this.options.names.cover) return
 
+      var $coverId = this.element.find('[name=' + this.options.names.cover.input + ']');
       var $item = this.options.$el.fileThumbsContainer.find('li[data-id=' + fileId + ']')
+
       this.options.$el.fileThumbsContainer.find('.file-item').removeClass('is-cover')
 
-      $item.addClass('is-cover')
-      this.element.find('[name=' + this.options.names.cover.input + ']').val(fileId)
-      this.options.coverId = fileId
+      if($coverId.val() === fileId) {
+        $coverId.val(null);
+        this.options.coverId = null
+
+      } else {
+        $item.addClass('is-cover')
+        $coverId.val(fileId)
+        this.options.coverId = fileId
+      }
+
     },
 
     _removeFromDocument: function (payload) {
