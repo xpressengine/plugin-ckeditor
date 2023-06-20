@@ -251,15 +251,16 @@ window.$(function ($) {
 
       // 삭제, 제거
       $item.find('.btn-delete').on('click', function () {
+        var $coverId = that.element.find('[name=' + that.options.names.cover.input + ']');
         that._removeFromDocument({
           fileId: media.fileId,
           mediaId: media.mediaId || null
         })
         $item.remove()
 
-        if (!that.options.names.cover) {
-          if (this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val() == media.fileId) {
-            this.options.$el.fileThumbsContainer.find('[name=' + that.options.names.cover.input + ']').val('')
+        if (that.options.names.cover) {
+          if($coverId.val() == media.fileId) {
+            $coverId.val(null)
           }
         }
       })
