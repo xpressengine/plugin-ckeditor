@@ -85,7 +85,7 @@ class CkEditor extends AbstractEditor
                 plugin::asset('assets/ckeditor/styles.js'),
                 plugin::asset('assets/js/media_library.widget.js'),
                 plugin::asset('assets/js/xe.ckeditor.define.js'),
-            ])->before('assets/core/editor/editor.bundle.js')->load();
+            ])->after('assets/core/editor/editor.bundle.js')->load();
 
             $this->frontend->css([
                 plugin::asset('assets/css/editor.css'),
